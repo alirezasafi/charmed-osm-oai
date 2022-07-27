@@ -13,3 +13,6 @@ applications:
   oai-ausf:
     charm: './charms/oai-ausf'
     scale: 1
+  oai-nrf:
+    charm: './charms/oai-nrf'
+    scale: 1

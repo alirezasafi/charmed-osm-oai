@@ -1,14 +1,37 @@
-# Copyright 2022 Ubuntu
-# See LICENSE file for licensing details.
-#
-# TEMPLATE-TODO: change this example to suit your needs.
-# If you don't need a config, you can remove the file entirely.
-# It ties in to the example _on_config_changed handler in src/charm.py
-#
-# Learn more about config at: https://juju.is/docs/sdk/config
-
 options:
-  thing:
-    default: 🎁
-    description: A thing used by the charm.
+  image:
     type: string
+    default: rdefosseoai/oai-nrf:latest
+    description: docker image name
+  http1:
+    type: int
+    default: 80
+    description: service http1 port
+  http2:
+    type: int
+    default: 9090
+    description: service http2 port
+  instance:
+    type: int
+    default: 0
+    description: instance id
+  pid-directory:
+    type: string
+    default: /var/run
+    description: pid directory
+  nrf-interface-name-for-sbi:
+    type: string
+    default: eth0
+    description: nrf interface name for sbi
+  nrf-interface-port-for-sbi:
+    type: int
+    default: 80
+    description: nrf interface port for sbi
+  nrf-interface-http2-port-for-sbi:
+    type: int
+    default: 9090
+    description: nrf interface http2 port
+  nrf-api-version:
+    type: string
+    default: v1
+    description: nrf api version

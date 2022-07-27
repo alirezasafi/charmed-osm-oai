@@ -1,7 +1,7 @@
 options:
   image:
     type: string
-    default: rdefosseoai/oai-ausf:latest
+    default: rdefosseoai/oai-udm:latest
     description: docker image name
   http:
     type: int
