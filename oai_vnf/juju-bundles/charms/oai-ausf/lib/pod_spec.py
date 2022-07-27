@@ -30,7 +30,7 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                 "envConfig": {
                     "TZ": config["time-zone"],
                     "INSTANCE_ID": config["instance-id"],
-                    "PID_DIR": config["pid-id"],
+                    "PID_DIR": config["pid-dir"],
                     "AUSF_NAME": config["ausf-name"],
                     "SBI_IF_NAME": config["sbi-if-name"],
                     "SBI_PORT": config["sbi-port"],
