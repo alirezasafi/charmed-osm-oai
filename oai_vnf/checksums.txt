@@ -30,11 +30,10 @@ bab64ec1c9287c84d7084376b9791573	oai_vnf/juju-bundles/charms/mysql/requirements-
 de0f92167f063b3d5eb11ba234a79b2a	oai_vnf/juju-bundles/charms/mysql/metadata.yaml
 307535953c4116d5752c17ad336ab6f8	oai_vnf/juju-bundles/charms/mysql/CONTRIBUTING.md
 744ecafb042d3d551dfd00797f88fe34	oai_vnf/juju-bundles/charms/mysql/README.md
-bf10ec37a14aba3048c95928c2722dbc	oai_vnf/juju-bundles/charms/mysql/src/pod_spec.py
 1fee8533a0aad75acea4811a193c33e3	oai_vnf/juju-bundles/charms/mysql/src/charm.py
 b1894961daae677625f31668446a175c	oai_vnf/juju-bundles/charms/mysql/tests/__init__.py
 e2e18510694630cf5bc1c71c94834f34	oai_vnf/juju-bundles/charms/mysql/tests/test_charm.py
-bf10ec37a14aba3048c95928c2722dbc	oai_vnf/juju-bundles/charms/mysql/hooks/pod_spec.py
+bf10ec37a14aba3048c95928c2722dbc	oai_vnf/juju-bundles/charms/mysql/lib/pod_spec.py
 86ece44e6490a80d504482f9878b2ce9	oai_vnf/juju-bundles/charms/mysql/lib/ops/version.py
 b57648f20c7425139e14f4cb37ca90d7	oai_vnf/juju-bundles/charms/mysql/lib/ops/jujuversion.py
 b9a434823cdecb67a04f05b7e085d762	oai_vnf/juju-bundles/charms/mysql/lib/ops/model.py
