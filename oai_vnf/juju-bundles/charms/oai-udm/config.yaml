@@ -1,14 +1,57 @@
-# Copyright 2022 Ubuntu
-# See LICENSE file for licensing details.
-#
-# TEMPLATE-TODO: change this example to suit your needs.
-# If you don't need a config, you can remove the file entirely.
-# It ties in to the example _on_config_changed handler in src/charm.py
-#
-# Learn more about config at: https://juju.is/docs/sdk/config
-
 options:
-  thing:
-    default: 🎁
-    description: A thing used by the charm.
+  image:
     type: string
+    default: rdefosseoai/oai-ausf:latest
+    description: docker image name
+  http:
+    type: int
+    default: 80
+    description: service http port
+  time-zone:
+    type: string
+    default: Europe/Paris
+    description: time zone
+  instance:
+    type: int
+    default: 0
+    description: instance id
+  pid-directory:
+    type: string
+    default: /var/run
+    description: pid directory
+  udm-name:
+    type: string
+    default: OAI_UDM
+    description: udm name
+  sbi-if-name:
+    type: string
+    default: eth0
+    description: sib interface name
+  sbi-port:
+    type: int
+    default: 80
+    description: sbi port
+  udm-version-nb:
+    type: string
+    default: v1
+    description: api version
+  use-fqdn-dns:
+    type: string
+    default: yes
+    description: use fqdn dns
+  udr-ip-address:
+    type: string
+    default: oai-udr
+    description: udr service address
+  udr-port:
+    type: int
+    default: 80
+    description: udr port
+  udr-version-nb:
+    type: string
+    default: v1
+    description: udr version nb
+  udr-fqdn:
+    type: string
+    default: oai-udr
+    description: wait mysql
