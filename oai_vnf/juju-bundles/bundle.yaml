@@ -1,0 +1,6 @@
+description: OAI Bundle
+bundle: kubernetes
+applications:
+  mysql:
+    charm: './charms/mysql'
+    scale: 1

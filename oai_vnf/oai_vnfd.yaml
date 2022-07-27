@@ -1,0 +1,16 @@
+vnfd:
+  id: oai-vnf
+  product-name: oai-vnf
+  df:
+  - id: default-df
+  mgmt-cp: mgmt-ext
+  k8s-cluster:
+    nets:
+    - id: mgmtnet
+  ext-cpd:
+  - id: mgmt-ext
+    k8s-cluster-net: mgmtnet
+  kdu:
+  - name: oai-kdu
+    juju-bundle: bundle.yaml
+
