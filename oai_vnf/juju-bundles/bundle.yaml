@@ -19,3 +19,6 @@ applications:
   oai-amf:
     charm: './charms/oai-amf'
     scale: 1
+  oai-smf:
+    charm: './charm/oai-smf'
+    scale: 1
