@@ -1,14 +1,121 @@
-# Copyright 2022 Ubuntu
-# See LICENSE file for licensing details.
-#
-# TEMPLATE-TODO: change this example to suit your needs.
-# If you don't need a config, you can remove the file entirely.
-# It ties in to the example _on_config_changed handler in src/charm.py
-#
-# Learn more about config at: https://juju.is/docs/sdk/config
-
 options:
-  thing:
-    default: 🎁
-    description: A thing used by the charm.
+  image:
     type: string
+    default: rdefosseoai/oai-spgwu-tiny:latest
+    description: docker image name
+  oai-spgwu-tiny:
+    type: int
+    default: 8805
+    description: service udp port
+  s1u:
+    type: int
+    default: 2152
+    description: service s1u port
+  iperf:
+    type: int
+    default: 5001
+    description: service iperf port
+  time-zone:
+    type: string
+    default: Europe/Paris
+    description: time zone
+  pid-directory:
+    type: string
+    default: /var/run
+    description: pid directory
+  sgw-interface-name-for-s1u-s12-s4-up:
+    type: string
+    default: eth0
+    description: sgw interface name for s1u s12 s4 up
+  sgw-interface-name-for-sx:
+    type: string
+    default: eth0
+    description: sgw interface name for sx
+  pgw-interface-name-for-sgi:
+    type: string
+    default: eth0
+    description: pgw interface name for sgi
+  network-ue-nat-option:
+    type: string
+    default: yes
+    description: network ue nat option
+  network-ue-ip:
+    type: string
+    default: 12.1.1.0/24
+    description: network ue ip
+  spgwc0-ip-address:
+    type: string
+    default: oai-smf
+    description: spgwc0 ip address
+  bypass-ul-pfcp-rules:
+    type: string
+    default: no
+    description: bypass ul pfcp rules
+  mcc:
+    type: int
+    default: 208
+    description: mcc
+  mnc:
+    type: int
+    default: 95
+    description: mnc
+  mnc03:
+    type: string
+    default: 095
+    description: mnc03
+  tac:
+    type: int
+    default: 40960
+    description: tac
+  gw-id:
+    type: int
+    default: 1
+    description: gw id
+  realm:
+    type: string
+    default: openairinterface.org
+    description: realm
+  enable-5g-features:
+    type: string
+    default: yes
+    description: enable 5g features
+  register-nrf:
+    type: string
+    default: yes
+    description: register nrf
+  use-fqdn-nrf:
+    type: string
+    default: yes
+    description: use fqdn nrf
+  upf-fqdn-5g:
+    type: string
+    default: oai-spgwu
+    description: udm fqdn
+  nrf-ipv4-address:
+    type: string
+    default: oai-nrf
+    description: nrf ipv4 address
+  nrf-port:
+    type: int
+    default: 80
+    description: nrf port
+  nrf-api-version:
+    type: string
+    default: v1
+    description: nrf api version
+  nrf-fqdn:
+    type: string
+    default: oai-nrf
+    description: nrf fqdn
+  nssai-sst-0:
+    type: int
+    default: 222
+    description: nssai sst 0
+  nssai-sd-0:
+    type: int
+    default: 123
+    description: nssai sd 0
+  dnn-0:
+    type: string
+    default: default
+    description: dnn 0

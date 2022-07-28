@@ -22,3 +22,6 @@ applications:
   oai-smf:
     charm: './charm/oai-smf'
     scale: 1
+  oai-spgwu:
+    charm: './charm/oai-spgwu'
+    scale: 1
