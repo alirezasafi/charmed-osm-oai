@@ -45,12 +45,12 @@ options:
     description: mysql service name
   mysql-user:
     type: string
-    default: test
-    description: mysql user
+    default: root
+    description: mysql root user
   mysql-pass:
     type: string
-    default: test
-    description: mysql pass
+    default: linux
+    description: mysql root pass
   mysql-db:
     type: string
     default: oai_db

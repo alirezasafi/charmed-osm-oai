@@ -6,12 +6,12 @@ logger = logging.getLogger(__name__)
 
 
 def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """make mysql ports details"""
+    """make udr ports details"""
     return [
         {
             "name": "http1",
             "protocol": "TCP",
-            "containerPort": config["http"]
+            "containerPort": config["http1"]
         },
         {
             "name": "http2",

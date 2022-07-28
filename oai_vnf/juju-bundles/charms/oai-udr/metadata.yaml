@@ -1,5 +1,6 @@
 name: oai-udr
 description: charm operator for UDR network function
+summary: UDR charm operator.
 min-juju-version: 2.7.0
 
 series: [kubernetes]
