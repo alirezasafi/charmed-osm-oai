@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """make mysql ports details"""
+    """make udm ports details"""
     return [
         {
             "name": "http",

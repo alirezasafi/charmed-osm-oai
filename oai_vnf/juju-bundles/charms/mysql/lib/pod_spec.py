@@ -9,10 +9,12 @@ def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
     return [
         {
             "name": "mysql",
+            "protocol": "TCP",
             "containerPort": config["mysql-port"]
         },
         {
             "name": "mysqlx",
+            "protocol": "TCP",
             "containerPort": config["mysqlx-port"]
         }
     ]

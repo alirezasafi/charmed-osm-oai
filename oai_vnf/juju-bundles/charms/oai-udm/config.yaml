@@ -37,7 +37,7 @@ options:
     description: api version
   use-fqdn-dns:
     type: string
-    default: yes
+    default: "yes"
     description: use fqdn dns
   udr-ip-address:
     type: string
@@ -54,4 +54,4 @@ options:
   udr-fqdn:
     type: string
     default: oai-udr
-    description: wait mysql
+    description: udr fqdn
