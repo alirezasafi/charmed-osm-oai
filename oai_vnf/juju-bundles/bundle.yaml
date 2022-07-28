@@ -16,3 +16,6 @@ applications:
   oai-nrf:
     charm: './charms/oai-nrf'
     scale: 1
+  oai-amf:
+    charm: './charms/oai-amf'
+    scale: 1
