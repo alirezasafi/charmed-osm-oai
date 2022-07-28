@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """make mysql ports details"""
+    """make nrf ports details"""
     return [
         {
             "name": "http1",
@@ -33,12 +33,12 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                 "imagePullPolicy": "Never",  # todo: use IfNotPresent,
                 "ports": ports,
                 "envConfig": {
+                    "INSTANCE": config["instance"],
+                    "PID_DIRECTORY": config["pid-directory"],
                     "NRF_INTERFACE_NAME_FOR_SBI": config["nrf-interface-name-for-sbi"],
                     "NRF_INTERFACE_PORT_FOR_SBI": config["nrf-interface-port-for-sbi"],
                     "NRF_INTERFACE_HTTP2_PORT_FOR_SBI": config["nrf-interface-http2-port-for-sbi"],
-                    "NRF_API_VERSION": config["nrf-api-version"],
-                    "INSTANCE": config["instance"],
-                    "PID_DIRECTORY": config["pid-directory"]
+                    "NRF_API_VERSION": config["nrf-api-version"]
                 }
             }
         ]

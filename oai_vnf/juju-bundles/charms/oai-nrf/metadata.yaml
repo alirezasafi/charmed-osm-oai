@@ -1,5 +1,6 @@
 name: oai-nrf
 description: charm operator for NRF network function
+summary: NRF charm operator
 min-juju-version: 2.7.0
 
 series: [kubernetes]
