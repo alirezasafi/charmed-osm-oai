@@ -33,7 +33,7 @@ options:
     description: sbi port
   use-fqdn-dns:
     type: string
-    default: yes
+    default: "yes"
     description: use fqdn dns
   udm-ip-address:
     type: string

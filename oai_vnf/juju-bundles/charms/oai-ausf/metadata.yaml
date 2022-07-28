@@ -1,5 +1,6 @@
 name: oai-ausf
 description: charm operator for AUSF network function
+summary: AUSF charm operator
 min-juju-version: 2.7.0
 
 series: [kubernetes]
