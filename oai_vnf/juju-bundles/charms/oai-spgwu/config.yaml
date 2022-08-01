@@ -37,19 +37,19 @@ options:
     description: pgw interface name for sgi
   network-ue-nat-option:
     type: string
-    default: yes
+    default: "yes"
     description: network ue nat option
   network-ue-ip:
     type: string
-    default: 12.1.1.0/24
+    default: "12.1.1.0/24"
     description: network ue ip
   spgwc0-ip-address:
     type: string
-    default: oai-smf
-    description: spgwc0 ip address
+    default: "127.0.0.1"
+    description: SMF ip-address incase NRF is not used to initiate a PFCP session
   bypass-ul-pfcp-rules:
     type: string
-    default: no
+    default: "no"
     description: bypass ul pfcp rules
   mcc:
     type: int
@@ -61,7 +61,7 @@ options:
     description: mnc
   mnc03:
     type: string
-    default: 095
+    default: "095"
     description: mnc03
   tac:
     type: int
@@ -77,15 +77,15 @@ options:
     description: realm
   enable-5g-features:
     type: string
-    default: yes
+    default: "yes"
     description: enable 5g features
   register-nrf:
     type: string
-    default: yes
+    default: "yes"
     description: register nrf
   use-fqdn-nrf:
     type: string
-    default: yes
+    default: yes"
     description: use fqdn nrf
   upf-fqdn-5g:
     type: string
