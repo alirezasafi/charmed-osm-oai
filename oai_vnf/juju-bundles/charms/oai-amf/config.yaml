@@ -85,7 +85,7 @@ options:
     description: plmn support mnc
   plmn-support-tac:
     type: string
-    default: 0x0001
+    default: "0x0001"
     description: plmn support tac
   sst-0:
     type: int
@@ -128,7 +128,7 @@ options:
     default: v1
     description: smf http version 0
   selected-0:
-    type: string
+    type: boolean
     default: true
     description: slected 0
   smf-instance-id-1:
@@ -148,7 +148,7 @@ options:
     default: v1
     description: smf http version 1
   selected-1:
-    type: string
+    type: boolean
     default: false
     description: selected 1
   mysql-server:
@@ -165,7 +165,7 @@ options:
     description: mysql pass
   mysql-db:
     type: string
-    default: oai-db
+    default: oai_db
     description: mysql database
   operator-key:
     type: string
@@ -181,19 +181,19 @@ options:
     description: nrf port
   nf-registration:
     type: string
-    default: yes
+    default: "yes"
     description: nf registration
   smf-selection:
     type: string
-    default: yes
+    default: "yes"
     description: smf selection
   use-fqdn-dns:
     type: string
-    default: yes
+    default: "yes"
     description: use fqdn dns
   external-ausf:
     type: string
-    default: yes
+    default: "yes"
     description: external ausf
   nrf-api-version:
     type: string

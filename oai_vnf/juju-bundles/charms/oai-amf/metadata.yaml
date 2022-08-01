@@ -1,5 +1,6 @@
 name: oai-amf
 description: charm operator for AMF network function
+summary: AMF charm operator
 min-juju-version: 2.7.0
 
 series: [kubernetes]

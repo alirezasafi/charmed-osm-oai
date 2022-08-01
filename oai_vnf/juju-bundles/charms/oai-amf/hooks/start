@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 sys.path.append('lib')
 
@@ -6,7 +8,7 @@ import logging
 from ops.charm import CharmBase
 from ops.framework import StoredState
 from ops.main import main
-from ops.model import ActiveStatus
+from ops.model import ActiveStatus, MaintenanceStatus
 
 from pod_spec import make_pod_spec
 
@@ -28,11 +30,11 @@ class OaiAmfCharm(CharmBase):
         # self.framework.observe(self.on.upgrade_charm, self._on_upgrade_charm)
 
     def _apply_spec(self):
-        if not self.framework.model.unit.is_leader():
-            return
+        # if not self.framework.model.unit.is_leader():
+            # return
         spec = make_pod_spec(self.framework.model.config)
-        if spec == self._stored.spec:
-            return
+        # if spec == self._stored.spec:
+            # return
         self.framework.model.pod.set_spec(spec)
         self._stored.spec = spec
 

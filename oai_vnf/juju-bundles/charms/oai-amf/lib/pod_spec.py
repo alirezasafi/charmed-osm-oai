@@ -10,7 +10,7 @@ def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
     return [
         {
             "name": "oai-amf",
-            "protocol": "SCTP",
+            "protocol": "TCP",  # todo: should be SCTP
             "containerPort": config["oai-amf"]
         },
         {
@@ -19,7 +19,7 @@ def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
             "containerPort": config["http1"]
         },
         {
-            "name": "http1",
+            "name": "http2",
             "protocol": "TCP",
             "containerPort": config["http2"]
         },
@@ -66,8 +66,8 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                     "SMF_FQDN_0": config["smf-fqdn-0"],
                     "SMF_IPV4_ADDR_0": config["smf-ipv4-addr-0"],
                     "SMF_HTTP_VERSION_0": config["smf-http-version-0"],
-                    "SELECTED_0": config["selected-0"],
                     "SMF_INSTANCE_ID_1": config["smf-instance-id-1"],
+                    "SELECTED_0": config["selected-0"],
                     "SMF_FQDN_1": config["smf-fqdn-1"],
                     "SMF_IPV4_ADDR_1": config["smf-ipv4-addr-1"],
                     "SMF_HTTP_VERSION_1": config["smf-http-version-1"],
@@ -79,12 +79,12 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                     "OPERATOR_KEY": config["operator-key"],
                     "NRF_IPV4_ADDRESS": config["nrf-ipv4-address"],
                     "NRF_PORT": config["nrf-port"],
+                    "NRF_API_VERSION": config["nrf-api-version"],
+                    "NRF_FQDN": config["nrf-fqdn"],
                     "NF_REGISTRATION": config["nf-registration"],
                     "SMF_SELECTION": config["smf-selection"],
                     "USE_FQDN_DNS": config["use-fqdn-dns"],
                     "EXTERNAL_AUSF": config["external-ausf"],
-                    "NRF_API_VERSION": config["nrf-api-version"],
-                    "NRF_FQDN": config["nrf-fqdn"],
                     "AUSF_IPV4_ADDRESS": config["ausf-ipv4-address"],
                     "AUSF_PORT": config["ausf-port"],
                     "AUSF_FQDN": config["ausf-fqdn"],
