@@ -85,7 +85,7 @@ options:
     description: register nrf
   use-fqdn-nrf:
     type: string
-    default: yes"
+    default: "yes"
     description: use fqdn nrf
   upf-fqdn-5g:
     type: string
