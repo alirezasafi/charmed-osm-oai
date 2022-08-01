@@ -1,5 +1,6 @@
 name: oai-smf
 description: charm operator for SMF network function
+summary: SMF charm operator
 min-juju-version: 2.7.0
 
 series: [kubernetes]

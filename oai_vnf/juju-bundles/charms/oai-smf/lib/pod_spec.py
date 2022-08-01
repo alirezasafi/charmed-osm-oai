@@ -6,11 +6,11 @@ logger = logging.getLogger(__name__)
 
 
 def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """make mysql ports details"""
+    """make smf ports details"""
     return [
         {
             "name": "oai-smf",
-            "protocol": "UDP",
+            "protocol": "TCP", # todo: should be UDP
             "containerPort": config["oai-smf"]
         },
         {
@@ -19,7 +19,7 @@ def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
             "containerPort": config["http1"]
         },
         {
-            "name": "http1",
+            "name": "http2",
             "protocol": "TCP",
             "containerPort": config["http2"]
         }

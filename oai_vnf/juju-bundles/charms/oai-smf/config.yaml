@@ -17,7 +17,7 @@ options:
     description: service http2 port
   time-zone:
     type: string
-    default: Europe/Paris
+    default: "Europe/Paris"
   instance:
     type: int
     default: 0
@@ -48,11 +48,11 @@ options:
     description: smf api version
   default-dns-ipv4-address:
     type: string
-    default: 192.168.18.129
+    default: "192.168.18.129"
     description: default dns ipv4 address
   default-dns-sec-ipv4-address:
     type: string
-    default: 192.168.18.129
+    default: "192.168.18.129"
     description: default dns sec ipv4 address
   amf-ipv4-address:
     type: string
@@ -108,7 +108,7 @@ options:
     description: nrf api version
   use-local-subscription-info:
     type: string
-    default: yes
+    default: "yes"
     description: use local subscription info
   nrf-fqdn:
     type: string
@@ -116,23 +116,23 @@ options:
     description: nrf fqdn
   register-nrf:
     type: string
-    default: yes
+    default: "yes"
     description: register nrf
   discover-upf:
     type: string
-    default: yes
+    default: "yes"
     description: discover upf
   use-fqdn-dns:
     type: string
-    default: yes
+    default: "yes"
     description: use fqdn dns
   dnn-range1:
     type: string
-    default: 12.1.1.2 - 12.1.1.128
+    default: "12.1.1.2 - 12.1.1.128"
     description: dnn range1
   dnn-range0:
     type: string
-    default: 12.1.1.2 - 12.1.1.128
+    default: "12.1.1.2 - 12.1.1.128"
     description: dnn range0
   dnn-ni1:
     type: string
