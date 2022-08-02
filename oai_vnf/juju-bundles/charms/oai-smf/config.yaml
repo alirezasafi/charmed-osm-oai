@@ -28,7 +28,7 @@ options:
     description: pid directory
   smf-interface-name-for-n4:
     type: string
-    default: net1
+    default: eth0
     description: smf interface name for n4
   smf-interface-name-for-sbi:
     type: string
@@ -48,11 +48,11 @@ options:
     description: smf api version
   default-dns-ipv4-address:
     type: string
-    default: "192.168.18.129"
+    default: "172.21.3.10"
     description: default dns ipv4 address
   default-dns-sec-ipv4-address:
     type: string
-    default: "192.168.18.129"
+    default: "172.21.3.100"
     description: default dns sec ipv4 address
   amf-ipv4-address:
     type: string
@@ -126,15 +126,83 @@ options:
     type: string
     default: "yes"
     description: use fqdn dns
-  dnn-range1:
+  http-version:
+    type: int
+    default: 1
+    description: http version
+  use-network-instance:
     type: string
-    default: "12.1.1.2 - 12.1.1.128"
-    description: dnn range1
+    default: "no"
+    description: use network instance
+  domain-access:
+    type: string
+    default: "random"
+    description: domain access
+  domain-core:
+    type: string
+    default: "random"
+    description: domain core
+  enable-usae-reporting:
+    type: string
+    default: "no"
+    description: enable usae reporting
   dnn-range0:
     type: string
-    default: "12.1.1.2 - 12.1.1.128"
+    default: "12.1.1.2 - 12.1.1.40"
     description: dnn range0
+  dnn-ni0:
+    type: string
+    default: oai.ipv4
+    description: dnn ni0
+  type0:
+    type: string
+    default: IPv4
+    description: type 0
+  nssai-sst0:
+    type: int
+    default: 1
+    description: nssai sst0
+  nssai-sd0:
+    type: int
+    default: 1
+    description: nssai sd0
+  type1:
+    type: string
+    default: IPv4
+    description: type 1
+  nssai-sst1:
+    type: int
+    default: 122
+    description: nssai sst1
+  nssai-sd1:
+    type: int
+    default: 123
+    description: nssai sd1
+  dnn-range1:
+    type: string
+    default: "12.1.1.41 - 12.1.1.80"
+    description: dnn range1
   dnn-ni1:
     type: string
     default: default
     description: dnn ni1
+  type2:
+    type: string
+    default: IPv4
+    description: type 2
+  nssai-sst2:
+    type: int
+    default: 1
+    description: nssai sst2
+  nssai-sd2:
+    type: int
+    default: 1023
+    description: nssai sd2
+  dnn-range2:
+    type: string
+    default: "12.1.1.81 - 12.1.1.120"
+    description: dnn range2
+  dnn-ni2:
+    type: string
+    default: oai
+    description: dnn ni2
