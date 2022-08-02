@@ -20,8 +20,8 @@ applications:
     charm: './charms/oai-amf'
     scale: 1
   oai-smf:
-    charm: './charm/oai-smf'
+    charm: './charms/oai-smf'
     scale: 1
   oai-spgwu:
-    charm: './charm/oai-spgwu'
+    charm: './charms/oai-spgwu'
     scale: 1

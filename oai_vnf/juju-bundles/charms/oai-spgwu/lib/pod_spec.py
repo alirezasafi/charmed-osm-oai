@@ -26,9 +26,52 @@ def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
     ]
 
 
+def live_ready_script() -> str:
+    with open("scipts/live-ready.sh") as text_file:
+        return text_file.read()
+
+
+def make_volume_config() -> List[Dict[str, Any]]:
+    return [
+        {
+            "name": "scripts",
+            "mountPath": "/scripts",
+            "files": [
+                {
+                    "path": "live-ready.sh",
+                    "content": live_ready_script()
+                }
+            ]
+        }
+    ]
+
+
+def make_liveness_probe() -> Dict[str, Any]:
+    return {
+        "exec": {
+            "command": ["sh", "/scripts/live-ready.sh"]
+        },
+        "initialDelaySeconds": 10,
+        "periodSeconds": 5
+    }
+
+
+def make_readiness_probe() -> Dict[str, Any]:
+    return {
+        "exec": {
+            "command": ["sh", "/scripts/live-ready.sh"]
+        },
+        "initialDelaySeconds": 5,
+        "periodSeconds": 5
+    }
+
+
 def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
     """make pod spec details"""
     ports = make_pod_ports(config)
+    volume_config = make_volume_config()
+    liveness_probe = make_liveness_probe()
+    readiness_probe = make_readiness_probe()
     return {
         "version": 3,
         "containers": [
@@ -63,7 +106,28 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                     "NRF_FQDN": config["nrf-fqdn"],
                     "NSSAI_SST_0": config["nssai-sst-0"],
                     "NSSAI_SD_0": config["nssai-sd-0"],
-                    "DNN_0": config["dnn-0"]
+                    "DNN_0": config["dnn-0"],
+                    "NSSAI_SST_1": config["nssai-sst-1"],
+                    "NSSAI_SD_1": config["nssai-sd-1"],
+                    "DNN_1": config["dnn-1"],
+                    "NSSAI_SST_2": config["nssai-sst-2"],
+                    "NSSAI_SD_2": config["nssai-sd-2"],
+                    "DNN_2": config["dnn-2"],
+                    "NSSAI_SST_3": config["nssai-sst-3"],
+                    "NSSAI_SD_3": config["nssai-sd-3"],
+                    "DNN_3": config["dnn-3"],
+                    "THREAD_S1U_PRIO": config["thread-s1u-prio"],
+                    "S1U_THREADS": config["s1u-threads"],
+                    "THREAD_SX_PRIO": config["thread-sx-prio"],
+                    "SX_THREADS": config["sx-threads"],
+                    "THREAD_SGI_PRIO": config["thread-sgi-prio"],
+                    "SGI_THREADS": config["sgi-threads"],
+                    "GTP_EXTENSION_HEADER_PRESENT": config["gtp-extention-header-present"]
+                },
+                "volumeConfig": volume_config,
+                "kubernetes": {
+                    "livenessProbe": liveness_probe,
+                    "readinessProbe": readiness_probe
                 }
             }
         ]

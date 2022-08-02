@@ -39,6 +39,10 @@ options:
     type: string
     default: "yes"
     description: network ue nat option
+  gtp-extention-header-present:
+    type: string
+    default: "yes"
+    description: gtp extention header present
   network-ue-ip:
     type: string
     default: "12.1.1.0/24"
@@ -57,7 +61,7 @@ options:
     description: mcc
   mnc:
     type: int
-    default: 95
+    default: 99
     description: mnc
   mnc03:
     type: string
@@ -73,7 +77,7 @@ options:
     description: gw id
   realm:
     type: string
-    default: openairinterface.org
+    default: 3gpp.org
     description: realm
   enable-5g-features:
     type: string
@@ -107,15 +111,75 @@ options:
     type: string
     default: oai-nrf
     description: nrf fqdn
+  thread-s1u-prio:
+    type: int
+    default: 88
+    description: thread s1u priority
+  s1u-threads:
+    type: int
+    default: 1
+    description: s1u threads
+  thread-sx-prio:
+    type: int
+    default: 88
+    description: thread sx priority
+  sx-threads:
+    type: int
+    default: 1
+    description: sx threads
+  thread-sgi-prio:
+    type: int
+    default: 98
+    description: thread sgi priority
+  sgi-threads:
+    type: int
+    default: 1
+    description: sgi threads
   nssai-sst-0:
     type: int
-    default: 222
+    default: 1
     description: nssai sst 0
   nssai-sd-0:
     type: int
-    default: 123
+    default: 1
     description: nssai sd 0
   dnn-0:
     type: string
-    default: default
+    default: oai
     description: dnn 0
+  nssai-sst-1:
+    type: int
+    default: 1
+    description: nssai sst 1
+  nssai-sd-1:
+    type: int
+    default: 1
+    description: nssai sd 1
+  dnn-1:
+    type: string
+    default: oai
+    description: dnn 1
+  nssai-sst-2:
+    type: int
+    default: 1
+    description: nssai sst 2
+  nssai-sd-2:
+    type: int
+    default: 1
+    description: nssai sd 2
+  dnn-2:
+    type: string
+    default: oai
+    description: dnn 2
+  nssai-sst-3:
+    type: int
+    default: 1
+    description: nssai sst 3
+  nssai-sd-3:
+    type: int
+    default: 1
+    description: nssai sd 3
+  dnn-3:
+    type: string
+    default: oai
+    description: dnn 3
