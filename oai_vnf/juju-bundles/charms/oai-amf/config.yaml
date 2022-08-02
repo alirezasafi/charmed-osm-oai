@@ -103,9 +103,17 @@ options:
     type: int
     default: 124
     description: sd 1
+  sst-2:
+    type: int
+    default: 2
+    description: sst 2
+  sd-2:
+    type: int
+    default: 2
+    description: sd 2
   amf-interface-name-for-ngap:
     type: string
-    default: net1
+    default: eth0
     description: amf interface name for ngap
   amf-interface-name-for-n11:
     type: string
@@ -137,7 +145,7 @@ options:
     description: smf instance id 1
   smf-fqdn-1:
     type: string
-    default: oai-smf
+    default: localhost
     description: smf fqdn 1
   smf-ipv4-addr-1:
     type: string
@@ -169,7 +177,7 @@ options:
     description: mysql database
   operator-key:
     type: string
-    default: 63bfa50ee6523365ff14c1f45f88737d
+    default: c42449363bbad02b66d16bc975d77cc1
     description: operator key
   nrf-ipv4-address:
     type: string
@@ -219,3 +227,35 @@ options:
     type: string
     default: v1
     description: ausf api version
+  nssf-ipv4-address:
+    type: string
+    default: oai-nssf
+    description: nssf ipv4 address
+  nssf-fqdn:
+    type: string
+    default: oai-nssf
+    description: nssf fqdn
+  nssf-port:
+    type: int
+    default: 80
+    description: nssf port
+  nssf-api-version:
+    type: string
+    default: v1
+    description: nssf api version
+  external-udm:
+    type: string
+    default: "no"
+    description: external udm
+  use-http2:
+    type: string
+    default: "no"
+    description: use http2
+  int-algo-list:
+    type: string
+    default: '[ "NIA0" , "NIA1" , "NIA2" ]'
+    description: int algo list
+  ciph-algo-list:
+    type: string
+    default: '[ "NEA0" , "NEA1" , "NEA2" ]'
+    description: cipg algo list

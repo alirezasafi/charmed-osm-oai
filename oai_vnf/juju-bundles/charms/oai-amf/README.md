@@ -25,4 +25,5 @@ on enhancements to this charm following best practice guidelines, and
 
 
 ## Notes
-pod port for main container is not proper and it should to be changed.
+- pod port for main container is not proper and it should to be changed.
+- selected-0 not exists in deployment config but was in compose

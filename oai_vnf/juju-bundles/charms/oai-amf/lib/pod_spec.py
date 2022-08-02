@@ -26,9 +26,52 @@ def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
     ]
 
 
+def live_ready_script() -> str:
+    with open("scripts/live-ready.sh") as text_file:
+        return text_file.read()
+
+
+def make_volume_config() -> List[Dict[str, Any]]:
+    return [
+        {
+            "name": "scripts",
+            "mountPath": "/scripts",
+            "files": [
+                {
+                    "path": "live-ready.sh",
+                    "content": live_ready_script()
+                }
+            ]
+        }
+    ]
+
+
+def make_liveness_probe() -> Dict[str, Any]:
+    return {
+        "exec": {
+            "command": ["sh", "/scripts/live-ready.sh"]
+        },
+        "initialDelaySeconds": 10,
+        "periodSeconds": 5
+    }
+
+
+def make_readiness_probe() -> Dict[str, Any]:
+    return {
+        "exec": {
+            "command": ["sh", "/scripts/live-ready.sh"]
+        },
+        "initialDelaySeconds": 5,
+        "periodSeconds": 5
+    }
+
+
 def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
     """make pod spec details"""
     ports = make_pod_ports(config)
+    volume_config = make_volume_config()
+    liveness_probe = make_liveness_probe()
+    readiness_probe = make_readiness_probe()
     return {
         "version": 3,
         "containers": [
@@ -60,14 +103,16 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                     "SD_0": config["sd-0"],
                     "SST_1": config["sst-1"],
                     "SD_1": config["sd-1"],
+                    "SST_2": config["sst-2"],
+                    "SD_2": config["sd-2"],
                     "AMF_INTERFACE_NAME_FOR_NGAP": config["amf-interface-name-for-ngap"],
                     "AMF_INTERFACE_NAME_FOR_N11": config["amf-interface-name-for-n11"],
                     "SMF_INSTANCE_ID_0": config["smf-instance-id-0"],
                     "SMF_FQDN_0": config["smf-fqdn-0"],
                     "SMF_IPV4_ADDR_0": config["smf-ipv4-addr-0"],
                     "SMF_HTTP_VERSION_0": config["smf-http-version-0"],
-                    "SMF_INSTANCE_ID_1": config["smf-instance-id-1"],
                     "SELECTED_0": config["selected-0"],
+                    "SMF_INSTANCE_ID_1": config["smf-instance-id-1"],
                     "SMF_FQDN_1": config["smf-fqdn-1"],
                     "SMF_IPV4_ADDR_1": config["smf-ipv4-addr-1"],
                     "SMF_HTTP_VERSION_1": config["smf-http-version-1"],
@@ -88,7 +133,20 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                     "AUSF_IPV4_ADDRESS": config["ausf-ipv4-address"],
                     "AUSF_PORT": config["ausf-port"],
                     "AUSF_FQDN": config["ausf-fqdn"],
-                    "AUSF_API_VERSION": config["ausf-api-version"]
+                    "AUSF_API_VERSION": config["ausf-api-version"],
+                    "NSSF_IPV4_ADDRESS": config["nssf-ipv4-address"],
+                    "NSSF_FQDN": config["nssf-fqdn"],
+                    "NSSF_PORT": config["nssf-port"],
+                    "NSSF_API_VERSION": config["nssf-api-version"],
+                    "EXTERNAL_UDM": config["external-udm"],
+                    "USE_HTTP2": config["use-http2"],
+                    "INT_ALGO_LIST": config["int-algo-list"],
+                    "CIPH_ALGO_LIST": config["ciph-algo-list"]
+                },
+                "volumeConfig": volume_config,
+                "kubernetes": {
+                    "livenessProbe": liveness_probe,
+                    "readinessProbe": readiness_probe
                 }
             }
         ]
