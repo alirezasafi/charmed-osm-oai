@@ -55,6 +55,17 @@ def make_liveness_probe() -> Dict[str, Any]:
     }
 
 
+def make_kubernetes_resources() -> Dict[str, Any]:
+    return {
+        "pod": {
+            "securityContext": {
+                "runAsUser": 999,
+                "fsGroup": 999
+            }
+        }
+    }
+
+    
 def make_readiness_probe() -> Dict[str, Any]:
     return {
         "exec": {
@@ -74,8 +85,10 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
     # volume_config = make_volume_config()
     liveness_probe = make_liveness_probe()
     readiness_probe = make_readiness_probe()
+    kubernetes_resources = make_kubernetes_resources()
     return {
         "version": 3,
+        "kubernetesResources": kubernetes_resources,
         "containers": [
             {
                 "name": "mysql",
