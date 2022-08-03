@@ -33,7 +33,7 @@ options:
     description: mcc
   mnc:
     type: int
-    default: 95
+    default: 99
     description: mnc
   region-id:
     type: int
@@ -49,7 +49,7 @@ options:
     description: served guami mcc 0
   served-guami-mnc-0:
     type: int
-    default: 95
+    default: 99
     description: served guami mnc 0
   served-guami-region-id-0:
     type: int
@@ -81,7 +81,7 @@ options:
     description: plmn support mcc
   plmn-support-mnc:
     type: int
-    default: 95
+    default: 99
     description: plmn support mnc
   plmn-support-tac:
     type: string
@@ -93,23 +93,23 @@ options:
     description: sst 0
   sd-0:
     type: int
-    default: 1
+    default: 10203
     description: sd 0
   sst-1:
     type: int
-    default: 111
+    default: 1
     description: sst 1
   sd-1:
     type: int
-    default: 124
+    default: 1
     description: sd 1
   sst-2:
     type: int
-    default: 2
+    default: 4
     description: sst 2
   sd-2:
     type: int
-    default: 2
+    default: 4
     description: sd 2
   amf-interface-name-for-ngap:
     type: string
@@ -193,7 +193,7 @@ options:
     description: nf registration
   smf-selection:
     type: string
-    default: "yes"
+    default: "no"
     description: smf selection
   use-fqdn-dns:
     type: string
@@ -206,7 +206,7 @@ options:
   nrf-api-version:
     type: string
     default: v1
-    description: smf selection
+    description: nrf api version
   nrf-fqdn:
     type: string
     default: oai-nrf

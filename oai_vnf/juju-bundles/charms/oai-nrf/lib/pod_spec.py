@@ -22,7 +22,7 @@ def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def live_ready_script() -> str:
-    with open("scipts/live-ready.sh") as text_file:
+    with open("scripts/live-ready.sh") as text_file:
         return text_file.read()
 
 

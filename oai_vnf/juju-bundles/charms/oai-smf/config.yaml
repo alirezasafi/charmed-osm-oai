@@ -48,7 +48,7 @@ options:
     description: smf api version
   default-dns-ipv4-address:
     type: string
-    default: "172.21.3.10"
+    default: "172.21.3.100"
     description: default dns ipv4 address
   default-dns-sec-ipv4-address:
     type: string
@@ -108,7 +108,7 @@ options:
     description: nrf api version
   use-local-subscription-info:
     type: string
-    default: "yes"
+    default: "no"
     description: use local subscription info
   nrf-fqdn:
     type: string
@@ -172,7 +172,7 @@ options:
     description: type 1
   nssai-sst1:
     type: int
-    default: 122
+    default: 222
     description: nssai sst1
   nssai-sd1:
     type: int
@@ -196,7 +196,7 @@ options:
     description: nssai sst2
   nssai-sd2:
     type: int
-    default: 1023
+    default: 10203
     description: nssai sd2
   dnn-range2:
     type: string
