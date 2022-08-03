@@ -1,0 +1,10 @@
+name: oai-nssf
+description: charm operator for NSSF network function
+summary: NSSF charm operator
+min-juju-version: 2.7.0
+
+series: [kubernetes]
+
+deployment:
+    type: stateless
+    service: loadbalancer

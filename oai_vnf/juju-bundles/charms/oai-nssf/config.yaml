@@ -1,0 +1,53 @@
+options:
+  image:
+    type: string
+    default: rdefosseoai/oai-nssf:latest
+    description: docker image name
+  http1:
+    type: int
+    default: 80
+    description: service http1 port
+  http2:
+    type: int
+    default: 8080
+    description: service http2 port
+  time-zone:
+    type: string
+    default: Europe/Paris
+    description: time zone
+  instance:
+    type: int
+    default: 0
+    description: instance id
+  pid-directory:
+    type: string
+    default: /var/run
+    description: pid directory
+  nssf-name:
+    type: string
+    default: oai-nssf
+    description: nssf name
+  nssf-fqdn:
+    type: string
+    default: oai-nssf
+    description: nssf fqdn
+  sbi-if-name:
+    type: string
+    default: eth0
+    description: sbi if name
+  sbi-port-http1:
+    type: int
+    default: 80
+    description: sbi port http1
+  sbi-port-http2:
+    type: int
+    default: 8080
+    description: sbi port http2
+  sbi-api-version:
+    type: string
+    default: v1
+    description: sbi api version
+  nssf-slice-config:
+    type: string
+    default: /tmp/nssf_slice_config.yaml
+    description: nssf slice config
