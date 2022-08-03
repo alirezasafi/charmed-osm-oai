@@ -27,7 +27,7 @@ def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def live_ready_script() -> str:
-    with open("scipts/live-ready.sh") as text_file:
+    with open("scripts/live-ready.sh") as text_file:
         return text_file.read()
 
 
@@ -66,14 +66,27 @@ def make_readiness_probe() -> Dict[str, Any]:
     }
 
 
+def make_kubernetes_resources() -> Dict[str, Any]:
+    return {
+        "pod": {
+            "securityContext": {
+                "runAsUser": 0,
+                "runAsGroup": 0
+            }
+        }
+    }
+
+
 def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
     """make pod spec details"""
     ports = make_pod_ports(config)
     volume_config = make_volume_config()
     liveness_probe = make_liveness_probe()
     readiness_probe = make_readiness_probe()
+    kubernetes_resources = make_kubernetes_resources()
     return {
         "version": 3,
+        "kubernetesResources": kubernetes_resources,
         "containers": [
             {
                 "name": "oai-spgwu",
@@ -81,7 +94,6 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                 "imagePullPolicy": "Never",  # todo: use IfNotPresent,
                 "ports": ports,
                 "envConfig": {
-                    "TZ": config["time-zone"],
                     "PID_DIRECTORY": config["pid-directory"],
                     "SGW_INTERFACE_NAME_FOR_S1U_S12_S4_UP": config["sgw-interface-name-for-s1u-s12-s4-up"],
                     "SGW_INTERFACE_NAME_FOR_SX": config["sgw-interface-name-for-sx"],
@@ -127,7 +139,10 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                 "volumeConfig": volume_config,
                 "kubernetes": {
                     "livenessProbe": liveness_probe,
-                    "readinessProbe": readiness_probe
+                    "readinessProbe": readiness_probe,
+                    "securityContext": {
+                        "privileged": True
+                    }
                 }
             }
         ]

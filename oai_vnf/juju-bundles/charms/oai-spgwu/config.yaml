@@ -25,15 +25,15 @@ options:
     description: pid directory
   sgw-interface-name-for-s1u-s12-s4-up:
     type: string
-    default: eth0
+    default: "eth0"
     description: sgw interface name for s1u s12 s4 up
   sgw-interface-name-for-sx:
     type: string
-    default: eth0
+    default: "eth0"
     description: sgw interface name for sx
   pgw-interface-name-for-sgi:
     type: string
-    default: eth0
+    default: "eth0"
     description: pgw interface name for sgi
   network-ue-nat-option:
     type: string
@@ -141,7 +141,7 @@ options:
     description: nssai sst 0
   nssai-sd-0:
     type: int
-    default: 1
+    default: 10203
     description: nssai sd 0
   dnn-0:
     type: string
@@ -157,19 +157,19 @@ options:
     description: nssai sd 1
   dnn-1:
     type: string
-    default: oai
+    default: oai.ipv4
     description: dnn 1
   nssai-sst-2:
     type: int
-    default: 1
+    default: 222
     description: nssai sst 2
   nssai-sd-2:
     type: int
-    default: 1
+    default: 123
     description: nssai sd 2
   dnn-2:
     type: string
-    default: oai
+    default: default
     description: dnn 2
   nssai-sst-3:
     type: int
