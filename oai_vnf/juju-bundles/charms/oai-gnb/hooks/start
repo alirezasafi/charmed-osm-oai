@@ -20,6 +20,7 @@ class OaiGnbCharm(CharmBase):
     _stored = StoredState()
 
     def __init__(self, *args):
+        super().__init__(*args)
         self._stored.set_default(spec=None)
 
         # observe

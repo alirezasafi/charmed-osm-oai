@@ -26,11 +26,24 @@ def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
     ]
 
 
+def make_kubernetes_resources() -> Dict[str, Any]:
+    return {
+        "pod": {
+            "securityContext": {
+                "runAsUser": 0,
+                "runAsGroup": 0
+            }
+        }
+    }
+
+
 def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
     """make pod spec details"""
     ports = make_pod_ports(config)
+    kubernetes_resources = make_kubernetes_resources()
     return {
         "version": 3,
+        "kubernetesResources": kubernetes_resources,
         "containers": [
             {
                 "name": "oai-gnb",
@@ -55,6 +68,11 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                     "GNB_NGU_IF_NAME": config["gnb-ngu-if-name"],
                     "GNB_NGU_IP_ADDRESS": config["gnb-ngu-ip-address"],
                     "USE_ADDITIONAL_OPTIONS": config["use-additional-option"]
+                },
+                "kubernetes": {
+                    "securityContext": {
+                        "privileged": True
+                    }
                 }
             }
         ]
