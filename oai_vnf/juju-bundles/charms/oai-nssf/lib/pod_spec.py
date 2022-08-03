@@ -1,3 +1,4 @@
+import yaml
 import logging
 from typing import Any, Dict, List
 
@@ -27,8 +28,9 @@ def live_ready_script() -> str:
 
 
 def nssf_slice_config() -> str:
-    with open("scripts/nssf_slice_config.yaml") as text_file:
-        return text_file.read()
+    with open("scripts/nssf_slice_config.yaml") as yaml_file:
+        nssf_config = yaml.safe_load(yaml_file)
+    return yaml.dump(nssf_config)
 
 
 def make_volume_config() -> List[Dict[str, Any]]:
@@ -76,14 +78,27 @@ def make_readiness_probe() -> Dict[str, Any]:
     }
 
 
+def make_kubernetes_resource() -> Dict[str, Any]:
+    return {
+        "pod": {
+            "securityContext": {
+                "runAsUser": 0,
+                "runAsGroup": 0
+            }
+        }
+    }
+
+
 def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
     """make pod spec details"""
     ports = make_pod_ports(config)
     volume_config = make_volume_config()
     liveness_probe = make_liveness_probe()
     readiness_probe = make_readiness_probe()
+    kubernetes_resource = make_kubernetes_resource()
     return {
         "version": 3,
+        "kubernetesResource": kubernetes_resource,
         "containers": [
             {
                 "name": "oai-nssf",
@@ -105,7 +120,10 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                 "volumeConfig": volume_config,
                 "kubernetes": {
                     "livenessProbe": liveness_probe,
-                    "readinessProbe": readiness_probe
+                    "readinessProbe": readiness_probe,
+                    "securityContext": {
+                        "privileged": False
+                    }
                 }
             }
         ]
