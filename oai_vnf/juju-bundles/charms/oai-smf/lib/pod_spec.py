@@ -66,14 +66,27 @@ def make_readiness_probe() -> Dict[str, Any]:
     }
 
 
+def make_kubernetes_resources() -> Dict[str, Any]:
+    return {
+        "pod": {
+            "securityContext": {
+                "runAsUser": 0,
+                "runAsGroup": 0
+            }
+        }
+    }
+
+
 def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
     """make pod spec details"""
     ports = make_pod_ports(config)
     volume_config = make_volume_config()
     liveness_probe = make_liveness_probe()
     readiness_probe = make_readiness_probe()
+    kubernetes_resources = make_kubernetes_resources()
     return {
         "version": 3,
+        "kubernetesResources": kubernetes_resources,
         "containers": [
             {
                 "name": "oai-smf",
