@@ -1,4 +1,7 @@
 # mysql
+### Mini Deployment
+- use mini database initialization. and data persistence is off.
+
 
 ## Description
 
