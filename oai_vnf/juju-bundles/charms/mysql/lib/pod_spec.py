@@ -22,21 +22,26 @@ def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def healthcheck_config() -> str:
-    with open('config/healthcheck.sh') as text_file:
+    with open('scripts/healthcheck.sh') as text_file:
+        return text_file.read()
+
+
+def oai_db_initialization() -> str:
+    with open('initialization/oai_db.sql') as text_file:
         return text_file.read()
 
 
 def make_volume_config() -> List[Dict[str, Any]]:
     return [
         {
-            "name": "config",
-            "mountPath": "/tmp/mysql-healthcheck.sh",
+            "name": "migrations",
+            "mountPath": "/docker-entrypoint-initdb.d",
             "files": [
                 {
-                    "path": "mysql-healthcheck.sh",
-                    "content": healthcheck_config()
+                    "path": "oai_db.sql",
+                    "content": oai_db_initialization()
                 }
-            ]  
+            ]
         }
     ]
 
@@ -82,7 +87,7 @@ def make_readiness_probe() -> Dict[str, Any]:
 def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
     """make pod spec details"""
     ports = make_pod_ports(config)
-    # volume_config = make_volume_config()
+    volume_config = make_volume_config()
     liveness_probe = make_liveness_probe()
     readiness_probe = make_readiness_probe()
     kubernetes_resources = make_kubernetes_resources()
@@ -102,6 +107,7 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                     "MYSQL_PASSWORD": config["mysql-password"],
                     "MYSQL_ROOT_PASSWORD": config["mysql-root-password"]
                 },
+                "volumeConfig": volume_config,
                 "kubernetes": {
                     "livenessProbe": liveness_probe,
                     "readinessProbe": readiness_probe
