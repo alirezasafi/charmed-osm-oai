@@ -105,11 +105,11 @@ options:
     description: sd 1
   sst-2:
     type: int
-    default: 4
+    default: 2
     description: sst 2
   sd-2:
     type: int
-    default: 4
+    default: 2
     description: sd 2
   amf-interface-name-for-ngap:
     type: string
@@ -129,7 +129,7 @@ options:
     description: smf fqdn 0
   smf-ipv4-addr-0:
     type: string
-    default: oai-smf
+    default: "0.0.0.0"
     description: smf ipv4 addr 0
   smf-http-version-0:
     type: string
@@ -149,7 +149,7 @@ options:
     description: smf fqdn 1
   smf-ipv4-addr-1:
     type: string
-    default: oai-smf
+    default: "0.0.0.0"
     description: smf ipv4 addr 1
   smf-http-version-1:
     type: string
@@ -177,11 +177,11 @@ options:
     description: mysql database
   operator-key:
     type: string
-    default: c42449363bbad02b66d16bc975d77cc1
+    default: "c42449363bbad02b66d16bc975d77cc1"
     description: operator key
   nrf-ipv4-address:
     type: string
-    default: oai-nrf
+    default: "0.0.0.0"
     description: nrf ipv4 address
   nrf-port:
     type: int
@@ -201,7 +201,7 @@ options:
     description: use fqdn dns
   external-ausf:
     type: string
-    default: "yes"
+    default: "no"
     description: external ausf
   nrf-api-version:
     type: string
@@ -213,7 +213,7 @@ options:
     description: nrf fqdn
   ausf-ipv4-address:
     type: string
-    default: oai-ausf
+    default: "127.0.0.1"
     description: ausf ipv4 address
   ausf-port:
     type: int
@@ -229,7 +229,7 @@ options:
     description: ausf api version
   nssf-ipv4-address:
     type: string
-    default: oai-nssf
+    default: "127.0.0.1"
     description: nssf ipv4 address
   nssf-fqdn:
     type: string

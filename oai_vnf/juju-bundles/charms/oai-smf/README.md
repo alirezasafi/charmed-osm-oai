@@ -1,5 +1,7 @@
 # oai-smf
-
+# NOTES
+default-dns-ipv4-address: configure dns for ue. don't use k8s dns. it can be 8.8.8.8 or 4.4.4.4 if you don't know your dns.
+default-dns-sec-ipv4-address: configure dns for ue. don't use k8s dns. it can be 8.8.8.8 or 4.4.4.4 if you don't know your dns
 ## Description
 
 TODO: Describe your charm in a few paragraphs of Markdown

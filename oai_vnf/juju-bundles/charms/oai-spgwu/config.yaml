@@ -46,7 +46,7 @@ options:
   network-ue-ip:
     type: string
     default: "12.1.1.0/24"
-    description: network ue ip
+    description: The range in which UE ip-address will be allocated should be configured the same in SMF
   spgwc0-ip-address:
     type: string
     default: "127.0.0.1"
@@ -64,8 +64,8 @@ options:
     default: 99
     description: mnc
   mnc03:
-    type: string
-    default: "095"
+    type: int
+    default: 99
     description: mnc03
   tac:
     type: int
@@ -97,7 +97,7 @@ options:
     description: udm fqdn
   nrf-ipv4-address:
     type: string
-    default: oai-nrf
+    default: "127.0.0.1"
     description: nrf ipv4 address
   nrf-port:
     type: int

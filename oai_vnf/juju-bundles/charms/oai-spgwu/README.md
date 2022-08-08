@@ -1,5 +1,6 @@
 # oai-spgwu
-
+# NOTES
+Network UE IP: The range in which UE ip-address will be allocated should be configured the same in SMF
 ## Description
 
 TODO: Describe your charm in a few paragraphs of Markdown

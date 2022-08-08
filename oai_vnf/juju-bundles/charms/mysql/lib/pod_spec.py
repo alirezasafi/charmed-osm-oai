@@ -105,7 +105,8 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                     "MYSQL_DATABASE": config["mysql-db"],
                     "MYSQL_USER": config["mysql-user"],
                     "MYSQL_PASSWORD": config["mysql-password"],
-                    "MYSQL_ROOT_PASSWORD": config["mysql-root-password"]
+                    "MYSQL_ROOT_PASSWORD": config["mysql-root-password"],
+                    "MYSQL_ALLOW_EMPTY_PASSWORD": config["mysql-allow-empty-password"]
                 },
                 "volumeConfig": volume_config,
                 "kubernetes": {

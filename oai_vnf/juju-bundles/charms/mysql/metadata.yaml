@@ -7,5 +7,5 @@ min-juju-version: 2.7.0
 series: [kubernetes]
 
 deployment:
-    type: stateless
+    type: statefull
     service: loadbalancer

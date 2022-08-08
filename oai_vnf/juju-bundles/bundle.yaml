@@ -1,17 +1,9 @@
 description: OAI Bundle
 bundle: kubernetes
+name: oai-core
 applications:
   mysql:
     charm: './charms/mysql'
-    scale: 1
-  oai-udr:
-    charm: './charms/oai-udr'
-    scale: 1
-  oai-udm:
-    charm: './charms/oai-udm'
-    scale: 1
-  oai-ausf:
-    charm: './charms/oai-ausf'
     scale: 1
   oai-nrf:
     charm: './charms/oai-nrf'

@@ -1,5 +1,5 @@
 # oai-nrf
-
+there is no different between mini and basic deployment.
 ## Description
 
 TODO: Describe your charm in a few paragraphs of Markdown

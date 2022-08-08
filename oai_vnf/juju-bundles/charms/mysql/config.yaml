@@ -31,3 +31,7 @@ options:
     type: string
     default: linux
     description: mysql root password
+  mysql-allow-empty-password:
+    tyep: string
+    default: "true"
+    description: mysql allow empty password
