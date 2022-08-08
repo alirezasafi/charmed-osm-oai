@@ -55,7 +55,7 @@ options:
     default: "8.8.8.8"
     description: configure dns for ue. don't use k8s dns. it can be 8.8.8.8 or 4.4.4.4 if you don't know your dns.
   amf-ipv4-address:
-    type:network-ue-ip string
+    type: string
     default: "127.0.0.1"
     description: amf ipv4 address
   amf-port:

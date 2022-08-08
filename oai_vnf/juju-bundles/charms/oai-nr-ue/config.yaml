@@ -21,8 +21,8 @@ options:
     description: time zone
   rfsimulator:
     type: string
-    default: "172.17.0.11"
-    description: rf simulator
+    default: oai-gnb
+    description: ip-address of gnb rf-sim. service name not accepted.
   full-imsi:
     type: string
     default: "208990100001121"

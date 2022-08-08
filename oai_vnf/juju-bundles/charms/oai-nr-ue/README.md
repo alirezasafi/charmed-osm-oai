@@ -1,5 +1,6 @@
 # oai-nr-ue
-
+# NOTES:
+rfsimulator: ip-address of gnb service. service name not accepted.
 ## Description
 
 TODO: Describe your charm in a few paragraphs of Markdown

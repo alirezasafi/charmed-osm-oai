@@ -17,9 +17,6 @@ applications:
   oai-spgwu:
     charm: './charms/oai-spgwu'
     scale: 1
-  oai-nssf:
-    charm: './charms/oai-nssf'
-    scale: 1
   oai-gnb:
     charm: './charms/oai-gnb'
     scale: 1

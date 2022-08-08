@@ -1,5 +1,6 @@
 # oai-gnb
-
+# NOTES
+AMF IP address: amf ip-address currently we can not provide the amf service name to be used by gNB. this should be ip address of amf service. otherwise not worked.
 ## Description
 
 TODO: Describe your charm in a few paragraphs of Markdown
