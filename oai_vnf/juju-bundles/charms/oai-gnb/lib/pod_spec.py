@@ -1,3 +1,4 @@
+import json
 import logging
 from typing import Any, Dict, List
 
@@ -26,21 +27,93 @@ def make_pod_ports(config: Dict[str, Any]) -> List[Dict[str, Any]]:
     ]
 
 
-def make_kubernetes_resources() -> Dict[str, Any]:
+def make_network_attachment_resources(config: Dict[str, Any]) -> Dict[str, Any]:
     return {
-        "pod": {
-            "securityContext": {
-                "runAsUser": 0,
-                "runAsGroup": 0
+        "network-attachment-definitions.k8s.cni.cncf.io": [
+            {
+                "apiVersion": "k8s.cni.cncf.io/v1",
+                "kind": "NetworkAttachmentDefinition",
+                "metadata": {
+                    "name": "oai-gnb-net1",
+                },
+                "spec": {
+                    "config": json.dumps({
+                        "cniVersion": "0.3.0",
+                        "type": "macvlan",
+                        "master": config["multus-host-interface"],
+                        "mode": "bridge",
+                        "ipam": {
+                            "type": "static",
+                            "addresses": [
+                                {
+                                    "address": f"{config['multus-ip1']}/{config['multus-mask1']}"
+                                }
+                            ]
+                        }
+                    })
+                }
+            },
+            {
+                "apiVersion": "k8s.cni.cncf.io/v1",
+                "kind": "NetworkAttachmentDefinition",
+                "metadata": {
+                    "name": "oai-gnb-net2",
+                },
+                "spec": {
+                    "config": json.dumps({
+                        "cniVersion": "0.3.0",
+                        "type": "macvlan",
+                        "master": config["multus-host-interface"],
+                        "mode": "bridge",
+                        "ipam": {
+                            "type": "static",
+                            "addresses": [
+                                {
+                                    "address": f"{config['multus-ip2']}/{config['multus-mask2']}"
+                                }
+                            ]
+                        }
+                    })
+                }
             }
+        ]
+    }
+
+
+def make_kubernetes_resources(config: Dict[str, Any]) -> Dict[str, Any]:
+    pod = {
+        "securityContext": {
+            "runAsUser": 0,
+            "runAsGroup": 0
         }
+    }
+    if config["multus-create"]:
+        annotations = {
+            "k8s.v1.cni.cncf.io/networks": json.dumps([
+                {
+                    "name": "oai-gnb-net1",
+                    "default-route": [config["multus-gateway"]]
+                },
+                {
+                     "name": "oai-gnb-net2"
+                }
+            ])
+        }   
+        custom_resources = make_network_attachment_resources(config)
+        pod["annotations"] = annotations
+        return {
+            "customResources": custom_resources,
+            "pod": pod
+        }
+    return {
+        "pod": pod
     }
 
 
 def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
     """make pod spec details"""
     ports = make_pod_ports(config)
-    kubernetes_resources = make_kubernetes_resources()
+    kubernetes_resources = make_kubernetes_resources(config)
     return {
         "version": 3,
         "kubernetesResources": kubernetes_resources,
@@ -48,7 +121,7 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
             {
                 "name": "oai-gnb",
                 "image": config["image"],
-                "imagePullPolicy": "Never",  # todo: use IfNotPresent,
+                "imagePullPolicy": "IfNotPresent",
                 "ports": ports,
                 "envConfig": {
                     "TZ": config["time-zone"],

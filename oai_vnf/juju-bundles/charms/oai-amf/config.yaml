@@ -15,6 +15,7 @@ options:
     type: int
     default: 9090
     description: service http2 port
+  # env config
   time-zone:
     type: string
     default: Europe/Paris
@@ -113,8 +114,8 @@ options:
     description: sd 2
   amf-interface-name-for-ngap:
     type: string
-    default: eth0
-    description: amf interface name for ngap
+    default: net1
+    description: amf interface name for ngap. use eth0 if multus-create is false.
   amf-interface-name-for-n11:
     type: string
     default: eth0
@@ -259,3 +260,24 @@ options:
     type: string
     default: '[ "NEA0" , "NEA1" , "NEA2" ]'
     description: cipg algo list
+  # network attachment config
+  multus-create:
+    type: boolean
+    default: true
+    description: network attachment creation flag
+  multus-ip:
+    type: string
+    default: "172.21.6.201"
+    description: network attachment ip address
+  multus-mask:
+    type: string
+    default: "22"
+    description: network attachment net mask
+  multus-gateway:
+    type: string
+    default: "172.21.7.254"
+    description: network attachment gateway addr
+  multus-host-interface:
+    type: string
+    default: "ens3"
+    description: network attachment host interface name for master

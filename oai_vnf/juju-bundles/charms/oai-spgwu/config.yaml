@@ -25,16 +25,16 @@ options:
     description: pid directory
   sgw-interface-name-for-s1u-s12-s4-up:
     type: string
-    default: "eth0"
-    description: sgw interface name for s1u s12 s4 up
+    default: "net1"
+    description: sgw interface name for s1u s12 s4 up. use eth0 if multus-create is false
   sgw-interface-name-for-sx:
     type: string
     default: "eth0"
     description: sgw interface name for sx
   pgw-interface-name-for-sgi:
     type: string
-    default: "eth0"
-    description: pgw interface name for sgi
+    default: "net1"
+    description: pgw interface name for sgi. use eth0 if multus-create is false
   network-ue-nat-option:
     type: string
     default: "yes"
@@ -183,3 +183,24 @@ options:
     type: string
     default: oai
     description: dnn 3
+  # network attachment config
+  multus-create:
+    type: boolean
+    default: true
+    description: network attachment creation flag
+  multus-ip:
+    type: string
+    default: "172.21.6.200"
+    description: network attachment ip address
+  multus-mask:
+    type: string
+    default: "22"
+    description: network attachment net mask
+  multus-gateway:
+    type: string
+    default: "172.21.7.254"
+    description: network attachment gateway addr
+  multus-host-interface:
+    type: string
+    default: "ens3"
+    description: network attachment host interface name for master

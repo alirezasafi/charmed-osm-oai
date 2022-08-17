@@ -1,3 +1,4 @@
+import json
 import logging
 from typing import Any, Dict, List
 
@@ -66,14 +67,60 @@ def make_readiness_probe() -> Dict[str, Any]:
     }
 
 
-def make_kubernetes_resources() -> Dict[str, Any]:
+def make_network_attachment_resources(config: Dict[str, Any]) -> Dict[str, Any]:
     return {
-        "pod": {
-            "securityContext": {
-                "runAsUser": 0,
-                "runAsGroup": 0
+        "network-attachment-definitions.k8s.cni.cncf.io": [
+            {
+                "apiVersion": "k8s.cni.cncf.io/v1",
+                "kind": "NetworkAttachmentDefinition",
+                "metadata": {
+                    "name": "oai-5g-mini-n3-net1",
+                },
+                "spec": {
+                    "config": json.dumps({
+                        "cniVersion": "0.3.0",
+                        "type": "macvlan",
+                        "master": config["multus-host-interface"],
+                        "mode": "bridge",
+                        "ipam": {
+                            "type": "static",
+                            "addresses": [
+                                {
+                                    "address": f"{config['multus-ip']}/{config['multus-mask']}"
+                                }
+                            ]
+                        }
+                    })
+                }
             }
+        ]
+    }
+
+
+def make_kubernetes_resources(config: Dict[str, Any]) -> Dict[str, Any]:
+    pod = {
+        "securityContext": {
+            "runAsUser": 0,
+            "runAsGroup": 0
         }
+    }
+    if config["multus-create"]:
+        annotations = {
+            "k8s.v1.cni.cncf.io/networks": json.dumps([
+                {
+                    "name": "oai-5g-mini-n3-net1",
+                    "default-route": [config["multus-gateway"]]
+                }
+            ])
+        }   
+        custom_resources = make_network_attachment_resources(config)
+        pod["annotations"] = annotations
+        return {
+            "customResources": custom_resources,
+            "pod": pod
+        }
+    return {
+        "pod": pod
     }
 
 
@@ -83,7 +130,7 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
     volume_config = make_volume_config()
     liveness_probe = make_liveness_probe()
     readiness_probe = make_readiness_probe()
-    kubernetes_resources = make_kubernetes_resources()
+    kubernetes_resources = make_kubernetes_resources(config)
     return {
         "version": 3,
         "kubernetesResources": kubernetes_resources,
@@ -91,7 +138,7 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
             {
                 "name": "oai-spgwu",
                 "image": config["image"],
-                "imagePullPolicy": "Never",  # todo: use IfNotPresent,
+                "imagePullPolicy": "IfNotPresent",
                 "ports": ports,
                 "envConfig": {
                     "GW_ID": config["gw-id"],
@@ -133,7 +180,7 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                     "NSSAI_SD_3": config["nssai-sd-3"],
                     "DNN_3": config["dnn-3"],
                     "UPF_FQDN_5G": config["upf-fqdn-5g"],
-                    # "MNC": config["mnc"],
+                    "MNC": config["mnc"],
                     # "TAC": config["tac"],
                 },
                 "volumeConfig": volume_config,

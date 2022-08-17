@@ -21,8 +21,8 @@ options:
     description: time zone
   rfsimulator:
     type: string
-    default: oai-gnb
-    description: ip-address of gnb rf-sim. service name not accepted.
+    default: "172.21.6.202"
+    description: ip-address of gnb rf-sim. service name not accepted. shoul be match with gnb
   full-imsi:
     type: string
     default: "208990100001121"
@@ -51,3 +51,24 @@ options:
     type: string
     default: "-E --sa --rfsim -r 106 --numerology 1 -C 3619200000 --nokrnmod"
     description: use additional options
+  # network attachment config
+  multus-create:
+    type: boolean
+    default: true
+    description: network attachment creation flag
+  multus-ip:
+    type: string
+    default: "172.21.6.204"
+    description: network attachment ip address
+  multus-mask:
+    type: string
+    default: "22"
+    description: network attachment net mask
+  multus-gateway:
+    type: string
+    default: "172.21.7.254"
+    description: network attachment gateway addr
+  multus-host-interface:
+    type: string
+    default: "ens3"
+    description: network attachment host interface name for master

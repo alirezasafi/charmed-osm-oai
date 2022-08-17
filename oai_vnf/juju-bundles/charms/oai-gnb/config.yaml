@@ -61,25 +61,54 @@ options:
     description: nssai sd1
   amf-ip-address:
     type: string
-    default: oai-amf
-    description: amf ip address
+    default: "172.21.6.201"
+    description: amf ip address. use oai-5g-mini-n1-net1
   gnb-nga-if-name:
     type: string
-    default: eth0
-    description: gnb nga interface name
+    default: net1
+    description: gnb nga interface name. use eth0 if multus-create is false
   gnb-nga-ip-address:
     type: string
-    default: status.podIP
-    description: gnb nga ip address
+    default: "172.21.6.202"
+    description: gnb nga ip address. oai-gnb-net1 ip addr
   gnb-ngu-if-name:
     type: string
-    default: eth0
-    description: gnb ngu interface name
+    default: net2
+    description: gnb ngu interface name. use eth0 if multus-create is false
   gnb-ngu-ip-address:
     type: string
-    default: status.podIP
-    description: gnb ngu ip address
+    default: "172.21.6.203"
+    description: gnb ngu ip address. oai-gnb-net2 ip addr
   use-additional-option:
     type: string
     default: "--sa -E --rfsim"
     description: use additional option
+  # network attachment config
+  multus-create:
+    type: boolean
+    default: true
+    description: network attachment creation flag
+  multus-ip1:
+    type: string
+    default: "172.21.6.202"
+    description: network attachment ip address 1
+  multus-mask1:
+    type: string
+    default: "22"
+    description: network attachment net mask 1
+  multus-ip2:
+    type: string
+    default: "172.21.6.203"
+    description: network attachment ip address 2
+  multus-mask2:
+    type: string
+    default: "22"
+    description: network attachment net mask 2
+  multus-gateway:
+    type: string
+    default: "172.21.7.254"
+    description: network attachment gateway addr
+  multus-host-interface:
+    type: string
+    default: "ens3"
+    description: network attachment host interface name for master
