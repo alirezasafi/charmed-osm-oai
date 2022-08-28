@@ -63,7 +63,10 @@ def make_kubernetes_resources() -> Dict[str, Any]:
             "securityContext": {
                 "runAsUser": 0,
                 "runAsGroup": 0
-            }
+            },
+            "restartPolicy": "Always",
+            "dnsPolicy": "ClusterFirst",
+            "terminationGracePeriodSeconds": 30
         }
     }
 def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:

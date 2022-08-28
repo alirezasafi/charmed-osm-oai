@@ -98,7 +98,7 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
             {
                 "name": "mysql",
                 "image": config["image"],
-                "imagePullPolicy": "Never", # todo: use IfNotPresent,
+                "imagePullPolicy": "IfNotPresent",
                 "ports": ports,
                 "envConfig": {
                     "TZ": config["time-zone"],

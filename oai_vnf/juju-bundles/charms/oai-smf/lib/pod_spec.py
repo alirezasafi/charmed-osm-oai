@@ -72,7 +72,10 @@ def make_kubernetes_resources() -> Dict[str, Any]:
             "securityContext": {
                 "runAsUser": 0,
                 "runAsGroup": 0
-            }
+            },
+            "restartPolicy": "Always",
+            "dnsPolicy": "ClusterFirst",
+            "terminationGracePeriodSeconds": 30
         }
     }
 

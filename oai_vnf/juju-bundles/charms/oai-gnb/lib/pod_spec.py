@@ -85,7 +85,10 @@ def make_kubernetes_resources(config: Dict[str, Any]) -> Dict[str, Any]:
         "securityContext": {
             "runAsUser": 0,
             "runAsGroup": 0
-        }
+        },
+        "restartPolicy": "Always",
+        "dnsPolicy": "ClusterFirst",
+        "terminationGracePeriodSeconds": 30
     }
     if config["multus-create"]:
         annotations = {

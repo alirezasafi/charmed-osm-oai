@@ -62,7 +62,10 @@ def make_kubernetes_resources(config: Dict[str, Any]) -> Dict[str, Any]:
         "securityContext": {
             "runAsUser": 0,
             "runAsGroup": 0
-        }
+        },
+        "restartPolicy": "Always",
+        "dnsPolicy": "ClusterFirst",
+        "terminationGracePeriodSeconds": 30
     }
     if config["multus-create"]:
         annotations = {
@@ -82,6 +85,7 @@ def make_kubernetes_resources(config: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "pod": pod
     }
+
 
 
 def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
@@ -112,7 +116,8 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                     "securityContext": {
                         "privileged": True
                     }
-                }
+                },
+                "resources": container_resources
             }
         ]
     }

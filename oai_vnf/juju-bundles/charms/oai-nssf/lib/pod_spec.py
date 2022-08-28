@@ -84,7 +84,10 @@ def make_kubernetes_resource() -> Dict[str, Any]:
             "securityContext": {
                 "runAsUser": 0,
                 "runAsGroup": 0
-            }
+            },
+            "restartPolicy": "Always",
+            "dnsPolicy": "ClusterFirst",
+            "terminationGracePeriodSeconds": 30
         }
     }
 
@@ -98,7 +101,7 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
     kubernetes_resource = make_kubernetes_resource()
     return {
         "version": 3,
-        "kubernetesResource": kubernetes_resource,
+        "kubernetesResources": kubernetes_resource,
         "containers": [
             {
                 "name": "oai-nssf",
