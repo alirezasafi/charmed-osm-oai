@@ -1,7 +1,7 @@
 options:
   image:
     type: string
-    default: rdefosseoai/oai-amf:latest
+    default: oaisoftwarealliance/oai-amf:v1.4.0
     description: docker image name
   oai-amf:
     type: int

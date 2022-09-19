@@ -116,8 +116,7 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
                     "securityContext": {
                         "privileged": True
                     }
-                },
-                "resources": container_resources
+                }
             }
         ]
     }
