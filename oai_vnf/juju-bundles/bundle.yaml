@@ -5,21 +5,28 @@ applications:
   mysql:
     charm: './charms/mysql'
     scale: 1
+    constraints: "mem=256M cpu-power=100"
   oai-nrf:
     charm: './charms/oai-nrf'
     scale: 1
+    constraints: "mem=256M cpu-power=100"
   oai-amf:
     charm: './charms/oai-amf'
     scale: 1
+    constraints: "mem=256M cpu-power=100"
   oai-smf:
     charm: './charms/oai-smf'
     scale: 1
-  oai-spgwu:
+    constraints: "mem=256M cpu-power=100"
+  oai-spgwu: 
     charm: './charms/oai-spgwu'
     scale: 1
+    constraints: "mem=256M cpu-power=100"
   oai-gnb:
     charm: './charms/oai-gnb'
     scale: 1
+    constraints: "mem=2G cpu-power=600"
   oai-nr-ue:
     charm: './charms/oai-nr-ue'
     scale: 1
+    constraints: "mem=2G cpu-power=600"
