@@ -1,7 +1,7 @@
 options:
   image:
     type: string
-    default: rdefosseoai/oai-smf:latest
+    default: oaisoftwarealliance/oai-smf:v1.4.0
     description: docker image name
   oai-smf:
     type: int
@@ -56,7 +56,7 @@ options:
     description: configure dns for ue. don't use k8s dns. it can be 8.8.8.8 or 4.4.4.4 if you don't know your dns.
   amf-ipv4-address:
     type: string
-    default: "127.0.0.1"
+    default: "oai-amf"
     description: amf ipv4 address
   amf-port:
     type: int
@@ -72,7 +72,7 @@ options:
     description: amf fqdn
   udm-ipv4-address:
     type: string
-    default: "127.0.0.1"
+    default: "oai-udm"
     description: udm ipv4 address
   udm-port:
     type: int
@@ -88,7 +88,7 @@ options:
     description: udm fqdn
   upf-ipv4-address:
     type: string
-    default: "127.0.0.1"
+    default: oai-spgwu
     description: upf ipv4 address
   upf-fqdn-0:
     type: string
@@ -96,7 +96,7 @@ options:
     description: upf fqdn 0
   nrf-ipv4-address:
     type: string
-    default: "127.0.0.1"
+    default: "oai-nrf"
     description: nrf ipv4 address
   nrf-port:
     type: int

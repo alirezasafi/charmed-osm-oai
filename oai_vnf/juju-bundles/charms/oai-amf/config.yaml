@@ -114,7 +114,7 @@ options:
     description: sd 2
   amf-interface-name-for-ngap:
     type: string
-    default: net1
+    default: "net1"
     description: amf interface name for ngap. use eth0 if multus-create is false.
   amf-interface-name-for-n11:
     type: string
@@ -130,7 +130,7 @@ options:
     description: smf fqdn 0
   smf-ipv4-addr-0:
     type: string
-    default: "0.0.0.0"
+    default: "oai-smf"
     description: smf ipv4 addr 0
   smf-http-version-0:
     type: string
@@ -146,11 +146,11 @@ options:
     description: smf instance id 1
   smf-fqdn-1:
     type: string
-    default: localhost
+    default: oai-smf
     description: smf fqdn 1
   smf-ipv4-addr-1:
     type: string
-    default: "0.0.0.0"
+    default: "oai-smf"
     description: smf ipv4 addr 1
   smf-http-version-1:
     type: string
@@ -182,7 +182,7 @@ options:
     description: operator key
   nrf-ipv4-address:
     type: string
-    default: "0.0.0.0"
+    default: "oai-nrf"
     description: nrf ipv4 address
   nrf-port:
     type: int
@@ -214,7 +214,7 @@ options:
     description: nrf fqdn
   ausf-ipv4-address:
     type: string
-    default: "127.0.0.1"
+    default: "oai-ausf"
     description: ausf ipv4 address
   ausf-port:
     type: int
@@ -230,7 +230,7 @@ options:
     description: ausf api version
   nssf-ipv4-address:
     type: string
-    default: "127.0.0.1"
+    default: "oai-nssf"
     description: nssf ipv4 address
   nssf-fqdn:
     type: string

@@ -1,7 +1,7 @@
 options:
   image:
     type: string
-    default: rdefosseoai/oai-nrf:latest
+    default: oaisoftwarealliance/oai-nrf:v1.4.0
     description: docker image name
   http1:
     type: int

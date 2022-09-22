@@ -1,7 +1,7 @@
 options:
   image:
     type: string
-    default: rdefosseoai/oai-spgwu-tiny:latest
+    default: oaisoftwarealliance/oai-spgwu-tiny:v1.4.0
     description: docker image name
   oai-spgwu-tiny:
     type: int
@@ -26,14 +26,14 @@ options:
   sgw-interface-name-for-s1u-s12-s4-up:
     type: string
     default: "net1"
-    description: sgw interface name for s1u s12 s4 up. use eth0 if multus-create is false
+    description: net1 interface name for s1u s12 s4 up. use eth0 if multus-create is false
   sgw-interface-name-for-sx:
     type: string
     default: "eth0"
     description: sgw interface name for sx
   pgw-interface-name-for-sgi:
     type: string
-    default: "net1"
+    default: "eth0"
     description: pgw interface name for sgi. use eth0 if multus-create is false
   network-ue-nat-option:
     type: string
@@ -97,7 +97,7 @@ options:
     description: udm fqdn
   nrf-ipv4-address:
     type: string
-    default: "127.0.0.1"
+    default: "oai-nrf"
     description: nrf ipv4 address
   nrf-port:
     type: int
