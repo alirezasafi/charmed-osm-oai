@@ -89,7 +89,7 @@ def make_pod_spec(config: Dict[str, Any]) -> Dict[str, Any]:
             {
                 "name": "oai-nrf",
                 "image": config["image"],
-                "imagePullPolicy": "Never",  # todo: use IfNotPresent,
+                "imagePullPolicy": "IfNotPresent",
                 "ports": ports,
                 "envConfig": {
                     "INSTANCE": config["instance"],

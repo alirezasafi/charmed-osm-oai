@@ -17,12 +17,12 @@ options:
     description: instance id
   pid-directory:
     type: string
-    default: /var/run
+    default: "/var/run"
     description: pid directory
   nrf-interface-name-for-sbi:
     type: string
-    default: eth0
-    description: nrf interface name for sbi
+    default: "eth0"
+    description: nrf interface name for sbi net1 if multus.create is set true
   nrf-interface-port-for-sbi:
     type: int
     default: 80
@@ -33,5 +33,5 @@ options:
     description: nrf interface http2 port
   nrf-api-version:
     type: string
-    default: v1
+    default: "v1"
     description: nrf api version

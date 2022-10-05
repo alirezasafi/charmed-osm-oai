@@ -1,7 +1,7 @@
 options:
   image:
     type: string
-    default: mysql:5.7
+    default: mysql:5.7.30
     description: mysql image 
   mysql-port:
     type: int
@@ -32,6 +32,6 @@ options:
     default: linux
     description: mysql root password
   mysql-allow-empty-password:
-    tyep: string
-    default: "true"
+    type: boolean
+    default: true
     description: mysql allow empty password
