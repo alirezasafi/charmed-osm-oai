@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enb-deployment
+  namespace: oai
+  labels:
+    app: enb-deployment
+    chart: enb
+spec:
+  selector:
+    matchLabels:
+      app: enb-deployment
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name": "public-net",
+            "interface": "eth1",
+            "ips": ["192.168.61.20"],
+            "default": true
+          }
+        ]'
+      labels:
+        app: enb-deployment
+    spec:
+      containers:
+        - name: enb
+          securityContext:
+            privileged: true
+          image: oaisoftwarealliance/oai-enb:develop
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: udp1
+              containerPort: 2152
+              protocol: UDP
+            - name: udp2
+              containerPort: 36412
+              protocol: UDP
+            - name: udp3
+              containerPort: 36422
+              protocol: UDP
+          env:
+          - name: TZ
+            value: Europe/Paris
+          - name: USE_FDD_MONO
+            value: "yes"
+          - name: RFSIMULATOR
+            value: enb
+          - name: ENB_NAME
+            value: eNB-rf-sim
+          - name: MCC
+            value: "208"
+          - name: MNC
+            value: "96"
+          - name: MNC_LENGTH
+            value: "2"
+          - name: TAC
+            value: "1"
+          - name: UTRA_BAND_ID
+            value: "7"
+          - name: DL_FREQUENCY_IN_MHZ
+            value: "2680"
+          - name: UL_FREQUENCY_OFFSET_IN_MHZ
+            value: "120"
+          - name: NID_CELL
+            value: "10"
+          - name: NB_PRB
+            value: "25"
+          - name: MME_S1C_IP_ADDRESS
+            value: "192.168.61.3"
+          - name: ENB_S1C_IF_NAME
+            value: eth1
+          - name: ENB_S1C_IP_ADDRESS
+            value: "192.168.61.20"
+          - name: ENB_S1U_IF_NAME
+            value: eth1
+          - name: ENB_S1U_IP_ADDRESS
+            value: "192.168.61.20"
+          - name: ENB_X2_IP_ADDRESS
+            value: "192.168.61.20"
+          - name: FLEXRAN_ENABLED
+            value: "no"
+          - name: FLEXRAN_INTERFACE_NAME
+            value: eth1
+          - name: FLEXRAN_IPV4_ADDRESS
+            value: "188.121.111.248"
+          - name: USE_ADDITIONAL_OPTIONS
+            value: --rfsim --log_config.global_log_options level,nocolor,time
+          livenessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - "pgrep lte-softmodem"
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - "pgrep lte-softmodem"
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 1
+            limits:
+              memory: 1Gi
+              cpu: 1

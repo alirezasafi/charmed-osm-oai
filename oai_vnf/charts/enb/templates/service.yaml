@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: enb-svc
+  namespace: oai
+  labels:
+    app: enb-svc
+    chart: enb
+spec:
+  type: ClusterIP
+  ports:
+    - name: udp1
+      targetPort: udp1
+      port: 2152
+      protocol: UDP
+    - name: udp2
+      targetPort: udp2
+      port: 36412
+      protocol: UDP
+    - name: udp3
+      targetPort: udp3
+      port: 36422
+      protocol: UDP
+  selector:
+    app: enb-deployment
