@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cassandra-deployment
+  namespace: oai
+  labels:
+    app: cassandra-deployment
+    chart: "cassandra-2.1"
+spec:
+  selector:
+    matchLabels:
+      app: cassandra-deployment
+  template:
+    metadata:
+      labels:
+        app: cassandra-deployment
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name" : "private-net",
+            "interface": "eth1",
+            "ips": ["192.168.68.2"],
+            "default": true
+          }
+        ]'
+    spec:
+      containers:
+        - name: cassandra
+          image: "cassandra:2.1"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http1
+              containerPort: 7000
+              protocol: TCP
+            - name: http2
+              containerPort: 7001
+              protocol: TCP
+            - name: http3
+              containerPort: 7199
+              protocol: TCP
+            - name: http4
+              containerPort: 9160
+              protocol: TCP
+            - name: http5
+              containerPort: 9042
+              protocol: TCP
+          env:
+          - name: CASSANDRA_CLUSTER_NAME
+            value: "OAI HSS Cluster"
+          - name: CASSANDRA_ENDPOINT_SNITCH
+            value: "GossipingPropertyFileSnitch"
+          livenessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - "nodetool status"
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - "nodetool status"
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 1
+            limits:
+              memory: 2Gi
+              cpu: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-init-deployment
+  namespace: oai
+  labels:
+    app: db-init-deployment
+    chart: db-init
+spec:
+  selector:
+    matchLabels:
+      app: db-init-deployment
+  template:
+    metadata:
+      labels:
+        app: db-init-deployment
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name" : "private-net",
+            "interface": "eth1",
+            "ips": ["192.168.68.4"],
+            "default": true
+          }
+        ]'
+    spec:
+      containers:
+        - name: db-init
+          image: "cassandra:2.1"
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/bash", "-c", "cqlsh --file /home/oai_db.cql 192.168.68.2 && echo 'OK' && sleep infinity"]
+          volumeMounts:
+          - name: db-init
+            mountPath: /home/oai_db.cql
+            subPath: oai_db.cql
+      volumes:
+      - name: db-init
+        configMap:
+          name: cassandra-db-init
