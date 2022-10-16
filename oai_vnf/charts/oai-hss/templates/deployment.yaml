@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oai-hss-deployment
+  namespace: oai
+  labels:
+    app: oai-hss-deployment
+    chart: oai-hss
+spec:
+  selector:
+    matchLabels:
+      app: oai-hss-deployment
+  template:
+    metadata:
+      labels:
+        app: oai-hss-deployment
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name": "private-net",
+            "interface": "eth1",
+            "ips": ["192.168.68.3"],
+            "default": true
+          },
+          {
+            "name": "public-net",
+            "interface": "eth2",
+            "ips": ["192.168.61.2"]
+          }
+        ]'
+    spec:
+      containers:
+        - name: oai-hss
+          image: oaisoftwarealliance/oai-hss:latest
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+          ports:
+          - name: http1
+            containerPort: 9042
+            protocol: TCP
+          - name: http2
+            containerPort: 5868
+            protocol: TCP
+          - name: http3
+            containerPort: 9080
+            protocol: TCP
+          - name: http4
+            containerPort: 9081
+            protocol: TCP
+          env:
+          - name: REALM
+            value: "openairinterface.org"
+          - name: HSS_FQDN
+            value: "hss.openairinterface.org"
+          - name: PREFIX
+            value: /openair-hss/etc
+          - name: cassandra_Server_IP
+            value: "192.168.68.2"
+          - name: OP_KEY
+            value: "1006020f0a478bf6b699f15c062e42b3"
+          - name: LTE_K
+            value: "fec86ba6eb707ed08905757b1bb44b8f"
+          - name: APN1
+            value: "oai.ipv4"
+          - name: APN2
+            value: "internet"
+          - name: FIRST_IMSI
+            value: "208960100000001"
+          - name: NB_USERS
+            value: "10"
+          livenessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - "pgrep oai_hss"
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - "pgrep oai_hss"
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+            limits:
+              memory: 256Mi
+              cpu: 100m

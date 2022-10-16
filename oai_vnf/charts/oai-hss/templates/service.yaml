@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: oai-hss-svc
+  namespace: oai
+  labels:
+    app: oai-hss-svc
+    chart: oai-hss
+spec:
+  type: ClusterIP
+  ports:
+  - name: http1
+    port: 9042
+    targetPort: http1
+    protocol: TCP
+  - name: http2
+    port: 5868
+    targetPort: http2
+    protocol: TCP
+  - name: http3
+    port: 9080
+    targetPort: http3
+    protocol: TCP
+  - name: http4
+    port: 9081
+    targetPort: http4
+    protocol: TCP
+  selector:
+    app: oai-hss-deployment
