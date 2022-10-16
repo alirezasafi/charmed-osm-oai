@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trf-gen-deployment
+  namespace: oai
+  labels:
+    app: trf-gen-deployment
+    chart: trf-gen
+spec:
+  selector:
+    matchLabels:
+      app: trf-gen-deployment
+  template:
+    metadata:
+      labels:
+        app: trf-gen-deployment
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name": "public-net",
+            "interface": "eth1",
+            "ips": ["192.168.61.11"],
+            "default": true
+          }
+        ]'
+    spec:
+      containers:
+      - name: trg-gen
+        securityContext:
+          privileged: true
+        image: oaisoftwarealliance/trf-gen-cn5g:latest
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/bash
+        - -c
+        - "ip route add 12.0.0.0/24 via 192.168.61.5 dev eth1; sleep infinity"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "ping -c 2 192.168.61.5"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "ping -c 2 192.168.61.5"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 5
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+            cpu: 100m
