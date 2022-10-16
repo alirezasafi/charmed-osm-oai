@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oai-spgwu-deployment
+  namespace: oai
+  labels:
+    app: oai-spgwu-deployment
+    chart: oai-spgwu
+spec:
+  selector:
+    matchLabels:
+      app: oai-spgwu-deployment
+  template:
+    metadata:
+      labels:
+        app: oai-spgwu-deployment
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name": "public-net",
+            "interface": "eth1",
+            "ips": ["192.168.61.5"],
+            "default": true
+          }
+        ]'
+    spec:
+      containers:
+      - name: oai-spgwu
+        securityContext:
+          privileged: true
+        image: oaisoftwarealliance/oai-spgwu-tiny:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: udp1
+          containerPort: 2152
+          protocol: UDP
+        - name: udp2
+          containerPort: 8805
+          protocol: UDP
+        env:
+        - name: TZ
+          value: Europe/Paris
+        - name: PID_DIRECTORY
+          value: /var/run
+        - name: INSTANCE
+          value: "1"
+        - name: SGW_INTERFACE_NAME_FOR_S1U_S12_S4_UP
+          value: eth1
+        - name: PGW_INTERFACE_NAME_FOR_SGI
+          value: eth1
+        - name: SGW_INTERFACE_NAME_FOR_SX
+          value: eth1
+        - name: SPGWC0_IP_ADDRESS
+          value: "192.168.61.4"
+        - name: NETWORK_UE_IP
+          value: "12.0.0.0/24"
+        - name: NETWORK_UE_NAT_OPTION
+          value: "yes"
+        - name: MCC
+          value: "208"
+        - name: MNC
+          value: "96"
+        - name: MNC03
+          value: "096"
+        - name: TAC
+          value: "1"
+        - name: GW_ID
+          value: "1"
+        - name: REALM
+          value: openairinterface.org
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "pgrep oai_spgwu"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "pgrep oai_spgwu"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 5
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 200m
+          limits:
+            memory: 256Mi
+            cpu: 200m
