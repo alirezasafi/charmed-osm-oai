@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oai-spgwc-deployment
+  namespace: oai
+  labels:
+    app: oai-spgwc-deployment
+    chart: oai-spgwc
+spec:
+  selector:
+    matchLabels:
+      app: oai-spgwc-deployment
+  template:
+    metadata:
+      labels:
+        app: oai-spgwc-deployment
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name": "public-net",
+            "interface": "eth1",
+            "ips": ["192.168.61.4"],
+            "default": true
+          }
+        ]'
+    spec:
+      containers:
+      - name: oai-spgwc
+        image: oaisoftwarealliance/oai-spgwc:latest
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+        ports:
+        - name: udp1
+          containerPort: 2123
+          protocol: UDP
+        - name: udp2
+          containerPort: 8805
+          protocol: UDP
+        env:
+        - name: TZ
+          value: Europe/Paris
+        - name: SGW_INTERFACE_NAME_FOR_S11
+          value: eth1
+        - name: PGW_INTERFACE_NAME_FOR_SX
+          value: eth1
+        - name: DEFAULT_DNS_IPV4_ADDRESS
+          value: "8.8.4.4"
+        - name: DEFAULT_DNS_SEC_IPV4_ADDRESS
+          value: "8.8.8.8"
+        - name: PUSH_PROTOCOL_OPTION
+          value: "true"
+        - name: APN_NI_1
+          value: oai.ipv4
+        - name: APN_NI_2
+          value: oai.ipv4_2
+        - name: DEFAULT_APN_NI_1
+          value: oai.ipv4
+        - name: UE_IP_ADDRESS_POOL_1
+          value: "12.0.0.2 - 12.0.0.254"
+        - name: UE_IP_ADDRESS_POOL_2
+          value: "12.1.1.2 - 12.1.1.254"
+        - name: MCC
+          value: "208"
+        - name: MNC
+          value: "96"
+        - name: MNC03
+          value: "096"
+        - name: TAC
+          value: "1"
+        - name: GW_ID
+          value: "1"
+        - name: REALM
+          value: openairinterface.org
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "pgrep oai_spgwc"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "pgrep oai_spgwc"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+            cpu: 100m
