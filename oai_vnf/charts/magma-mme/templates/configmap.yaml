@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mme-entrypoint
+  namespace: oai
+data:
+  {{ (.Files.Glob "configurations/entrypoint.sh").AsConfig | indent 2 | trim }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mme-config
+  namespace: oai
+data:
+  {{ (.Files.Glob "configurations/mme.conf").AsConfig | indent 2 | trim }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mme-fd-config
+  namespace: oai
+data:
+  {{ (.Files.Glob "configurations/mme_fd.conf.tmplt").AsConfig | indent 2 | trim }}

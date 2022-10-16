@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magma-mme-deployment
+  namespace: oai
+  labels:
+    app: magma-mme-deployment
+    chart: magma-mme
+spec:
+  selector:
+    matchLabels:
+      app: magma-mme-deployment
+  template:
+    metadata:
+      labels:
+        app: magma-mme-deployment
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name": "public-net",
+            "interface": "eth1",
+            "ips": ["192.168.61.3"],
+            "default": true
+          }
+        ]'
+    spec:
+      containers:
+      - name: magma-mme
+        image: oaisoftwarealliance/magma-mme:latest
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+        ports:
+        - name: udp1
+          containerPort: 2123
+          protocol: UDP
+        - name: http1
+          containerPort: 3870
+          protocol: TCP
+        - name: http2
+          containerPort: 5870
+          protocol: TCP
+        command:
+        - /bin/bash
+        - -c
+        - "/magma-mme/bin/entrypoint.sh"
+        env:
+        - name: TZ
+          value: Europe/Paris
+        - name: REALM
+          value: openairinterface.org
+        - name: PREFIX
+          value: /openair-mme/etc
+        - name: HSS_HOSTNAME
+          value: hss
+        - name: HSS_FQDN
+          value: "hss.openairinterface.org"
+        - name: HSS_REALM
+          value: openairinterface.org
+        - name: MME_FQDN
+          value: mme.openairinterface.org
+        - name: FEATURES
+          value: mme_oai
+        volumeMounts:
+        - name: mme-entrypoint
+          mountPath: /magma-mme/bin/entrypoint.sh
+          subPath: entrypoint.sh
+        - name: mme-config
+          mountPath: /magma-mme/etc/mme.conf
+          subPath: mme.conf
+        - name: mme-fd-config
+          mountPath: /magma-mme/etc/mme_fd.conf.tmplt
+          subPath: mme_fd.conf.tmplt
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "pgrep oai_mme"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "pgrep oai_mme"
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 5
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: 200m
+          limits:
+            memory: 512Mi
+            cpu: 200m
+      volumes:
+      - name: mme-config
+        configMap:
+          name: mme-config
+      - name: mme-fd-config
+        configMap:
+          name: mme-fd-config
+      - name: mme-entrypoint
+        configMap:
+          name: mme-entrypoint
+          defaultMode: 0774
