@@ -1,0 +1,13 @@
+name: oai-hss
+display-name: OAI HSS Charm Operator
+
+summary: OAI HSS Charm Operator
+
+description: |
+  OAI HSS charm Operator
+
+series: [kubernetes]
+
+deployment:
+  type: stateless
+  service: cluster

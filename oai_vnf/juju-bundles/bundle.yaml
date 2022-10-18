@@ -6,3 +6,7 @@ applications:
     charm: './charms/cassandra'
     scale: 1
     constraints: "mem=1G cpu-power=1000"
+  oai-hss:
+    charm: './charms/oai-hss'
+    scale: 1
+    constraints: "mem=256M cpu-power=100"

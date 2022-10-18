@@ -1,0 +1,100 @@
+options:
+  image:
+    type: string
+    default: oaisoftwarealliance/oai-hss:latest
+    description: oai hss image name
+  http1-port:
+    type: int
+    default: 9042
+    description: http1 container port
+  http2-port:
+    type: int
+    default: 5868
+    description: http2 container port
+  http3-port:
+    type: int
+    default: 9080
+    description: http3 container port
+  http4-port:
+    type: int
+    default: 9081
+    description: http4 container port
+  # env configs
+  realm:
+    type: string
+    default: "openairinterface.org"
+    description: realm
+  hss-fqdn:
+    type: string
+    default: "hss.openairinterface.org"
+    description: hss fqdn
+  prefix:
+    type: string
+    default: "/openair-hss/etc"
+    description: prefix
+  cassandra-ip:
+    type: string
+    default: "192.168.68.2"
+    description: cassandra server ip
+  op-key:
+    type: string
+    default: "1006020f0a478bf6b699f15c062e42b3"
+    description: op key
+  lte-k:
+    type: string
+    default: "fec86ba6eb707ed08905757b1bb44b8f"
+    description: lte k
+  apn1:
+    type: string
+    default: "oai.ipv4"
+    description: apn 1
+  apn2:
+    type: string
+    default: "internet"
+    description: apn 2
+  first-imsi:
+    type: string
+    default: "208960100000001"
+    description: first imsi
+  nb-users:
+    type: int
+    default: 10
+    description: nb users
+  # network configurations
+  pub-net-name:
+    type: string
+    default: "public-net"
+    description: public network name
+  pub-net-gateway:
+    type: string
+    default: "192.168.61.0"
+    description: network gateway addr
+  pub-net-mask:
+    type: string
+    default: "26"
+    description: net mask
+  pv-net-name:
+    type: string
+    default: "private-net"
+    description: private network name
+  pv-interface:
+    type: string
+    default: "eth1"
+    description: private interface name
+  pv-ip-addr:
+    type: string
+    default: "192.168.68.3"
+    description: private ip addr
+  pub-interface:
+    type: string
+    default: "eth2"
+    description: public interface name
+  pub-ip-addr:
+    type: string
+    default: "192.168.61.2"
+    description: public ip addr
+  host-interface:
+    type: string
+    default: "ens4"
+    description: host interface name
+     
