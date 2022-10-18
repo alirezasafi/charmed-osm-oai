@@ -10,3 +10,7 @@ applications:
     charm: './charms/oai-hss'
     scale: 1
     constraints: "mem=256M cpu-power=100"
+  redis:
+    charm: './charms/redis'
+    scale: 1
+    constraints: "mem=256M cpu-power=100"

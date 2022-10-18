@@ -1,0 +1,22 @@
+options:
+  image:
+    type: string
+    default: "redis:6.0.5"
+    description: redis image name
+  http1-port:
+    type: int
+    default: 6380
+    description: http1 container port
+  # network config
+  net-name:
+    type: string
+    default: "public-net"
+    description: network name
+  interface:
+    type: string
+    default: "eth1"
+    description: service interface name
+  ip-addr:
+    type: string
+    default: "192.168.61.6"
+    description: service ip addr

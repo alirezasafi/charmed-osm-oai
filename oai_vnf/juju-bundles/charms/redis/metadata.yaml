@@ -1,0 +1,13 @@
+name: redis
+display-name: Redis Charm 
+
+summary: Redis Charm Operator
+
+description: |
+  Redis Charm Operator
+
+series: [kubernetes]
+
+deployment:
+  type: stateless
+  service: cluster
