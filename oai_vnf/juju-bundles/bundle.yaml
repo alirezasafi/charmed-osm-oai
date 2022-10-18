@@ -26,3 +26,7 @@ applications:
     charm: './charms/oai-spgwu'
     scale: 1
     constraints: "mem=256M cpu-power=200"
+  trf-gen:
+    charm: './charms/trg-gen'
+    scale: 1
+    constraints: "mem=256M cpu-power=100"

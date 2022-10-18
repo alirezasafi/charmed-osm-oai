@@ -1,0 +1,13 @@
+name: trf-gen
+display-name: Trafic Generator Charm
+
+summary: Trafic Generator Charm.
+
+description: |
+  Trafic Generator Charm.
+
+series: [kubernetes]
+
+deployment:
+  type: stateless
+  service: cluster

@@ -1,0 +1,18 @@
+options:
+  image:
+    type: string
+    default: oaisoftwarealliance/trf-gen-cn5g:latest
+    description: trf-gen image name
+  # network config
+  net-name:
+    type: string
+    default: "public-net"
+    description: network name
+  interface:
+    type: string
+    default: "eth1"
+    description: service interface name
+  ip-addr:
+    type: string
+    default: "192.168.61.11"
+    description: service ip addr
