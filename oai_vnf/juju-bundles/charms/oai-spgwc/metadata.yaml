@@ -1,0 +1,15 @@
+name: oai-spgwc
+display-name: SPGWC Charm Operator
+
+# (Required)
+summary: SPGWC Charm Operator.
+
+description: |
+  SPGWC Charm Operator.
+
+
+series: [kubernetes]
+
+deployment:
+  type: stateless
+  service: cluster

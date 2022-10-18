@@ -14,3 +14,7 @@ applications:
     charm: './charms/redis'
     scale: 1
     constraints: "mem=256M cpu-power=100"
+  oai-spgwc:
+    charm: './charms/oai-spgwc'
+    scale: 1
+    constraints: "mem=256M cpu-power=100"

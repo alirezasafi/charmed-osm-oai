@@ -1,0 +1,95 @@
+options:
+  image:
+    type: string
+    default: "oaisoftwarealliance/oai-spgwc:latest"
+    description: spgwc image name
+  udp1-port:
+    type: int
+    default: 2123
+    description: udp1 container port
+  udp2-port:
+    type: int
+    default: 8805
+    description: udp2 container port
+  # env config
+  tz:
+    type: string
+    default: Europe/Paris
+    description: time znoe
+  sgw-interface-name-for-s11:
+    type: string
+    default: eth1
+    description: sgw interface name for s11
+  pgw-interface-name-for-sx:
+    type: string
+    default: eth1
+    description: pgw interface name for sx
+  default-dns-ipv4-addr:
+    type: string
+    default: "8.8.4.4"
+    description: default dns ipv4 addr
+  default-dns-sec-ipv4-addr:
+    type: string
+    default: "8.8.8.8"
+    description: default dns sec ipv4 addr
+  push-protocol-option:
+    type: string
+    default: "true"
+    description: push protocol option
+  apn-ni-1:
+    type: string
+    default: oai.ipv4
+    description: apn ni 1
+  apn-ni-2:
+    type: string
+    default: oai.ipv4
+    description: apn ni 1
+  default-apn-ni-1:
+    type: string
+    default: oai.ipv4
+    description: default apn ni 1
+  ue-ip-addr-pool-1:
+    type: string
+    default: "12.0.0.2 - 12.0.0.254"
+    description: ue ip addr pool 1
+  ue-ip-addr-pool-2:
+    type: string
+    default: "12.1.1.2 - 12.1.1.254"
+    description: ue ip addr pool 2
+  mcc:
+    type: string
+    default: "208"
+    description: mcc
+  mnc:
+    type: string
+    default: "96"
+    description: mnc
+  mnc03:
+    type: string
+    default: "096"
+    description: mnc03
+  tac:
+    type: string
+    default: "1"
+    description: tac
+  gw-id:
+    type: string
+    default: "1"
+    description: gw id
+  realm:
+    type: string
+    default: "openairinterface.org"
+    description: realm
+  # network config
+  net-name:
+    type: string
+    default: "public-net"
+    description: network name
+  interface:
+    type: string
+    default: "eth1"
+    description: service interface name
+  ip-addr:
+    type: string
+    default: "192.168.61.4"
+    description: service ip addr
