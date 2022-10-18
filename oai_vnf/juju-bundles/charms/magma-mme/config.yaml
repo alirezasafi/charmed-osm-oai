@@ -1,0 +1,64 @@
+options:
+  image:
+    type: string
+    default: magma-mme:latest
+    # default: oaisoftwarealliance/magma-mme:latest
+    description: image name
+  udp1-port:
+    type: int
+    default: 2123
+    description: udp container port
+  http1-port:
+    type: int
+    default: 3870
+    description: http1 container port
+  http2-port:
+    type: int
+    default: 5870
+    description: http2 container port
+  # env configs
+  tz:
+    type: string
+    default: Europe/Paris
+    description: time zone
+  realm:
+    type: string
+    default: openairinterface.org
+    description: realm
+  prefix:
+    type: string
+    default: /openair-mme/etc
+    description: prefix
+  hss-hostname:
+    type: string
+    default: hss
+    description: hss hostname
+  hss-fqdn:
+    type: string
+    default: hss.openairinterface.org
+    description: hss fqdn
+  hss-realm:
+    type: string
+    default: openairinterface.org
+    description: hss realm
+  mme-fqdn:
+    type: string
+    default: mme.openairinterface.org
+    description: mme fqdn
+  features:
+    type: string
+    default: mme_oai
+    description: features
+  # network config
+  net-name:
+    type: string
+    default: "public-net"
+    description: network name
+  interface:
+    type: string
+    default: "eth1"
+    description: service interface name
+  ip-addr:
+    type: string
+    default: "192.168.61.3"
+    description: service ip addr

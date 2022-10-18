@@ -1,0 +1,13 @@
+name: magma-mme
+display-name: MAGMA MME Charm Operator
+
+summary: MAGMA MME Charm Operator.
+
+description: |
+  MAGMA MME Charm Operator
+
+series: [kubernetes]
+
+deployment:
+  type: stateless
+  service: cluster
