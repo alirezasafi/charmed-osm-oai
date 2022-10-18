@@ -1,0 +1,2 @@
+initialize-db:
+  description: initialize database action

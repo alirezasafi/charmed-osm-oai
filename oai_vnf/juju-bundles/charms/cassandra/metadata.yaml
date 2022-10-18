@@ -1,0 +1,13 @@
+name: cassandra
+display-name: Cassandra Charm Operator
+
+summary: Cassandra Charm Operator
+
+description: |
+  an open source NoSQL distributed database
+
+series: [kubernetes]
+
+deployment:
+  type: stateless
+  service: cluster

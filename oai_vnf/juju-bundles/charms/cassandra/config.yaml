@@ -1,0 +1,60 @@
+options:
+  image:
+    type: string
+    default: cassandra:2.1
+    description: cassandra image name
+  http1-port:
+    type: int
+    default: 7000
+    description: http1 container port
+  http2-port:
+    type: int
+    default: 7001
+    description: http2 container port
+  http3-port:
+    type: int
+    default: 7199
+    description: http3 container port
+  http4-port:
+    type: int
+    default: 9160
+    description: http4 container port
+  http5-port:
+    type: int
+    default: 9042
+    description: http5 container port
+  # env configs
+  cluster-name:
+    type: string
+    default: "OAI HSS Cluster"
+    description: cluster name
+  endpoint-snich:
+    type: string
+    default: "GossipingPropertyFileSnitch"
+    description: endpoint snich
+  # network configurations
+  net-name:
+    type: string
+    default: "private-net"
+    description: netork attachment name
+  net-gateway:
+    type: string
+    default: "192.168.68.0"
+    description: network gateway addr
+  net-mask:
+    type: string
+    default: "26"
+    description: net mask
+  interface:
+    type: string
+    default: "eth1"
+    description: service interface name
+  ip-addr:
+    type: string
+    default: "192.168.68.2"
+    description: service ip addr
+  host-interface:
+    type: string
+    default: "ens4"
+    description: host interface name
+     

@@ -3,6 +3,17 @@ vnfd:
   product-name: oai-vnf
   df:
   - id: default-df
+    lcm-operations-configuration:
+      operate-vnf-op-config:
+        day1-2:
+          - id: oai-kdu
+            initial-config-primitive:
+            - name: initialize-db
+              parameter:
+              - data-type: STRING
+                name: application-name
+                value: cassandra
+              seq: 1
   mgmt-cp: mgmt-ext
   k8s-cluster:
     nets:
@@ -13,4 +24,3 @@ vnfd:
   kdu:
   - name: oai-kdu
     juju-bundle: bundle.yaml
-

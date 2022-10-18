@@ -1,0 +1,4 @@
+#!/bin/bash
+
+
+cqlsh --file /home/oai_db.cql 192.168.68.2 && echo 'OK'
