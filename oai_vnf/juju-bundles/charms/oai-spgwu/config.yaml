@@ -1,206 +1,87 @@
 options:
   image:
     type: string
-    default: oaisoftwarealliance/oai-spgwu-tiny:v1.4.0
-    description: docker image name
-  oai-spgwu-tiny:
-    type: int
-    default: 8805
-    description: service udp port
-  s1u:
+    default: oaisoftwarealliance/oai-spgwu-tiny:latest
+    description: spgwc image name
+  udp1-port:
     type: int
     default: 2152
-    description: service s1u port
-  iperf:
+    description: udp1 container port
+  udp2-port:
     type: int
-    default: 5001
-    description: service iperf port
-  time-zone:
+    default: 8805
+    description: udp2 container port
+  # env config
+  tz:
     type: string
     default: Europe/Paris
-    description: time zone
+    description: time znoe
   pid-directory:
     type: string
     default: /var/run
-    description: pid directory
-  sgw-interface-name-for-s1u-s12-s4-up:
+    description: pid dir
+  instance:
     type: string
-    default: "net1"
-    description: net1 interface name for s1u s12 s4 up. use eth0 if multus-create is false
-  sgw-interface-name-for-sx:
+    default: "1"
+    description: pid dir
+  sgw-interface-name-for-s1u:
     type: string
-    default: "eth0"
-    description: sgw interface name for sx
+    default: eth1
+    description: sgw interface name for s1u
   pgw-interface-name-for-sgi:
     type: string
-    default: "eth0"
-    description: pgw interface name for sgi. use eth0 if multus-create is false
+    default: eth1
+    description: pgw interface name for sgi
+  sgw-interface-name-for-sx:
+    type: string
+    default: eth1
+    description: sgw interface name for sx
+  spgwc0-ip-addr:
+    type: string
+    default: "192.168.61.4"
+    description: spgwc ip addr
+  network-ue-ip:
+    type: string
+    default: "12.0.0.0/24"
+    description: network ue ip
   network-ue-nat-option:
     type: string
     default: "yes"
     description: network ue nat option
-  gtp-extention-header-present:
-    type: string
-    default: "yes"
-    description: gtp extention header present
-  network-ue-ip:
-    type: string
-    default: "12.1.1.0/24"
-    description: The range in which UE ip-address will be allocated should be configured the same in SMF
-  spgwc0-ip-address:
-    type: string
-    default: "127.0.0.1"
-    description: SMF ip-address incase NRF is not used to initiate a PFCP session
-  bypass-ul-pfcp-rules:
-    type: string
-    default: "no"
-    description: bypass ul pfcp rules
   mcc:
-    type: int
-    default: 208
+    type: string
+    default: "208"
     description: mcc
   mnc:
-    type: int
-    default: 99
+    type: string
+    default: "96"
     description: mnc
   mnc03:
-    type: int
-    default: 99
+    type: string
+    default: "096"
     description: mnc03
   tac:
-    type: int
-    default: 40960
+    type: string
+    default: "1"
     description: tac
   gw-id:
-    type: int
-    default: 1
+    type: string
+    default: "1"
     description: gw id
   realm:
     type: string
-    default: 3gpp.org
+    default: "openairinterface.org"
     description: realm
-  enable-5g-features:
+  # network config
+  net-name:
     type: string
-    default: "yes"
-    description: enable 5g features
-  register-nrf:
+    default: "public-net"
+    description: network name
+  interface:
     type: string
-    default: "yes"
-    description: register nrf
-  use-fqdn-nrf:
+    default: "eth1"
+    description: service interface name
+  ip-addr:
     type: string
-    default: "yes"
-    description: use fqdn nrf
-  upf-fqdn-5g:
-    type: string
-    default: oai-spgwu
-    description: udm fqdn
-  nrf-ipv4-address:
-    type: string
-    default: "oai-nrf"
-    description: nrf ipv4 address
-  nrf-port:
-    type: int
-    default: 80
-    description: nrf port
-  nrf-api-version:
-    type: string
-    default: v1
-    description: nrf api version
-  nrf-fqdn:
-    type: string
-    default: oai-nrf
-    description: nrf fqdn
-  thread-s1u-prio:
-    type: int
-    default: 88
-    description: thread s1u priority
-  s1u-threads:
-    type: int
-    default: 1
-    description: s1u threads
-  thread-sx-prio:
-    type: int
-    default: 88
-    description: thread sx priority
-  sx-threads:
-    type: int
-    default: 1
-    description: sx threads
-  thread-sgi-prio:
-    type: int
-    default: 98
-    description: thread sgi priority
-  sgi-threads:
-    type: int
-    default: 1
-    description: sgi threads
-  nssai-sst-0:
-    type: int
-    default: 1
-    description: nssai sst 0
-  nssai-sd-0:
-    type: int
-    default: 10203
-    description: nssai sd 0
-  dnn-0:
-    type: string
-    default: oai
-    description: dnn 0
-  nssai-sst-1:
-    type: int
-    default: 1
-    description: nssai sst 1
-  nssai-sd-1:
-    type: int
-    default: 1
-    description: nssai sd 1
-  dnn-1:
-    type: string
-    default: oai.ipv4
-    description: dnn 1
-  nssai-sst-2:
-    type: int
-    default: 222
-    description: nssai sst 2
-  nssai-sd-2:
-    type: int
-    default: 123
-    description: nssai sd 2
-  dnn-2:
-    type: string
-    default: default
-    description: dnn 2
-  nssai-sst-3:
-    type: int
-    default: 1
-    description: nssai sst 3
-  nssai-sd-3:
-    type: int
-    default: 1
-    description: nssai sd 3
-  dnn-3:
-    type: string
-    default: oai
-    description: dnn 3
-  # network attachment config
-  multus-create:
-    type: boolean
-    default: true
-    description: network attachment creation flag
-  multus-ip:
-    type: string
-    default: "172.21.6.200"
-    description: network attachment ip address
-  multus-mask:
-    type: string
-    default: "22"
-    description: network attachment net mask
-  multus-gateway:
-    type: string
-    default: "172.21.7.254"
-    description: network attachment gateway addr
-  multus-host-interface:
-    type: string
-    default: "ens3"
-    description: network attachment host interface name for master
+    default: "192.168.61.5"
+    description: service ip addr

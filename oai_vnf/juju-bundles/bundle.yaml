@@ -21,4 +21,8 @@ applications:
   oai-spgwc:
     charm: './charms/oai-spgwc'
     scale: 1
-    constraints: "mem=256M cpu-power=100"
+    constraints: "mem=256M cpu-power=200"
+  oai-spgwu:
+    charm: './charms/oai-spgwu'
+    scale: 1
+    constraints: "mem=256M cpu-power=200"

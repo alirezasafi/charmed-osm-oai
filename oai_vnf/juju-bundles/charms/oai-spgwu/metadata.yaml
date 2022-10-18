@@ -1,10 +1,11 @@
 name: oai-spgwu
-description: charm operator for SPGWU network function
-summary: NRF charm operator
-min-juju-version: 2.7.0
+display-name: SPGWU Charm Operator
+
+description: SPGWU Charm Operator
+summary: SPGWU Charm Operator
 
 series: [kubernetes]
 
 deployment:
     type: stateless
-    service: loadbalancer
+    service: cluster
