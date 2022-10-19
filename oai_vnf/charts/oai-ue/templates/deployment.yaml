@@ -23,6 +23,15 @@ spec:
       labels:
         app: oai-ue-deployment
     spec:
+      initContainers:
+        - name: init-enb
+          image: busybox:1.28
+          imagePullPolicy: IfNotPresent
+          command:  ['sh', '-c', "sleep 100 && until nslookup enb-svc; do echo waiting for enb; sleep 2; done"]
+          resources:
+            requests:
+              memory: 10Mi
+              cpu: 10m
       containers:
         - name: ue0
           securityContext:
@@ -85,4 +94,3 @@ spec:
             limits:
               memory: 1Gi
               cpu: 1
-

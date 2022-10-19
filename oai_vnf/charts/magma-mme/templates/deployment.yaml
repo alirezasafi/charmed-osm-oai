@@ -24,6 +24,23 @@ spec:
           }
         ]'
     spec:
+      initContainers:
+        - name: init-hss
+          image: busybox:1.28
+          imagePullPolicy: IfNotPresent
+          command:  ['sh', '-c', "sleep 60 && until nslookup oai-hss-svc; do echo waiting for oai-hss; sleep 2; done"]
+          resources:
+            requests:
+              memory: 10Mi
+              cpu: 10m
+        - name: init-redis
+          image: busybox:1.28
+          imagePullPolicy: IfNotPresent
+          command:  ['sh', '-c', "sleep 60 && until nslookup redis-svc; do echo waiting for redis-hss; sleep 2; done"]
+          resources:
+            requests:
+              memory: 10Mi
+              cpu: 10m
       containers:
       - name: magma-mme
         image: oaisoftwarealliance/magma-mme:latest

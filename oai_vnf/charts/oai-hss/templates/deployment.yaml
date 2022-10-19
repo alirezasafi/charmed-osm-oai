@@ -29,6 +29,15 @@ spec:
           }
         ]'
     spec:
+      initContainers:
+        - name: init-cassandra
+          image: busybox:1.28
+          imagePullPolicy: IfNotPresent
+          command:  ['sh', '-c', "sleep 60 && until nslookup cassandra-svc; do echo waiting for cassandra; sleep 2; done"]
+          resources:
+            requests:
+              memory: 10Mi
+              cpu: 10m
       containers:
         - name: oai-hss
           image: oaisoftwarealliance/oai-hss:latest
@@ -77,9 +86,9 @@ spec:
               - "pgrep oai_hss"
             initialDelaySeconds: 10
             timeoutSeconds: 5
-            periodSeconds: 10
+            periodSeconds: 30
             successThreshold: 1
-            failureThreshold: 5
+            failureThreshold: 10
           readinessProbe:
             exec:
               command:
@@ -88,9 +97,9 @@ spec:
               - "pgrep oai_hss"
             initialDelaySeconds: 10
             timeoutSeconds: 5
-            periodSeconds: 10
+            periodSeconds: 30
             successThreshold: 1
-            failureThreshold: 5
+            failureThreshold: 10
           resources:
             requests:
               memory: 256Mi

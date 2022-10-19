@@ -24,6 +24,15 @@ spec:
           }
         ]'
     spec:
+      initContainers:
+        - name: init-spgwc
+          image: busybox:1.28
+          imagePullPolicy: IfNotPresent
+          command:  ['sh', '-c', "sleep 60 && until nslookup oai-spgwc-svc; do echo waiting for spgwc; sleep 2; done"]
+          resources:
+            requests:
+              memory: 10Mi
+              cpu: 10m
       containers:
       - name: oai-spgwu
         securityContext:
