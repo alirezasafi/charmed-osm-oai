@@ -1,0 +1,123 @@
+options:
+  image:
+    type: string
+    default: oaisoftwarealliance/oai-enb:develop
+    description: enb image name
+  udp1-port:
+    type: int
+    default: 2152
+    description: udp1 container port
+  udp2-port:
+    type: int
+    default: 36412
+    description: udp2 container port
+  udp3-port:
+    type: int
+    default: 36422
+    description: udp3 container port
+  # env config
+  tz:
+    type: string
+    default: Europe/Paris
+    description: time znoe
+  use-fdd-mono:
+    type: string
+    default: "yes"
+    description: use fdd mono
+  rfsimulator:
+    type: string
+    default: enb
+    description: time znoe
+  enb-name:
+    type: string
+    default: "eNB-rf-sim"
+    description: time znoe
+  mcc:
+    type: string
+    default: "208"
+    description: mcc
+  mnc:
+    type: string
+    default: "96"
+    description: mnc
+  mnc-length:
+    type: string
+    default: "2"
+    description: mnc length
+  tac:
+    type: string
+    default: "1"
+    description: tac
+  utra-band-id:
+    type: string
+    default: "7"
+    description: utra band id
+  dl-freq:
+    type: string
+    default: "2680"
+    description: dl freq in mhz
+  ul-freq-offset:
+    type: string
+    default: "120"
+    description: ul freq in mhz
+  nid-cell:
+    type: string
+    default: "10"
+    description: nid cell
+  nb-prb:
+    type: string
+    default: "25"
+    description: nb prb
+  mme-s1c-ip-addr:
+    type: string
+    default: "192.168.61.3"
+    description: mme ip addr
+  enb-s1c-if-name:
+    type: string
+    default: "eth1"
+    description: enb s1c interface name
+  enb-s1c-ip-addr:
+    type: string
+    default: "192.168.61.20"
+    description: enb s1c ip addr
+  enb-s1u-if-name:
+    type: string
+    default: "eth1"
+    description: enb s1u interface name
+  enb-s1u-ip-addr:
+    type: string
+    default: "192.168.61.20"
+    description: enb s1u ip addr
+  enb-x2-ip-addr:
+    type: string
+    default: "192.168.61.20"
+    description: enb x2 ip addr
+  flexran-enabled:
+    type: string
+    default: "no"
+    description: flexran enabled
+  flexran-if-name:
+    type: string
+    default: "eth1"
+    description: flexran interface name
+  flexran-ipv4-addr:
+    type: string
+    default: "188.121.111.248"
+    description: flexran ipv4 addr
+  use-additional-options:
+    type: string
+    default: "--rfsim --log_config.global_log_options level,nocolor,time"
+    description: use additional options
+  # network config
+  net-name:
+    type: string
+    default: "public-net"
+    description: network name
+  interface:
+    type: string
+    default: "eth1"
+    description: service interface name
+  ip-addr:
+    type: string
+    default: "192.168.61.20"
+    description: service ip addr

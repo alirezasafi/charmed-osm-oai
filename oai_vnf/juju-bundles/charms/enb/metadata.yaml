@@ -1,0 +1,14 @@
+name: enb
+display-name: enodeB Charm Operator
+
+summary: enodeB Charm Operator.
+
+description: |
+  enodeB Charm Operator.
+
+
+series: [kubernetes]
+
+deployment:
+  type: stateless
+  service: cluster

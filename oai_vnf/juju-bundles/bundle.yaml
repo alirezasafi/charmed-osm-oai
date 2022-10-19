@@ -30,3 +30,7 @@ applications:
     charm: './charms/trg-gen'
     scale: 1
     constraints: "mem=256M cpu-power=100"
+  enb:
+    charm: './charms/enb'
+    scale: 1
+    constraints: "mem=1G cpu-power=1000"
