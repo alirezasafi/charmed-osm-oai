@@ -27,11 +27,11 @@ options:
   rfsimulator:
     type: string
     default: enb
-    description: time znoe
+    description: rfsimulator
   enb-name:
     type: string
     default: "eNB-rf-sim"
-    description: time znoe
+    description: enb name
   mcc:
     type: string
     default: "208"

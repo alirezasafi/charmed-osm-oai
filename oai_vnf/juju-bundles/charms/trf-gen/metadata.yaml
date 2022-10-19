@@ -10,4 +10,4 @@ series: [kubernetes]
 
 deployment:
   type: stateless
-  service: cluster
+  service: omit

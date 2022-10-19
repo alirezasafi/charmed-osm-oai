@@ -143,11 +143,18 @@ def make_pod_spec(config: Dict[str, Any]):
                 "imagePullPolicy": "IfNotPresent",
                 "ports": ports,
                 "envConfig": environments,
-                "volumeConfig": config_map,
                 "kubernetes": {
                     "livenessProbe": probes,
                     "readinessProbe": probes
                 }
+            },
+            {
+                "name": "db-init",
+                "image": config["image"],
+                "imagePullPolicy": "IfNotPresent",
+                "command": ["/bin/bash", "-c", "cqlsh --file /home/oai_db.cql 192.168.68.2 && echo 'OK' && sleep infinity"],
+                "envConfig": environments,
+                "volumeConfig": config_map,
             }
         ]
     }
