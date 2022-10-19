@@ -27,10 +27,14 @@ applications:
     scale: 1
     constraints: "mem=256M cpu-power=200"
   trf-gen:
-    charm: './charms/trg-gen'
+    charm: './charms/trf-gen'
     scale: 1
     constraints: "mem=256M cpu-power=100"
   enb:
     charm: './charms/enb'
+    scale: 1
+    constraints: "mem=1G cpu-power=1000"
+  oai-ue:
+    charm: './charms/oai-ue'
     scale: 1
     constraints: "mem=1G cpu-power=1000"

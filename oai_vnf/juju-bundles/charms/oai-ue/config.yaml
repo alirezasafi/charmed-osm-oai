@@ -1,0 +1,67 @@
+options:
+  image:
+    type: string
+    default: oaisoftwarealliance/oai-lte-ue:develop
+    description: ue image name
+  http1-port:
+    type: int
+    default: 10000
+    description: http1 container port
+  # env config
+  tz:
+    type: string
+    default: Europe/Paris
+    description: time znoe
+  host-name:
+    type: string
+    default: "oai_ue0"
+    description: use fdd mono
+  rfsimulator:
+    type: string
+    default: "192.168.61.20"
+    description: rfsimulator
+  mcc:
+    type: string
+    default: "208"
+    description: mcc
+  mnc:
+    type: string
+    default: "96"
+    description: mnc
+  short-imsi:
+    type: string
+    default: "0100000001"
+    description: short imsi
+  lte-key:
+    type: string
+    default: "fec86ba6eb707ed08905757b1bb44b8f"
+    description: lte key
+  opc:
+    type: string
+    default: "c42449363bbad02b66d16bc975d77cc1"
+    description: opc
+  misisdn:
+    type: string
+    default: "001011234561010"
+    description: msisdn
+  hplmn:
+    type: string
+    default: "20896"
+    description: opc
+  use-additional-options:
+    type: string
+    default: "--rfsim -C 2680000000 -r 25 --ue-rxgain 140 --ue-txgain 120 --nokrnmod 1 --log_config.global_log_options level,nocolor,time"
+    description: use additional options
+  # network config
+  net-name:
+    type: string
+    default: "public-net"
+    description: network name
+  interface:
+    type: string
+    default: "eth1"
+    description: service interface name
+  ip-addr:
+    type: string
+    default: "192.168.61.30"
+    description: service ip addr

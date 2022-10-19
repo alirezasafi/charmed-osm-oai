@@ -1,0 +1,13 @@
+name: oai-ue
+display-name: OAI UE Charm Operator
+
+summary: OAI UE Charm Operator
+
+description: |
+  OAI UE Charm Operator
+
+series: [kubernetes]
+
+deployment:
+  type: stateless
+  service: cluster
