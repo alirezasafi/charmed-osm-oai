@@ -57,7 +57,7 @@ spec:
               - "nodetool status"
             initialDelaySeconds: 10
             timeoutSeconds: 5
-            periodSeconds: 30
+            periodSeconds: 20
             successThreshold: 1
             failureThreshold: 10
           readinessProbe:
@@ -68,7 +68,7 @@ spec:
               - "nodetool status"
             initialDelaySeconds: 10
             timeoutSeconds: 5
-            periodSeconds: 30
+            periodSeconds: 20
             successThreshold: 1
             failureThreshold: 10
           resources:
@@ -109,7 +109,7 @@ spec:
         - name: init-cassandra
           image: busybox:1.28
           imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 10 && until nslookup cassandra-svc; do echo waiting for cassandra; sleep 2; done"]
+          command:  ['sh', '-c', "sleep 30 && until nslookup cassandra-svc; do echo waiting for cassandra; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi

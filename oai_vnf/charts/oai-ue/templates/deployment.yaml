@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: oai-ue-deployment
+  name: oai-ue0-deployment
   labels:
-    app: oai-ue-deployment
-    chart: oai-ue
+    app: oai-ue0-deployment
+    chart: oai-ue0
 spec:
   selector:
     matchLabels:
-      app: oai-ue-deployment
+      app: oai-ue0-deployment
   template:
     metadata:
       annotations:
@@ -21,13 +21,13 @@ spec:
           }
         ]'
       labels:
-        app: oai-ue-deployment
+        app: oai-ue0-deployment
     spec:
       initContainers:
         - name: init-enb
           image: busybox:1.28
           imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 100 && until nslookup enb-svc; do echo waiting for enb; sleep 2; done"]
+          command:  ['sh', '-c', "sleep 160 && until nslookup enb-svc; do echo waiting for enb; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
@@ -94,3 +94,197 @@ spec:
             limits:
               memory: 1Gi
               cpu: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oai-ue1-deployment
+  labels:
+    app: oai-ue1-deployment
+    chart: oai-ue1
+spec:
+  selector:
+    matchLabels:
+      app: oai-ue1-deployment
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name": "public-net",
+            "interface": "eth1",
+            "ips": ["192.168.61.31"],
+            "default": true
+          }
+        ]'
+      labels:
+        app: oai-ue1-deployment
+    spec:
+      initContainers:
+        - name: init-enb
+          image: busybox:1.28
+          imagePullPolicy: IfNotPresent
+          command:  ['sh', '-c', "sleep 170 && until nslookup enb-svc; do echo waiting for enb; sleep 2; done"]
+          resources:
+            requests:
+              memory: 10Mi
+              cpu: 10m
+      containers:
+        - name: ue1
+          securityContext:
+            privileged: true
+          image: oaisoftwarealliance/oai-lte-ue:develop
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http1
+              containerPort: 10001
+              protocol: TCP
+          env:
+          - name: TZ
+            value: Europe/Paris
+          - name: HOSTNAME
+            value: oai_ue1
+          - name: RFSIMULATOR
+            value: "192.168.61.20"
+          - name: MCC
+            value: "208"
+          - name: MNC
+            value: "96"
+          - name: SHORT_IMSI
+            value: "0100000002"
+          - name: LTE_KEY
+            value: "fec86ba6eb707ed08905757b1bb44b8f"
+          - name: OPC
+            value: "c42449363bbad02b66d16bc975d77cc1"
+          - name: MSISDN
+            value: "001011234561010"
+          - name: HPLMN
+            value: "20896"
+          - name: USE_ADDITIONAL_OPTIONS
+            value: --rfsim -C 2680000000 -r 25 --ue-rxgain 140 --ue-txgain 120 --nokrnmod 1 --log_config.global_log_options level,nocolor,time
+          livenessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - "pgrep lte-uesoftmodem"
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - "pgrep lte-uesoftmodem"
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          resources: 
+            requests:
+              memory: 1Gi
+              cpu: 1
+            limits:
+              memory: 1Gi
+              cpu: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oai-ue2-deployment
+  labels:
+    app: oai-ue2-deployment
+    chart: oai-ue2
+spec:
+  selector:
+    matchLabels:
+      app: oai-ue2-deployment
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name": "public-net",
+            "interface": "eth1",
+            "ips": ["192.168.61.32"],
+            "default": true
+          }
+        ]'
+      labels:
+        app: oai-ue2-deployment
+    spec:
+      initContainers:
+        - name: init-enb
+          image: busybox:1.28
+          imagePullPolicy: IfNotPresent
+          command:  ['sh', '-c', "sleep 180 && until nslookup enb-svc; do echo waiting for enb; sleep 2; done"]
+          resources:
+            requests:
+              memory: 10Mi
+              cpu: 10m
+      containers:
+        - name: ue2
+          securityContext:
+            privileged: true
+          image: oaisoftwarealliance/oai-lte-ue:develop
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http1
+              containerPort: 10002
+              protocol: TCP
+          env:
+          - name: TZ
+            value: Europe/Paris
+          - name: HOSTNAME
+            value: oai_ue2
+          - name: RFSIMULATOR
+            value: "192.168.61.20"
+          - name: MCC
+            value: "208"
+          - name: MNC
+            value: "96"
+          - name: SHORT_IMSI
+            value: "0100000003"
+          - name: LTE_KEY
+            value: "fec86ba6eb707ed08905757b1bb44b8f"
+          - name: OPC
+            value: "c42449363bbad02b66d16bc975d77cc1"
+          - name: MSISDN
+            value: "001011234561010"
+          - name: HPLMN
+            value: "20896"
+          - name: USE_ADDITIONAL_OPTIONS
+            value: --rfsim -C 2680000000 -r 25 --ue-rxgain 140 --ue-txgain 120 --nokrnmod 1 --log_config.global_log_options level,nocolor,time
+          livenessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - "pgrep lte-uesoftmodem"
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - "pgrep lte-uesoftmodem"
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          resources: 
+            requests:
+              memory: 1Gi
+              cpu: 1
+            limits:
+              memory: 1Gi
+              cpu: 1  

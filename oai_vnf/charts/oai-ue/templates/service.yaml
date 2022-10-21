@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: oai-ue-svc
+  name: oai-ue0-svc
   labels:
-    app: oai-ue-svc
+    app: oai-ue0-svc
     chart: oai-ue
 spec:
   type: ClusterIP
@@ -13,4 +13,38 @@ spec:
       port: 10000
       protocol: TCP
   selector:
-    app: oau-ue-deployment
+    app: oau-ue0-deployment
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oai-ue1-svc
+  labels:
+    app: oai-ue1-svc
+    chart: oai-ue
+spec:
+  type: ClusterIP
+  ports:
+    - name: http1
+      targetPort: http1
+      port: 10001
+      protocol: TCP
+  selector:
+    app: oau-ue1-deployment
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oai-ue2-svc
+  labels:
+    app: oai-ue2-svc
+    chart: oai-ue
+spec:
+  type: ClusterIP
+  ports:
+    - name: http1
+      targetPort: http1
+      port: 10002
+      protocol: TCP
+  selector:
+    app: oau-ue2-deployment

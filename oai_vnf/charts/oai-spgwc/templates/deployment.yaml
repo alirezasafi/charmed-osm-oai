@@ -28,7 +28,7 @@ spec:
         - name: init-magma
           image: busybox:1.28
           imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 60 && until nslookup magma-mme-svc; do echo waiting for magma; sleep 2; done"]
+          command:  ['sh', '-c', "sleep 100 && until nslookup magma-mme-svc; do echo waiting for magma; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
@@ -54,9 +54,9 @@ spec:
         - name: PGW_INTERFACE_NAME_FOR_SX
           value: eth1
         - name: DEFAULT_DNS_IPV4_ADDRESS
-          value: "8.8.4.4"
-        - name: DEFAULT_DNS_SEC_IPV4_ADDRESS
           value: "8.8.8.8"
+        - name: DEFAULT_DNS_SEC_IPV4_ADDRESS
+          value: "8.8.4.4"
         - name: PUSH_PROTOCOL_OPTION
           value: "true"
         - name: APN_NI_1

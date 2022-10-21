@@ -28,7 +28,7 @@ spec:
         - name: init-spgwu
           image: busybox:1.28
           imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 60 && until nslookup oai-spgwu-svc; do echo waiting for spgwu; sleep 2; done"]
+          command:  ['sh', '-c', "sleep 110 && until nslookup oai-spgwu-svc; do echo waiting for spgwu; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
