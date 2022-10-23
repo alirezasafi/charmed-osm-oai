@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis-deployment
-  namespace: oai
   labels:
     app: redis-deployment
     chart: redis-6

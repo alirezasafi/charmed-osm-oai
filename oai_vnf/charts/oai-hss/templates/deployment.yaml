@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: oai-hss-deployment
-  namespace: oai
   labels:
     app: oai-hss-deployment
     chart: oai-hss

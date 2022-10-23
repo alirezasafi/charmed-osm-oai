@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: oai-spgwc-deployment
-  namespace: oai
   labels:
     app: oai-spgwc-deployment
     chart: oai-spgwc

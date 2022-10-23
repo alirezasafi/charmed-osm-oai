@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: magma-mme-deployment
-  namespace: oai
   labels:
     app: magma-mme-deployment
     chart: magma-mme

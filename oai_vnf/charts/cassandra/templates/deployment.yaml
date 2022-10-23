@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cassandra-deployment
-  namespace: oai
   labels:
     app: cassandra-deployment
     chart: "cassandra-2.1"
@@ -49,28 +48,28 @@ spec:
             value: "OAI HSS Cluster"
           - name: CASSANDRA_ENDPOINT_SNITCH
             value: "GossipingPropertyFileSnitch"
-          livenessProbe:
-            exec:
-              command:
-              - /bin/bash
-              - -c
-              - "nodetool status"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 20
-            successThreshold: 1
-            failureThreshold: 10
-          readinessProbe:
-            exec:
-              command:
-              - /bin/bash
-              - -c
-              - "nodetool status"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 20
-            successThreshold: 1
-            failureThreshold: 10
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #     - /bin/bash
+          #     - -c
+          #     - "nodetool status"
+          #   initialDelaySeconds: 10
+          #   timeoutSeconds: 5
+          #   periodSeconds: 20
+          #   successThreshold: 1
+          #   failureThreshold: 10
+          # readinessProbe:
+          #   exec:
+          #     command:
+          #     - /bin/bash
+          #     - -c
+          #     - "nodetool status"
+          #   initialDelaySeconds: 10
+          #   timeoutSeconds: 5
+          #   periodSeconds: 20
+          #   successThreshold: 1
+          #   failureThreshold: 10
           resources:
             requests:
               memory: 1Gi
@@ -83,7 +82,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: db-init-deployment
-  namespace: oai
   labels:
     app: db-init-deployment
     chart: db-init
@@ -109,7 +107,7 @@ spec:
         - name: init-cassandra
           image: busybox:1.28
           imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 30 && until nslookup cassandra-svc; do echo waiting for cassandra; sleep 2; done"]
+          command:  ['sh', '-c', "sleep 10 && until nslookup cassandra-svc; do echo waiting for cassandra; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
