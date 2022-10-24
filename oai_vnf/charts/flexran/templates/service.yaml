@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flexran-svc
+  labels:
+    app: flexran-svc
+    chart: flexran
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9999
+      targetPort: http1
+      protocol: TCP
+      name: http1
+    - port: 2210
+      targetPort: http2
+      protocol: TCP
+      name: http2
+    - port: 5550
+      targetPort: http3
+      protocol: TCP
+      name: http3
+    - port: 6630
+      targetPort: http4
+      protocol: TCP
+      name: http4
+    - name: metrics
+      port: 8000
+      targetPort: metrics
+  selector:
+    app: flexran-deployment

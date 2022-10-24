@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flexran-deployment
+  labels:
+    app: flexran-deployment
+    chart: flexran
+spec:
+  selector:
+    matchLabels:
+      app: flexran-deployment
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          {
+            "name": "public-net",
+            "interface": "eth1",
+            "ips": ["192.168.61.61"],
+            "default": true
+          }
+        ]'
+      labels:
+        app: flexran-deployment
+    spec:
+      initContainers:
+      - name: init-spgwu
+        image: busybox:1.28
+        imagePullPolicy: IfNotPresent
+        command:  ['sh', '-c', "sleep 130 && until nslookup oai-spgwu-svc; do echo waiting for spgwu; sleep 2; done"]
+        resources:
+          requests:
+            memory: 10Mi
+            cpu: 10m
+      containers:
+      - name: metrics
+        image: flexran-exporter:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: metrics
+          containerPort: 8000
+        env:
+        - name: FLEXRAN_IP
+          value: "192.168.61.61"
+        - name: FLEXRAN_PORT
+          value: "9999"
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+            cpu: 100m
+        livenessProbe:
+          httpGet:
+            path: /
+            port: metrics
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: metrics
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+      - name: flexran
+        securityContext:
+          privileged: true
+        image: ellior/flexran:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http1
+          containerPort: 9999
+          protocol: TCP
+        - name: http2
+          containerPort: 2210
+          protocol: TCP
+        - name: http3
+          containerPort: 5550
+          protocol: TCP
+        - name: http4
+          containerPort: 6630
+          protocol: TCP
+        volumeMounts:
+          - mountPath: /sys/fs/cgroup
+            name: cgroup
+            readOnly: true
+        # resources:
+        #   request:
+        #     memory: 512Mi
+        #     cpu: 200m
+        #   limits:
+        #     memory: 512Mi
+        #     cpu: 200m
+      volumes:
+      - name: cgroup
+        hostPath:
+          path: /sys/fs/cgroup
+          type: Directory

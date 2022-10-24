@@ -27,7 +27,7 @@ spec:
         - name: init-core
           image: busybox:1.28
           imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 130 && until nslookup oai-spgwu-svc; do echo waiting for spgwu; sleep 2; done"]
+          command:  ['sh', '-c', "sleep 150 && until nslookup flexran-svc; do echo waiting for flexran; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
@@ -88,11 +88,11 @@ spec:
           - name: ENB_X2_IP_ADDRESS
             value: "192.168.61.20"
           - name: FLEXRAN_ENABLED
-            value: "no"
+            value: "yes"
           - name: FLEXRAN_INTERFACE_NAME
             value: eth1
           - name: FLEXRAN_IPV4_ADDRESS
-            value: "188.121.111.248"
+            value: "192.168.61.61"
           - name: USE_ADDITIONAL_OPTIONS
             value: --rfsim --log_config.global_log_options level,nocolor,time
           livenessProbe:

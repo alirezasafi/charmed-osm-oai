@@ -107,7 +107,7 @@ spec:
         - name: init-cassandra
           image: busybox:1.28
           imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 10 && until nslookup cassandra-svc; do echo waiting for cassandra; sleep 2; done"]
+          command:  ['sh', '-c', "sleep 20 && until nslookup cassandra-svc; do echo waiting for cassandra; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
