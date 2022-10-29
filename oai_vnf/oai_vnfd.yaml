@@ -22,5 +22,5 @@ vnfd:
   - id: mgmt-ext
     k8s-cluster-net: mgmtnet
   kdu:
-  - name: oai-kdu
-    juju-bundle: bundle.yaml
+  - name: 4g-rfsimulator
+    helm-chart: local/4g-rfsimulatro
