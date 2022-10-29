@@ -85,13 +85,13 @@ spec:
           - mountPath: /sys/fs/cgroup
             name: cgroup
             readOnly: true
-        # resources:
-        #   request:
-        #     memory: 512Mi
-        #     cpu: 200m
-        #   limits:
-        #     memory: 512Mi
-        #     cpu: 200m
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+            cpu: 100m
       volumes:
       - name: cgroup
         hostPath:
