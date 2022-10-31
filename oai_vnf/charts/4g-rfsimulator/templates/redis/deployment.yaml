@@ -17,8 +17,8 @@ spec:
         k8s.v1.cni.cncf.io/networks: '[
           {
             "name": "{{ .Values.networks.pubCoreNetName }}",
-            "interface": "{{ .Values.redis.networks.IfName }}",
-            "ips": ["{{ .Values.redis.networks.IpAddr }}"],
+            "interface": "{{ .Values.redis.networks.ifName }}",
+            "ips": ["{{ .Values.redis.networks.ipAddr }}"],
             "default": true
           }
         ]'

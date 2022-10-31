@@ -117,8 +117,8 @@ redis:
   labels:
     app: redis-deployment
   networks:
-    IfName: "eth1"
-    IpAddr: "192.168.61.6"
+    ifName: "eth1"
+    ipAddr: "192.168.61.6"
   resources:
     requests:
       memory: 256Mi
@@ -140,3 +140,52 @@ redis:
     http1: 6380
   config:
     name: redis-conf
+
+mme:
+  image: "oaisoftwarealliance/magma-mme"
+  imageTag: "latest"
+  env:
+    timeZone: Europe/Paris
+    realm: openairinterface.org
+    prefix: /openair-mme/etc
+    hssHostName: hss
+    hssFqdn: "hss.openairinterface.org"
+    hssRealm: openairinterface.org
+    mmeFqdn: mme.openairinterface.org
+    features: mme_oai
+  initContainer:
+    image: "busybox"
+    imageTag: "1.28"
+    delayInit: 90
+  securityContext:
+    privileged: true
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 200m
+  probes:
+    params:
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      periodSeconds: 20
+      successThreshold: 1
+      failureThreshold: 10
+    limits:
+      memory: 512Mi
+      cpu: 200m
+  networks:
+    IfName: "eth1"
+    ipAddr: "192.168.61.3"
+  labels:
+    app: magma-mme-deployment
+  service:
+    name: magma-mme-svc
+    labels:
+      app: magma-mme-svc
+    udp1: 2123
+    http1: 3870
+    http2: 5870
+  config:
+    entrypointName: mme-entrypoint
+    confName: mme-config
+    fdConfName: mme-fd-config
