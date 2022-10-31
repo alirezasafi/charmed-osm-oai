@@ -321,3 +321,49 @@ trfGen:
     limits:
       memory: 256Mi
       cpu: 100m
+
+flexran:
+  image: "ellior/flexran"
+  imageTag: "v1"
+  securityContext:
+    privileged: true
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 100m
+  labels:
+    app: flexran-deployment
+  networks:
+    ifName: "eth1"
+    ipAddr: "192.168.61.61"
+  initContainer:
+    image: "busybox"
+    imageTag: "1.28"
+    delayInit: 140
+  service:
+    name: flexran-svc
+    labels:
+      app: flexran-svc
+    http1: 9999
+    http2: 2210
+    http3: 5550
+    http4: 6630
+    metrics: 8000
+  metrics:
+    image: "flexran-exporter"
+    imageTag: "latest"
+    statsPort: 9999
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 100m
+    probes:
+      params:
+        initialDelaySeconds: 10
+        timeoutSeconds: 5

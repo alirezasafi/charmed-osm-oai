@@ -1,31 +1,31 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: flexran-svc
+  name: {{ .Values.flexran.service.name }}
   labels:
-    app: flexran-svc
     chart: flexran
+{{ toYaml .Values.flexran.service.labels | indent 4 }}
 spec:
   type: ClusterIP
   ports:
-    - port: 9999
+    - port: {{ .Values.flexran.service.http1 }}
       targetPort: http1
       protocol: TCP
       name: http1
-    - port: 2210
+    - port: {{ .Values.flexran.service.http2 }}
       targetPort: http2
       protocol: TCP
       name: http2
-    - port: 5550
+    - port: {{ .Values.flexran.service.http3 }}
       targetPort: http3
       protocol: TCP
       name: http3
-    - port: 6630
+    - port: {{ .Values.flexran.service.http4 }}
       targetPort: http4
       protocol: TCP
       name: http4
     - name: metrics
-      port: 8000
+      port: {{ .Values.flexran.service.metrics }}
       targetPort: metrics
   selector:
-    app: flexran-deployment
+{{ toYaml .Values.flexran.labels | indent 4 }}
