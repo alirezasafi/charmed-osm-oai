@@ -31,11 +31,12 @@ cassandra:
       cpu: 1
   probes:
     enabled: false
-    initialDelaySeconds: 10
-    timeoutSeconds: 5
-    periodSeconds: 20
-    successThreshold: 1
-    failureThreshold: 10
+    params:
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      periodSeconds: 20
+      successThreshold: 1
+      failureThreshold: 10
   labels:
     app: cassandra-deployment
   networks:
@@ -58,7 +59,56 @@ cassandra:
       app: cassandra-svc
   config:
     name: cassandra-db-init
-    
+
+oaiHss:
+  image: "oaisoftwarealliance/oai-hss"
+  imageTag: latest
+  securityContext:
+    privileged: true
+  env:
+    realm: "openairinterface.org"
+    fqdn: "hss.openairinterface.org"
+    prefix: "/openair-hss/etc"
+    opKey: "1006020f0a478bf6b699f15c062e42b3"
+    lteKey: "fec86ba6eb707ed08905757b1bb44b8f"
+    apn1: "oai.ipv4"
+    apn2: "internet"
+    firstImsi: "208960100000001"
+    nbUsers: "10"
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 100m
+  probes:
+    params:
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      periodSeconds: 20
+      successThreshold: 1
+      failureThreshold: 10
+  labels:
+    app: oai-hss-deployment
+  networks:
+    pvIfName: "eth1"
+    pvIpAddr: "192.168.68.3"
+    pubIfName: "eth2"
+    pubIpAddr: "192.168.61.2"
+  initContainer:
+    image: "busybox"
+    imageTag: "1.28"
+    delayInit: 60
+  service:
+    name: oai-hss-svc
+    labels:
+      app: oai-hss-svc
+    http1: 9042
+    http2: 5868
+    http3: 9080
+    http4: 9081
+
 redis:
   image: "redis"
   imageTag: "6.0.5"
@@ -77,11 +127,12 @@ redis:
       memory: 256Mi
       cpu: 100m
   probes:
-    initialDelaySeconds: 10
-    timeoutSeconds: 5
-    periodSeconds: 20
-    successThreshold: 1
-    failureThreshold: 10
+    params:
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      periodSeconds: 20
+      successThreshold: 1
+      failureThreshold: 10
   service:
     name: redis-svc
     labels:

@@ -49,22 +49,14 @@ spec:
             - /bin/bash
             - -c
             - "redis-cli -h {{ .Values.redis.networks.IpAddr }} -p {{ .Values.redis.service.http1 }} ping"
-          initialDelaySeconds: {{ .Values.redis.probes.initialDelaySeconds }}
-          timeoutSeconds: {{ .Values.redis.probes.timeoutSeconds }}
-          periodSeconds: {{ .Values.redis.probes.periodSeconds }}
-          successThreshold: {{ .Values.redis.probes.successThreshold }}
-          failureThreshold: {{ .Values.redis.probes.failureThreshold }}
+{{ toYaml .Values.redis.probes.params | indent 10 }}
         readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "redis-cli -h {{ .Values.redis.networks.IpAddr }} -p {{ .Values.redis.service.http1 }} ping"
-          initialDelaySeconds: {{ .Values.redis.probes.initialDelaySeconds }}
-          timeoutSeconds: {{ .Values.redis.probes.timeoutSeconds }}
-          periodSeconds: {{ .Values.redis.probes.periodSeconds }}
-          successThreshold: {{ .Values.redis.probes.successThreshold }}
-          failureThreshold: {{ .Values.redis.probes.failureThreshold }}
+{{ toYaml .Values.redis.probes.params | indent 10 }}
         resources:
 {{ toYaml .Values.redis.resources | indent 10 }}
       volumes:

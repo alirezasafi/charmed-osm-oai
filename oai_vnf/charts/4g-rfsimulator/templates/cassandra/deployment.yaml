@@ -57,22 +57,14 @@ spec:
               - /bin/bash
               - -c
               - "nodetool status"
-            initialDelaySeconds: {{ .Values.cassandra.probes.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.cassandra.probes.timeoutSeconds }}
-            periodSeconds: {{ .Values.cassandra.probes.periodSeconds }}
-            successThreshold: {{ .Values.cassandra.probes.successThreshold }}
-            failureThreshold: {{ .Values.cassandra.probes.failureThreshold }}
+{{ toYaml .Values.cassandra.probes.params | indent 12 }}
           readinessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "nodetool status"
-            initialDelaySeconds: {{ .Values.cassandra.probes.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.cassandra.probes.timeoutSeconds }}
-            periodSeconds: {{ .Values.cassandra.probes.periodSeconds }}
-            successThreshold: {{ .Values.cassandra.probes.successThreshold }}
-            failureThreshold: {{ .Values.cassandra.probes.failureThreshold }}
+{{ toYaml .Values.cassandra.probes.params | indent 12 }}
           {{- end }}
           resources:
 {{ toYaml .Values.cassandra.resources | indent 12 }}

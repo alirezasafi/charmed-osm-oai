@@ -3,115 +3,95 @@ kind: Deployment
 metadata:
   name: oai-hss-deployment
   labels:
-    app: oai-hss-deployment
     chart: oai-hss
+{{ toYaml .Values.oaiHss.labels | indent 4 }}
 spec:
   selector:
     matchLabels:
-      app: oai-hss-deployment
+{{ toYaml .Values.oaiHss.labels | indent 6 }}
   template:
     metadata:
       labels:
-        app: oai-hss-deployment
+{{ toYaml .Values.oaiHss.labels | indent 8 }}
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "oai-private-core-net",
-            "interface": "eth1",
-            "ips": ["192.168.68.3"],
+            "name": "{{ .Values.networks.pvCoreNetName }}",
+            "interface": "{{ .Values.oaiHss.networks.pvIfName }}",
+            "ips": ["{{ .Values.oaiHss.networks.pvIpAddr }}"],
             "default": true
           },
           {
-            "name": "oai-public-core-net",
-            "interface": "eth2",
-            "ips": ["192.168.61.2"]
+            "name": "{{ .Values.networks.pubCoreNetName }}",
+            "interface": "{{ .Values.oaiHss.networks.pubIfName }}",
+            "ips": ["{{ .Values.oaiHss.networks.pubIpAddr }}"]
           }
         ]'
     spec:
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: worker
-                operator: In
-                values:
-                - oai-core
+{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       initContainers:
         - name: init-cassandra
-          image: busybox:1.28
-          imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 60 && until nslookup cassandra-svc; do echo waiting for cassandra; sleep 2; done"]
+          image: "{{ .Values.oaiHss.initContainer.image }}:{{ .Values.oaiHss.initContainer.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+          command:  ['sh', '-c', "sleep {{ .Values.oaiHss.initContainer.delayInit }} && until nslookup {{ .Values.cassandra.service.name }}; do echo waiting for cassandra; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
               cpu: 10m
       containers:
         - name: oai-hss
-          image: oaisoftwarealliance/oai-hss:latest
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.oaiHss.image }}:{{ .Values.oaiHss.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
           securityContext:
-            privileged: true
+{{ toYaml .Values.oaiHss.securityContext | indent 12 }}
           ports:
           - name: http1
-            containerPort: 9042
+            containerPort: {{ .Values.oaiHss.service.http1 }}
             protocol: TCP
           - name: http2
-            containerPort: 5868
+            containerPort: {{ .Values.oaiHss.service.http2 }}
             protocol: TCP
           - name: http3
-            containerPort: 9080
+            containerPort: {{ .Values.oaiHss.service.http3 }}
             protocol: TCP
           - name: http4
-            containerPort: 9081
+            containerPort: {{ .Values.oaiHss.service.http4 }}
             protocol: TCP
           env:
           - name: REALM
-            value: "openairinterface.org"
+            value: "{{ .Values.oaiHss.env.realm }}"
           - name: HSS_FQDN
-            value: "hss.openairinterface.org"
+            value: "{{ .Values.oaiHss.env.fqdn }}"
           - name: PREFIX
-            value: /openair-hss/etc
+            value: {{ .Values.oaiHss.env.prefix }}
           - name: cassandra_Server_IP
-            value: "192.168.68.2"
+            value: "{{ .Values.cassandra.networks.mainIpAddr }}"
           - name: OP_KEY
-            value: "1006020f0a478bf6b699f15c062e42b3"
+            value: "{{ .Values.oaiHss.env.opKey }}"
           - name: LTE_K
-            value: "fec86ba6eb707ed08905757b1bb44b8f"
+            value: "{{ .Values.oaiHss.env.lteKey }}"
           - name: APN1
-            value: "oai.ipv4"
+            value: "{{ .Values.oaiHss.env.apn1 }}"
           - name: APN2
-            value: "internet"
+            value: "{{ .Values.oaiHss.env.apn2 }}"
           - name: FIRST_IMSI
-            value: "208960100000001"
+            value: "{{ .Values.oaiHss.env.firstImsi }}"
           - name: NB_USERS
-            value: "10"
+            value: "{{ .Values.oaiHss.env.nbUsers }}"
           livenessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep oai_hss"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 30
-            successThreshold: 1
-            failureThreshold: 10
+{{ toYaml .Values.oaiHss.probes.params | indent 12 }}
           readinessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep oai_hss"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 30
-            successThreshold: 1
-            failureThreshold: 10
+{{ toYaml .Values.oaiHss.probes.params | indent 12 }}
           resources:
-            requests:
-              memory: 256Mi
-              cpu: 100m
-            limits:
-              memory: 256Mi
-              cpu: 100m
+{{ toYaml .Values.oaiHss.resources | indent 12 }}
