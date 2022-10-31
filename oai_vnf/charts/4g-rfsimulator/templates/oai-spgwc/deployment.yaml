@@ -3,118 +3,98 @@ kind: Deployment
 metadata:
   name: oai-spgwc-deployment
   labels:
-    app: oai-spgwc-deployment
     chart: oai-spgwc
+{{ toYaml .Values.spgwc.labels | indent 4 }}
 spec:
   selector:
     matchLabels:
-      app: oai-spgwc-deployment
+{{ toYaml .Values.spgwc.labels | indent 6 }}
   template:
     metadata:
       labels:
-        app: oai-spgwc-deployment
+{{ toYaml .Values.spgwc.labels | indent 8 }}
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "oai-public-core-net",
-            "interface": "eth1",
-            "ips": ["192.168.61.4"],
+            "name": "{{ .Values.networks.pubCoreNetName }}",
+            "interface": "{{ .Values.spgwc.networks.ifName }}",
+            "ips": ["{{ .Values.spgwc.networks.ipAddr }}"],
             "default": true
           }
         ]'
     spec:
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: worker
-                operator: In
-                values:
-                - oai-core
+{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       initContainers:
         - name: init-magma
-          image: busybox:1.28
-          imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 100 && until nslookup magma-mme-svc; do echo waiting for magma; sleep 2; done"]
+          image: "{{ .Values.spgwc.initContainer.image }}:{{ .Values.spgwc.initContainer.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+          command:  ['sh', '-c', "sleep {{ .Values.spgwc.initContainer.delayInit }} && until nslookup {{ .Values.mme.service.name }}; do echo waiting for magma; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
               cpu: 10m
       containers:
       - name: oai-spgwc
-        image: oaisoftwarealliance/oai-spgwc:latest
-        imagePullPolicy: IfNotPresent
+        image: "{{ .Values.spgwc.image }}:{{ .Values.spgwc.imageTag }}"
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         securityContext:
-          privileged: true
+{{ toYaml .Values.spgwc.securityContext | indent 10 }}
         ports:
         - name: udp1
-          containerPort: 2123
+          containerPort: {{ .Values.spgwc.service.udp1 }}
           protocol: UDP
         - name: udp2
-          containerPort: 8805
+          containerPort: {{ .Values.spgwc.service.udp2 }}
           protocol: UDP
         env:
         - name: TZ
-          value: Europe/Paris
+          value: {{ .Values.spgwc.env.timeZone }}
         - name: SGW_INTERFACE_NAME_FOR_S11
-          value: eth1
+          value: {{ .Values.spgwc.env.sgwIfNameForS11 }}
         - name: PGW_INTERFACE_NAME_FOR_SX
-          value: eth1
+          value: {{ .Values.spgwc.env.pgwIfNameForSx }}
         - name: DEFAULT_DNS_IPV4_ADDRESS
-          value: "8.8.8.8"
+          value: "{{ .Values.spgwc.env.defaultDNS }}"
         - name: DEFAULT_DNS_SEC_IPV4_ADDRESS
-          value: "8.8.4.4"
+          value: "{{ .Values.spgwc.env.defaultDNSSec }}"
         - name: PUSH_PROTOCOL_OPTION
-          value: "true"
+          value: "{{ .Values.spgwc.env.pushProtocol }}"
         - name: APN_NI_1
-          value: oai.ipv4
+          value: {{ .Values.spgwc.env.apnNI1 }}
         - name: APN_NI_2
-          value: oai.ipv4_2
+          value: {{ .Values.spgwc.env.apnNI2 }}
         - name: DEFAULT_APN_NI_1
-          value: oai.ipv4
+          value: {{ .Values.spgwc.env.defaultApnNI1 }}
         - name: UE_IP_ADDRESS_POOL_1
-          value: "12.0.0.2 - 12.0.0.254"
+          value: "{{ .Values.spgwc.env.ueIpAddrPool1 }}"
         - name: UE_IP_ADDRESS_POOL_2
-          value: "12.1.1.2 - 12.1.1.254"
+          value: "{{ .Values.spgwc.env.ueIpAddrPool2 }}"
         - name: MCC
-          value: "208"
+          value: "{{ .Values.spgwc.env.mcc }}"
         - name: MNC
-          value: "96"
+          value: "{{ .Values.spgwc.env.mnc }}"
         - name: MNC03
-          value: "096"
+          value: "{{ .Values.spgwc.env.mnc03 }}"
         - name: TAC
-          value: "1"
+          value: "{{ .Values.spgwc.env.tac }}"
         - name: GW_ID
-          value: "1"
+          value: "{{ .Values.spgwc.env.gwID }}"
         - name: REALM
-          value: openairinterface.org
+          value: {{ .Values.spgwc.env.realm }}
         livenessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "pgrep oai_spgwc"
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 5
-          successThreshold: 1
-          failureThreshold: 5
+{{ toYaml .Values.spgwc.probes.params | indent 10 }}
         readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "pgrep oai_spgwc"
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 5
-          successThreshold: 1
-          failureThreshold: 5
+{{ toYaml .Values.spgwc.probes.params | indent 10 }}
         resources:
-          requests:
-            memory: 256Mi
-            cpu: 100m
-          limits:
-            memory: 256Mi
-            cpu: 100m
+{{ toYaml .Values.spgwc.resources | indent 10 }}

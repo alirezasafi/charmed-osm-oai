@@ -189,3 +189,57 @@ mme:
     entrypointName: mme-entrypoint
     confName: mme-config
     fdConfName: mme-fd-config
+
+spgwc:
+  image: "oaisoftwarealliance/oai-spgwc"
+  imageTag: "latest"
+  env:
+    timeZone: Europe/Paris
+    sgwIfNameForS11: eth1
+    pgwIfNameForSx: eth1
+    defaultDNS: "8.8.8.8"
+    defaultDNSSec: "8.8.4.4"
+    pushProtocol: "true"
+    apnNI1: oai.ipv4
+    apnNI2: oai.ipv4_2
+    defaultApnNI1: oai.ipv4
+    ueIpAddrPool1: "12.0.0.2 - 12.0.0.254"
+    ueIpAddrPool2: "12.1.1.2 - 12.1.1.254"
+    mcc: "208"
+    mnc: "96"
+    mnc03: "096"
+    tac: "1"
+    gwID: "1"
+    realm: openairinterface.org
+  labels:
+    app: oai-spgwc-deployment
+  networks:
+    ifName: "eth1"
+    ipAddr: "192.168.61.4"
+  initContainer:
+    image: "busybox"
+    imageTag: "1.28"
+    delayInit: 100
+  securityContext:
+    privileged: true
+  probes:
+    params:
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      periodSeconds: 20
+      successThreshold: 1
+      failureThreshold: 10
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 100m
+  service:
+    name: oai-spgwc-svc
+    labels:
+      app: oai-spgwc-svc
+    udp1: 2123
+    udp2: 8805
+    

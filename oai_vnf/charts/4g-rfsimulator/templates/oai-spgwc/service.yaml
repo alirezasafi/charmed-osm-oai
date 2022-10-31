@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: oai-spgwc-svc
+  name: {{ .Values.spgwc.service.name }}
   labels:
-    app: oai-spgwc-svc
     chart: oai-spgwc
+{{ toYaml .Values.spgwc.service.labels | indent 4}}
 spec:
   type: ClusterIP
   ports:
   - name: udp1
-    port: 2123
+    port: {{ .Values.spgwc.service.udp1 }}
     targetPort: udp1
     protocol: UDP
   - name: udp2
-    port: 8805
+    port: {{ .Values.spgwc.service.udp2 }}
     targetPort: udp2
     protocol: UDP
   selector:
-    app: oai-spgwc-deployment
+{{ toYaml .Values.spgwc.labels | indent 4 }}
