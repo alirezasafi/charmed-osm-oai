@@ -48,14 +48,14 @@ spec:
             command:
             - /bin/bash
             - -c
-            - "redis-cli -h {{ .Values.redis.networks.IpAddr }} -p {{ .Values.redis.service.http1 }} ping"
+            - "redis-cli -h {{ .Values.redis.networks.ipAddr }} -p {{ .Values.redis.service.http1 }} ping"
 {{ toYaml .Values.redis.probes.params | indent 10 }}
         readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
-            - "redis-cli -h {{ .Values.redis.networks.IpAddr }} -p {{ .Values.redis.service.http1 }} ping"
+            - "redis-cli -h {{ .Values.redis.networks.ipAddr }} -p {{ .Values.redis.service.http1 }} ping"
 {{ toYaml .Values.redis.probes.params | indent 10 }}
         resources:
 {{ toYaml .Values.redis.resources | indent 10 }}

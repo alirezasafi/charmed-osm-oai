@@ -3,114 +3,94 @@ kind: Deployment
 metadata:
   name: oai-spgwu-deployment
   labels:
-    app: oai-spgwu-deployment
     chart: oai-spgwu
+{{ toYaml .Values.spgwu.labels | indent 4 }}
 spec:
   selector:
     matchLabels:
-      app: oai-spgwu-deployment
+{{ toYaml .Values.spgwu.labels | indent 6 }}
   template:
     metadata:
       labels:
-        app: oai-spgwu-deployment
+{{ toYaml .Values.spgwu.labels | indent 8 }}
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "oai-public-core-net",
-            "interface": "eth1",
-            "ips": ["192.168.61.5"],
+            "name": "{{ .Values.networks.pubCoreNetName }}",
+            "interface": "{{ .Values.spgwu.networks.ifName }}",
+            "ips": ["{{ .Values.spgwu.networks.ipAddr }}"],
             "default": true
           }
         ]'
     spec:
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: worker
-                operator: In
-                values:
-                - oai-core
+{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       initContainers:
         - name: init-spgwc
-          image: busybox:1.28
-          imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 110 && until nslookup oai-spgwc-svc; do echo waiting for spgwc; sleep 2; done"]
+          image: "{{ .Values.spgwu.initContainer.image }}:{{ .Values.spgwu.initContainer.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+          command:  ['sh', '-c', "sleep {{ .Values.spgwu.initContainer.delayInit }} && until nslookup {{ .Values.spgwc.service.name }}; do echo waiting for spgwc; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
               cpu: 10m
       containers:
       - name: oai-spgwu
+        image: "{{ .Values.spgwu.image }}:{{ .Values.spgwu.imageTag }}"
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         securityContext:
-          privileged: true
-        image: oaisoftwarealliance/oai-spgwu-tiny:latest
-        imagePullPolicy: IfNotPresent
+{{ toYaml .Values.spgwc.securityContext | indent 10 }}
         ports:
         - name: udp1
-          containerPort: 2152
+          containerPort: {{ .Values.spgwu.service.udp1 }}
           protocol: UDP
         - name: udp2
-          containerPort: 8805
+          containerPort: {{ .Values.spgwu.service.udp2 }}
           protocol: UDP
         env:
         - name: TZ
-          value: Europe/Paris
+          value: {{ .Values.spgwu.env.timeZone }}
         - name: PID_DIRECTORY
-          value: /var/run
+          value: {{ .Values.spgwu.env.pidDir }}
         - name: INSTANCE
-          value: "1"
+          value: "{{ .Values.spgwu.env.instance }}"
         - name: SGW_INTERFACE_NAME_FOR_S1U_S12_S4_UP
-          value: eth1
+          value: {{ .Values.spgwu.env.sgwIfNameForS1uS12S4 }}
         - name: PGW_INTERFACE_NAME_FOR_SGI
-          value: eth1
+          value: {{ .Values.spgwu.env.pgwIfNameForSgi }}
         - name: SGW_INTERFACE_NAME_FOR_SX
-          value: eth1
+          value: {{ .Values.spgwu.env.sgwIfNameForSx }}
         - name: SPGWC0_IP_ADDRESS
-          value: "192.168.61.4"
+          value: "{{ .Values.spgwc.networks.ipAddr }}"
         - name: NETWORK_UE_IP
-          value: "12.0.0.0/24"
+          value: "{{ .Values.spgwu.env.netUeIP }}"
         - name: NETWORK_UE_NAT_OPTION
-          value: "yes"
+          value: "{{ .Values.spgwu.env.netUeNAT }}"
         - name: MCC
-          value: "208"
+          value: "{{ .Values.spgwu.env.mcc }}"
         - name: MNC
-          value: "96"
+          value: "{{ .Values.spgwu.env.mnc }}"
         - name: MNC03
-          value: "096"
+          value: "{{ .Values.spgwu.env.mnc03 }}"
         - name: TAC
-          value: "1"
+          value: "{{ .Values.spgwu.env.tac }}"
         - name: GW_ID
-          value: "1"
+          value: "{{ .Values.spgwu.env.gwID }}"
         - name: REALM
-          value: openairinterface.org
+          value: {{ .Values.spgwu.env.realm }}
         livenessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "pgrep oai_spgwu"
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 5
+{{ toYaml .Values.spgwu.probes.params | indent 10 }}
         readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "pgrep oai_spgwu"
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 5
+{{ toYaml .Values.spgwu.probes.params | indent 10 }}
         resources:
-          requests:
-            memory: 256Mi
-            cpu: 200m
-          limits:
-            memory: 256Mi
-            cpu: 200m
+{{ toYaml .Values.spgwc.resources | indent 10 }}

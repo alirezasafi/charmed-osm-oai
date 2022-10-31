@@ -242,4 +242,53 @@ spgwc:
       app: oai-spgwc-svc
     udp1: 2123
     udp2: 8805
-    
+
+spgwu:
+  image: "oaisoftwarealliance/oai-spgwu-tiny"
+  imageTag: "latest"
+  env:
+    timeZone: Europe/Paris
+    pidDir: /var/run
+    instance: "1"
+    sgwIfNameForS1uS12S4: eth1
+    pgwIfNameForSgi: eth1
+    sgwIfNameForSx: eth1
+    netUeIP: "12.0.0.0/24"
+    netUeNAT: "yes"
+    mcc: "208"
+    mnc: "96"
+    mnc03: "096"
+    tac: "1"
+    gwID: "1"
+    realm: openairinterface.org
+  labels:
+    app: oai-spgwu-deployment
+  networks:
+    ifName: "eth1"
+    ipAddr: "192.168.61.5"
+  initContainer:
+    image: "busybox"
+    imageTag: "1.28"
+    delayInit: 110
+  securityContext:
+    privileged: true
+  probes:
+    params:
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      periodSeconds: 20
+      successThreshold: 1
+      failureThreshold: 10
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 200m
+    limits:
+      memory: 256Mi
+      cpu: 200m
+  service:
+    name: oai-spgwu-svc
+    labels:
+      app: oai-spgwc-svc
+    udp1: 2152
+    udp2: 8805
