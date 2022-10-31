@@ -3,40 +3,33 @@ kind: Deployment
 metadata:
   name: trf-gen-deployment
   labels:
-    app: trf-gen-deployment
     chart: trf-gen
+{{ toYaml .Values.trfGen.labels | indent 4 }}
 spec:
   selector:
     matchLabels:
-      app: trf-gen-deployment
+{{ toYaml .Values.trfGen.labels | indent 6 }}
   template:
     metadata:
       labels:
-        app: trf-gen-deployment
+{{ toYaml .Values.trfGen.labels | indent 8 }}
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "oai-public-core-net",
-            "interface": "eth1",
-            "ips": ["192.168.61.11"],
+            "name": "{{ .Values.networks.pubCoreNetName }}",
+            "interface": "{{ .Values.trfGen.networks.ifName }}",
+            "ips": ["{{ .Values.trfGen.networks.ipAddr }}"],
             "default": true
           }
         ]'
     spec:
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: worker
-                operator: In
-                values:
-                - oai-core
+{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       initContainers:
         - name: init-spgwu
-          image: busybox:1.28
-          imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 130 && until nslookup oai-spgwu-svc; do echo waiting for spgwu; sleep 2; done"]
+          image: "{{ .Values.trfGen.initContainer.image }}:{{ .Values.trfGen.initContainer.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+          command:  ['sh', '-c', "sleep {{ .Values.spgwc.initContainer.delayInit }} && until nslookup {{ .Values.spgwu.service.name }}; do echo waiting for spgwu; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
@@ -44,39 +37,26 @@ spec:
       containers:
       - name: trg-gen
         securityContext:
-          privileged: true
-        image: oaisoftwarealliance/trf-gen-cn5g:latest
-        imagePullPolicy: IfNotPresent
+{{ toYaml .Values.trfGen.securityContext | indent 10 }}
+        image: "{{ .Values.trfGen.image }}:{{ .Values.trfGen.imageTag }}"
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         command:
         - /bin/bash
         - -c
-        - "ip route add 12.0.0.0/24 via 192.168.61.5 dev eth1; sleep infinity"
+        - "ip route add {{ .Values.spgwu.env.netUeIP }} via {{ .Values.spgwu.networks.ipAddr }} dev eth1; sleep infinity"
         livenessProbe:
           exec:
             command:
             - /bin/bash
             - -c
-            - "ping -c 2 192.168.61.5"
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 5
+            - "ping -c 2 {{ .Values.spgwu.networks.ipAddr }}"
+{{ toYaml .Values.trfGen.probes.params | indent 10 }}
         readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
-            - "ping -c 2 192.168.61.5"
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 5
+            - "ping -c 2 {{ .Values.spgwu.networks.ipAddr }}"
+{{ toYaml .Values.trfGen.probes.params | indent 10 }}
         resources:
-          requests:
-            memory: 256Mi
-            cpu: 100m
-          limits:
-            memory: 256Mi
-            cpu: 100m
+{{ toYaml .Values.trfGen.resources | indent 10 }}

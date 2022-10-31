@@ -292,3 +292,32 @@ spgwu:
       app: oai-spgwc-svc
     udp1: 2152
     udp2: 8805
+
+trfGen:
+  image: oaisoftwarealliance/trf-gen-cn5g
+  imageTag: latest
+  labels:
+    app: trf-gen-deployment
+  networks:
+    ifName: "eth1"
+    ipAddr: "192.168.61.11"
+  initContainer:
+    image: "busybox"
+    imageTag: "1.28"
+    delayInit: 110
+  securityContext:
+    privileged: true
+  probes:
+    params:
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      periodSeconds: 20
+      successThreshold: 1
+      failureThreshold: 10
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 100m
