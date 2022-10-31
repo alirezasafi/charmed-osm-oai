@@ -1,5 +1,23 @@
 
 imagePullPolicy: IfNotPresent
+networks:
+  pvCoreNetName: oai-private-core-net
+  pvCoreNetSubnet: "192.168.68.0"
+  pvCoreNetMask: "26"
+  pubCoreNetName: oai-public-core-net
+  pubCoreNetSubnet: "192.168.61.0"
+  pubCoreNetMask: "26"
+
+affinity:
+  coreAffinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: worker
+            operator: In
+            values:
+            - oai-core
 
 cassandra:
   image: "cassandra"
@@ -21,22 +39,10 @@ cassandra:
   labels:
     app: cassandra-deployment
   networks:
-    name: oai-private-core-net
-    subnet: "192.168.68.0"
-    mask: "26"
     mainIfName: "eth1"
     mainIpAddr: "192.168.68.2"
     dbInitIfName: "eth1"
     dbInitIpAddr: "192.168.68.4"
-  affinity: 
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: worker
-            operator: In
-            values:
-            - oai-core
   initContainer:
     image: "busybox"
     imageTag: "1.28"
@@ -53,3 +59,33 @@ cassandra:
   config:
     name: cassandra-db-init
     
+redis:
+  image: "redis"
+  imageTag: "6.0.5"
+  securityContext:
+    privileged: true
+  labels:
+    app: redis-deployment
+  networks:
+    IfName: "eth1"
+    IpAddr: "192.168.61.6"
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 100m
+  probes:
+    initialDelaySeconds: 10
+    timeoutSeconds: 5
+    periodSeconds: 20
+    successThreshold: 1
+    failureThreshold: 10
+  service:
+    name: redis-svc
+    labels:
+      app: redis-svc
+    http1: 6380
+  config:
+    name: redis-conf

@@ -3,44 +3,37 @@ kind: Deployment
 metadata:
   name: redis-deployment
   labels:
-    app: redis-deployment
     chart: redis-6
+{{ toYaml .Values.redis.labels | indent 4 }}
 spec:
   selector:
     matchLabels:
-      app: redis-deployment
+{{ toYaml .Values.redis.labels | indent 6 }}
   template:
     metadata:
       labels:
-        app: redis-deployment
+{{ toYaml .Values.redis.labels | indent 8 }}
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "oai-public-core-net",
-            "interface": "eth1",
-            "ips": ["192.168.61.6"],
+            "name": "{{ .Values.networks.pubCoreNetName }}",
+            "interface": "{{ .Values.redis.networks.IfName }}",
+            "ips": ["{{ .Values.redis.networks.IpAddr }}"],
             "default": true
           }
         ]'
     spec:
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: worker
-                operator: In
-                values:
-                - oai-core
+{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       containers:
       - name: redis
-        image: "redis:6.0.5"
-        imagePullPolicy: IfNotPresent
+        image: "{{ .Values.redis.image }}:{{ .Values.redis.imageTag }}"
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote}}
         securityContext:
-          privileged: true
+{{ toYaml .Values.redis.securityContext | indent 10 }}
         ports:
           - name: http1
-            containerPort: 6380
+            containerPort: {{ .Values.redis.service.http1 }}
             protocol: TCP
         command:
         - /bin/bash
@@ -55,32 +48,27 @@ spec:
             command:
             - /bin/bash
             - -c
-            - "redis-cli -h 192.168.61.6 -p 6380 ping"
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 5
+            - "redis-cli -h {{ .Values.redis.networks.IpAddr }} -p {{ .Values.redis.service.http1 }} ping"
+          initialDelaySeconds: {{ .Values.redis.probes.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.redis.probes.timeoutSeconds }}
+          periodSeconds: {{ .Values.redis.probes.periodSeconds }}
+          successThreshold: {{ .Values.redis.probes.successThreshold }}
+          failureThreshold: {{ .Values.redis.probes.failureThreshold }}
         readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
-            - "redis-cli -h 192.168.61.6 -p 6380 ping"
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 5
+            - "redis-cli -h {{ .Values.redis.networks.IpAddr }} -p {{ .Values.redis.service.http1 }} ping"
+          initialDelaySeconds: {{ .Values.redis.probes.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.redis.probes.timeoutSeconds }}
+          periodSeconds: {{ .Values.redis.probes.periodSeconds }}
+          successThreshold: {{ .Values.redis.probes.successThreshold }}
+          failureThreshold: {{ .Values.redis.probes.failureThreshold }}
         resources:
-          requests:
-            memory: 256Mi
-            cpu: 100m
-          limits:
-            memory: 256Mi
-            cpu: 100m
+{{ toYaml .Values.redis.resources | indent 10 }}
       volumes:
       - name: redis-conf
         configMap:
-          name: redis-conf
+          name: {{ .Values.redis.config.name }}
 

@@ -16,7 +16,7 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name" : "{{ .Values.cassandra.networks.name }}",
+            "name" : "{{ .Values.networks.pvCoreNetName }}",
             "interface": "{{ .Values.cassandra.networks.mainIfName }}",
             "ips": ["{{ .Values.cassandra.networks.mainIpAddr }}"],
             "default": true
@@ -24,7 +24,7 @@ spec:
         ]'
     spec:
       affinity:
-{{ toYaml .Values.cassandra.affinity | indent 8 }}
+{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       containers:
         - name: cassandra
           image: "{{ .Values.cassandra.image }}:{{ .Values.cassandra.imageTag }}"
@@ -95,7 +95,7 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name" : "{{ .Values.cassandra.networks.name }}",
+            "name" : "{{ .Values.networks.pvCoreNetName }}",
             "interface": "{{ .Values.cassandra.networks.dbInitIfName }}",
             "ips": ["{{ .Values.cassandra.networks.dbInitIpAddr }}"],
             "default": true
@@ -103,7 +103,7 @@ spec:
         ]'
     spec:
       affinity:
-{{ toYaml .Values.cassandra.affinity | indent 8 }}
+{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       initContainers:
         - name: init-cassandra
           image: "{{ .Values.cassandra.initContainer.image }}:{{ .Values.cassandra.initContainer.imageTag }}"
