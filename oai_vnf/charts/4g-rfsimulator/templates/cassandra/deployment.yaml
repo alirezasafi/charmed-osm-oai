@@ -16,13 +16,22 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name" : "private-net",
+            "name" : "oai-private-core-net",
             "interface": "eth1",
             "ips": ["192.168.68.2"],
             "default": true
           }
         ]'
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker
+                operator: In
+                values:
+                - oai-core
       containers:
         - name: cassandra
           image: cassandra:2.1
@@ -96,13 +105,22 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name" : "private-net",
+            "name" : "oai-private-core-net",
             "interface": "eth1",
             "ips": ["192.168.68.4"],
             "default": true
           }
         ]'
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker
+                operator: In
+                values:
+                - oai-core
       initContainers:
         - name: init-cassandra
           image: busybox:1.28

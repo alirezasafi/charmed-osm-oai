@@ -14,20 +14,29 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "public-net",
+            "name": "oai-ran-net",
             "interface": "eth1",
-            "ips": ["192.168.61.20"],
+            "ips": ["192.168.62.20"],
             "default": true
           }
         ]'
       labels:
         app: enb-deployment
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker
+                operator: In
+                values:
+                - oai-ran
       initContainers:
         - name: init-core
           image: busybox:1.28
           imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 150 && until nslookup flexran-svc; do echo waiting for flexran; sleep 2; done"]
+          command:  ['sh', '-c', "sleep 180 && until nslookup flexran-svc; do echo waiting for flexran; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
@@ -80,13 +89,13 @@ spec:
           - name: ENB_S1C_IF_NAME
             value: eth1
           - name: ENB_S1C_IP_ADDRESS
-            value: "192.168.61.20"
+            value: "192.168.241.10" # odl interface ip that connected to core
           - name: ENB_S1U_IF_NAME
             value: eth1
           - name: ENB_S1U_IP_ADDRESS
-            value: "192.168.61.20"
+            value: "192.168.241.10" # odl interface ip that connected to core
           - name: ENB_X2_IP_ADDRESS
-            value: "192.168.61.20"
+            value: "192.168.241.10" # odl interface ip that connected to core
           - name: FLEXRAN_ENABLED
             value: "yes"
           - name: FLEXRAN_INTERFACE_NAME

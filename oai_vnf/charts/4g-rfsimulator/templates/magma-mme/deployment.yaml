@@ -16,13 +16,22 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "public-net",
+            "name": "oai-public-core-net",
             "interface": "eth1",
             "ips": ["192.168.61.3"],
             "default": true
           }
         ]'
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker
+                operator: In
+                values:
+                - oai-core
       initContainers:
         - name: init-hss
           image: busybox:1.28

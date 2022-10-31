@@ -16,18 +16,27 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "public-net",
+            "name": "oai-public-core-net",
             "interface": "eth1",
             "ips": ["192.168.61.5"],
             "default": true
           }
         ]'
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker
+                operator: In
+                values:
+                - oai-core
       initContainers:
         - name: init-spgwc
           image: busybox:1.28
           imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 100 && until nslookup oai-spgwc-svc; do echo waiting for spgwc; sleep 2; done"]
+          command:  ['sh', '-c', "sleep 110 && until nslookup oai-spgwc-svc; do echo waiting for spgwc; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi

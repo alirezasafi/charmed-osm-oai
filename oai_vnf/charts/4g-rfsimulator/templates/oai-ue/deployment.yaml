@@ -14,20 +14,29 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "public-net",
+            "name": "oai-ran-net",
             "interface": "eth1",
-            "ips": ["192.168.61.30"],
+            "ips": ["192.168.62.30"],
             "default": true
           }
         ]'
       labels:
         app: oai-ue0-deployment
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker
+                operator: In
+                values:
+                - oai-ran
       initContainers:
         - name: init-enb
           image: busybox:1.28
           imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 180 && until nslookup enb-svc; do echo waiting for enb; sleep 2; done"]
+          command:  ['sh', '-c', "sleep 220 && until nslookup enb-svc; do echo waiting for enb; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
@@ -48,7 +57,7 @@ spec:
           - name: HOSTNAME
             value: oai_ue0
           - name: RFSIMULATOR
-            value: "192.168.61.20"
+            value: "192.168.62.20"
           - name: MCC
             value: "208"
           - name: MNC
@@ -111,9 +120,9 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "public-net",
+            "name": "oai-ran-net",
             "interface": "eth1",
-            "ips": ["192.168.61.31"],
+            "ips": ["192.168.62.31"],
             "default": true
           }
         ]'
@@ -145,7 +154,7 @@ spec:
           - name: HOSTNAME
             value: oai_ue1
           - name: RFSIMULATOR
-            value: "192.168.61.20"
+            value: "192.168.62.20"
           - name: MCC
             value: "208"
           - name: MNC
@@ -208,9 +217,9 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "public-net",
+            "name": "oai-ran-net",
             "interface": "eth1",
-            "ips": ["192.168.61.32"],
+            "ips": ["192.168.62.32"],
             "default": true
           }
         ]'
@@ -242,7 +251,7 @@ spec:
           - name: HOSTNAME
             value: oai_ue2
           - name: RFSIMULATOR
-            value: "192.168.61.20"
+            value: "192.168.62.20"
           - name: MCC
             value: "208"
           - name: MNC

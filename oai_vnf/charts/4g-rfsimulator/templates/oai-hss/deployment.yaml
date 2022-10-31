@@ -16,18 +16,27 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "private-net",
+            "name": "oai-private-core-net",
             "interface": "eth1",
             "ips": ["192.168.68.3"],
             "default": true
           },
           {
-            "name": "public-net",
+            "name": "oai-public-core-net",
             "interface": "eth2",
             "ips": ["192.168.61.2"]
           }
         ]'
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker
+                operator: In
+                values:
+                - oai-core
       initContainers:
         - name: init-cassandra
           image: busybox:1.28

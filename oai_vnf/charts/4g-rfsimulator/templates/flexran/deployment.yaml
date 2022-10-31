@@ -14,7 +14,7 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "public-net",
+            "name": "oai-public-core-net",
             "interface": "eth1",
             "ips": ["192.168.61.61"],
             "default": true
@@ -23,11 +23,20 @@ spec:
       labels:
         app: flexran-deployment
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker
+                operator: In
+                values:
+                - oai-core
       initContainers:
       - name: init-spgwu
         image: busybox:1.28
         imagePullPolicy: IfNotPresent
-        command:  ['sh', '-c', "sleep 130 && until nslookup oai-spgwu-svc; do echo waiting for spgwu; sleep 2; done"]
+        command:  ['sh', '-c', "sleep 140 && until nslookup oai-spgwu-svc; do echo waiting for spgwu; sleep 2; done"]
         resources:
           requests:
             memory: 10Mi
