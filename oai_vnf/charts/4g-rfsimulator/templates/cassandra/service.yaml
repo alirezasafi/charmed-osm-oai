@@ -1,32 +1,32 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cassandra-svc
+  name: {{ .Values.cassandra.service.name }}
   labels:
-    app: cassandra-svc
     chart: cassandra
+{{ toYaml .Values.cassandra.service.labels | indent 4 }}
 spec:
   type: ClusterIP
   ports:
   - name: http1
-    port: 7000
+    port: {{ .Values.cassandra.service.http1 }}
     targetPort: http1
     protocol: TCP
   - name: http2
-    port: 7001
+    port: {{ .Values.cassandra.service.http2 }}
     targetPort: http2
     protocol: TCP
   - name: http3
-    port: 7199
+    port: {{ .Values.cassandra.service.http3 }}
     targetPort: http3
     protocol: TCP
   - name: http4
-    port: 9160
+    port: {{ .Values.cassandra.service.http4 }}
     targetPort: http4
     protocol: TCP
   - name: http5
-    port: 9042
+    port: {{ .Values.cassandra.service.http5 }}
     targetPort: http5
     protocol: TCP
   selector:
-    app: cassandra-deployment
+{{ toYaml .Values.cassandra.labels | indent 4 }}

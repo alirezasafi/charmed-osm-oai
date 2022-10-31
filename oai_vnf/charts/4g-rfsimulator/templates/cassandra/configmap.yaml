@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cassandra-db-init
+  name: {{ .Values.cassandra.config.name }}
 data:
   {{ (.Files.Glob "initialization/oai_db.cql").AsConfig | indent 2 | trim }}
   

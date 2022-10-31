@@ -1,0 +1,55 @@
+
+imagePullPolicy: IfNotPresent
+
+cassandra:
+  image: "cassandra"
+  imageTag: "2.1"
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 1
+    limits:
+      memory: 1Gi
+      cpu: 1
+  probes:
+    enabled: false
+    initialDelaySeconds: 10
+    timeoutSeconds: 5
+    periodSeconds: 20
+    successThreshold: 1
+    failureThreshold: 10
+  labels:
+    app: cassandra-deployment
+  networks:
+    name: oai-private-core-net
+    subnet: "192.168.68.0"
+    mask: "26"
+    mainIfName: "eth1"
+    mainIpAddr: "192.168.68.2"
+    dbInitIfName: "eth1"
+    dbInitIpAddr: "192.168.68.4"
+  affinity: 
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: worker
+            operator: In
+            values:
+            - oai-core
+  initContainer:
+    image: "busybox"
+    imageTag: "1.28"
+    delayInit: 20
+  service:
+    name: cassandra-svc
+    http1: 7000
+    http2: 7001
+    http3: 7199
+    http4: 9160
+    http5: 9042
+    labels:
+      app: cassandra-svc
+  config:
+    name: cassandra-db-init
+    
