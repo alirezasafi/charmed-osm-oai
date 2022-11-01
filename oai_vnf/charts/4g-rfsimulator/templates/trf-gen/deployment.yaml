@@ -29,7 +29,7 @@ spec:
         - name: init-spgwu
           image: "{{ .Values.trfGen.initContainer.image }}:{{ .Values.trfGen.initContainer.imageTag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.spgwc.initContainer.delayInit }} && until nslookup {{ .Values.spgwu.service.name }}; do echo waiting for spgwu; sleep 2; done"]
+          command:  ['sh', '-c', "sleep {{ .Values.trfGen.initContainer.delayInit }} && until nslookup {{ .Values.spgwu.service.name }}; do echo waiting for spgwu; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi

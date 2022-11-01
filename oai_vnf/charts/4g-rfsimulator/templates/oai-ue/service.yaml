@@ -1,50 +1,54 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: oai-ue0-svc
+  name: {{ .Values.ue.ue0.service.name }}
   labels:
-    app: oai-ue0-svc
     chart: oai-ue
+{{ toYaml .Values.ue.ue0.service.labels | indent 4 }}
 spec:
   type: ClusterIP
   ports:
     - name: http1
       targetPort: http1
-      port: 10000
+      port: {{ .Values.ue.ue0.service.http1 }}
       protocol: TCP
   selector:
-    app: oau-ue0-deployment
+{{ toYaml .Values.ue.ue0.labels | indent 4 }}
+{{- if .Values.ue.ue1.enabled }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: oai-ue1-svc
+  name: {{ .Values.ue.ue1.service.name }}
   labels:
-    app: oai-ue1-svc
     chart: oai-ue
+{{ toYaml .Values.ue.ue1.service.labels | indent 4 }}
 spec:
   type: ClusterIP
   ports:
     - name: http1
       targetPort: http1
-      port: 10001
+      port: {{ .Values.ue.ue1.service.http1 }}
       protocol: TCP
   selector:
-    app: oau-ue1-deployment
+{{ toYaml .Values.ue.ue1.labels | indent 4 }}
+{{- end }}
+{{- if .Values.ue.ue2.enabled }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: oai-ue2-svc
+  name: {{ .Values.ue.ue2.service.name }}
   labels:
-    app: oai-ue2-svc
     chart: oai-ue
+{{ toYaml .Values.ue.ue2.service.labels | indent 4 }}
 spec:
   type: ClusterIP
   ports:
     - name: http1
       targetPort: http1
-      port: 10002
+      port: {{ .Values.ue.ue2.service.http1 }}
       protocol: TCP
   selector:
-    app: oau-ue2-deployment
+{{ toYaml .Values.ue.ue2.labels | indent 4 }}
+{{- end }}

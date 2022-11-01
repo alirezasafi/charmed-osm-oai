@@ -24,7 +24,7 @@ affinity:
             values:
             - oai-core
   ranAffinity:
-    nodeAffinity:
+    nodeAffinity
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
         - matchExpressions:
@@ -170,7 +170,7 @@ mme:
   initContainer:
     image: "busybox"
     imageTag: "1.28"
-    delayInit: 90
+    delayInit: 80
   securityContext:
     privileged: true
   resources:
@@ -283,7 +283,7 @@ spgwu:
   initContainer:
     image: "busybox"
     imageTag: "1.28"
-    delayInit: 110
+    delayInit: 120
   securityContext:
     privileged: true
   probes:
@@ -318,7 +318,7 @@ trfGen:
   initContainer:
     image: "busybox"
     imageTag: "1.28"
-    delayInit: 110
+    delayInit: 120
   securityContext:
     privileged: true
   probes:
@@ -436,3 +436,89 @@ enb:
     udp1: 2152
     udp2: 36412
     udp3: 36422
+
+ue:
+  image: "oaisoftwarealliance/oai-lte-ue"
+  imageTag: "develop"
+  env:
+    timeZone: Europe/Paris
+    mcc: "208"
+    mnc: "96"
+    lteKey: "fec86ba6eb707ed08905757b1bb44b8f"
+    opc: "c42449363bbad02b66d16bc975d77cc1"
+    mision: "001011234561010"
+    hplmn: "20896"
+    useAdditionalOpt: --rfsim -C 2680000000 -r 25 --ue-rxgain 140 --ue-txgain 120 --nokrnmod 1 --log_config.global_log_options level,nocolor,time
+  securityContext:
+    privileged: true
+  initContainer:
+    image: "busybox"
+    imageTag: "1.28"
+    resources:
+      requests:
+        memory: 10Mi
+        cpu: 10m
+  probes:
+    params:
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      failureThreshold: 5
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 1
+    limits:
+      memory: 1Gi
+      cpu: 1
+  ue0:
+    env:
+      hostName: oai_ue0
+      shortImsi: "0100000001"
+    labels:
+      app: oai-ue0-deployment
+    delayInit: 220
+    networks:
+      ifName: eth1
+      ranIpAddr: "192.168.62.30"
+      pubCoreIpAddr: "192.168.61.30"
+    service: 
+      name: oai-ue0-svc
+      labels:
+        app: oai-ue0-svc
+      http1: 10000
+  ue1:
+    enabled: true
+    env:
+      hostName: oai_ue1
+      shortImsi: "0100000002"
+    labels:
+      app: oai-ue1-deployment
+    delayInit: 240
+    networks:
+      ifName: eth1
+      ranIpAddr: "192.168.62.31"
+      pubCoreIpAddr: "192.168.61.31"
+    service: 
+      name: oai-ue1-svc
+      labels:
+        app: oai-ue1-svc
+      http1: 10001
+  ue2:
+    enabled: true
+    env:
+      hostName: oai_ue2
+      shortImsi: "0100000003"
+    labels:
+      app: oai-ue2-deployment
+    delayInit: 260
+    networks:
+      ifName: eth1
+      ranIpAddr: "192.168.62.32"
+      pubCoreIpAddr: "192.168.61.32"
+    service: 
+      name: oai-ue2-svc
+      labels:
+        app: oai-ue2-svc
+      http1: 10002

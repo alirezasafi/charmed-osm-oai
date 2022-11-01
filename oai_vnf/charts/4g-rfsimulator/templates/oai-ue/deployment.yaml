@@ -3,114 +3,111 @@ kind: Deployment
 metadata:
   name: oai-ue0-deployment
   labels:
-    app: oai-ue0-deployment
     chart: oai-ue0
+{{ toYaml .Values.ue.ue0.labels | indent 4 }}
 spec:
   selector:
     matchLabels:
-      app: oai-ue0-deployment
+{{ toYaml .Values.ue.ue0.labels | indent 6 }}
   template:
     metadata:
+      labels:
+{{ toYaml .Values.ue.ue0.labels | indent 8 }}
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
+          {{- if .Values.distributedMode }}
           {
-            "name": "oai-ran-net",
-            "interface": "eth1",
-            "ips": ["192.168.62.30"],
+            "name": "{{ .Values.networks.ranNetName }}",
+            "interface": "{{ .Values.ue.ue0.networks.ifName }}",
+            "ips": ["{{ .Values.ue.ue0.networks.ranIpAddr }}"],
             "default": true
           }
+          {{- else }}
+          {
+            "name": "{{ .Values.networks.pubCoreNetName }}",
+            "interface": "{{ .Values.ue.ue0.networks.ifName }}",
+            "ips": ["{{ .Values.ue.ue0.networks.pubCoreIpAddr }}"],
+            "default": true
+          }
+          {{- end }}
         ]'
-      labels:
-        app: oai-ue0-deployment
     spec:
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: worker
-                operator: In
-                values:
-                - oai-ran
+      {{- if .Values.distributedMode }}
+{{ toYaml .Values.affinity.ranAffinity | indent 8 }}
+      {{- else }}
+{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
+      {{- end }}
       initContainers:
         - name: init-enb
-          image: busybox:1.28
-          imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 220 && until nslookup enb-svc; do echo waiting for enb; sleep 2; done"]
+          image: "{{ .Values.ue.initContainer.image }}:{{ .Values.ue.initContainer.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+          command:  ['sh', '-c', "sleep {{ .Values.ue.ue0.delayInit }} && until nslookup {{ .Values.enb.service.name }}; do echo waiting for enb; sleep 2; done"]
           resources:
-            requests:
-              memory: 10Mi
-              cpu: 10m
+{{ toYaml .Values.ue.initContainer.resources | indent 12 }}
       containers:
         - name: ue0
           securityContext:
-            privileged: true
-          image: oaisoftwarealliance/oai-lte-ue:develop
-          imagePullPolicy: IfNotPresent
+{{ toYaml .Values.ue.securityContext | indent 12 }}
+          image: "{{ .Values.ue.image }}:{{ .Values.ue.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
           ports:
             - name: http1
-              containerPort: 10000
+              containerPort: {{ .Values.ue.ue0.service.http1 }}
               protocol: TCP
           env:
           - name: TZ
-            value: Europe/Paris
+            value: {{ .Values.ue.env.timeZone }}
           - name: HOSTNAME
-            value: oai_ue0
+            value: {{ .Values.ue.ue0.env.hostName }}
           - name: RFSIMULATOR
-            value: "192.168.62.20"
+            {{- if .Values.distributedMode }}
+            value: "{{ .Values.enb.networks.ranIpAddr }}"
+            {{- else }}
+            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
+            {{- end }}
           - name: MCC
-            value: "208"
+            value: "{{ .Values.ue.env.mcc }}"
           - name: MNC
-            value: "96"
+            value: "{{ .Values.ue.env.mnc }}"
           - name: SHORT_IMSI
-            value: "0100000001"
+            value: "{{ .Values.ue.ue0.env.shortImsi }}"
           - name: LTE_KEY
-            value: "fec86ba6eb707ed08905757b1bb44b8f"
+            value: "{{ .Values.ue.env.lteKey }}"
           - name: OPC
-            value: "c42449363bbad02b66d16bc975d77cc1"
+            value: "{{ .Values.ue.env.opc }}"
           - name: MSISDN
-            value: "001011234561010"
+            value: "{{ .Values.ue.env.mision }}"
           - name: HPLMN
-            value: "20896"
+            value: "{{ .Values.ue.env.hplmn }}"
           - name: USE_ADDITIONAL_OPTIONS
-            value: --rfsim -C 2680000000 -r 25 --ue-rxgain 140 --ue-txgain 120 --nokrnmod 1 --log_config.global_log_options level,nocolor,time
+            value: "{{ .Values.ue.env.useAdditionalOpt }}"
           livenessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-uesoftmodem"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 5
+
+{{ toYaml .Values.ue.probes.params | indent 12 }}
           readinessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-uesoftmodem"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 5
+{{ toYaml .Values.ue.probes.params | indent 12 }}
           resources: 
-            requests:
-              memory: 1Gi
-              cpu: 1
-            limits:
-              memory: 1Gi
-              cpu: 1
+{{ toYaml .Values.ue.resources | indent 12 }}
+{{- if .Values.ue.ue1.enabled }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: oai-ue1-deployment
   labels:
-    app: oai-ue1-deployment
     chart: oai-ue1
+{{ toYaml .Values.ue.ue1.labels | indent 4 }}
 spec:
   selector:
     matchLabels:
@@ -119,87 +116,94 @@ spec:
     metadata:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
+          {{- if .Values.distributedMode }}
           {
-            "name": "oai-ran-net",
-            "interface": "eth1",
-            "ips": ["192.168.62.31"],
+            "name": "{{ .Values.networks.ranNetName }}",
+            "interface": "{{ .Values.ue.ue1.networks.ifName }}",
+            "ips": ["{{ .Values.ue.ue1.networks.ranIpAddr }}"],
             "default": true
           }
+          {{- else }}
+          {
+            "name": "{{ .Values.networks.pubCoreNetName }}",
+            "interface": "{{ .Values.ue.ue1.networks.ifName }}",
+            "ips": ["{{ .Values.ue.ue1.networks.pubCoreIpAddr }}"],
+            "default": true
+          }
+          {{- end }}
         ]'
       labels:
         app: oai-ue1-deployment
+
     spec:
+      affinity:
+      {{- if .Values.distributedMode }}
+{{ toYaml .Values.affinity.ranAffinity | indent 8 }}
+      {{- else }}
+{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
+      {{- end }}
       initContainers:
         - name: init-enb
-          image: busybox:1.28
-          imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 200 && until nslookup enb-svc; do echo waiting for enb; sleep 2; done"]
+          image: "{{ .Values.ue.initContainer.image }}:{{ .Values.ue.initContainer.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+          command:  ['sh', '-c', "sleep {{ .Values.ue.ue1.delayInit }} && until nslookup {{ .Values.enb.service.name }}; do echo waiting for enb; sleep 2; done"]
           resources:
-            requests:
-              memory: 10Mi
-              cpu: 10m
+{{ toYaml .Values.ue.initContainer.resources | indent 12 }}
       containers:
         - name: ue1
           securityContext:
-            privileged: true
-          image: oaisoftwarealliance/oai-lte-ue:develop
-          imagePullPolicy: IfNotPresent
+{{ toYaml .Values.ue.securityContext | indent 12 }}
+          image: "{{ .Values.ue.image }}:{{ .Values.ue.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
           ports:
             - name: http1
-              containerPort: 10001
+              containerPort: {{ .Values.ue.ue1.service.http1 }}
               protocol: TCP
           env:
           - name: TZ
-            value: Europe/Paris
+            value: {{ .Values.ue.env.timeZone }}
           - name: HOSTNAME
-            value: oai_ue1
+            value: {{ .Values.ue.ue1.env.hostName }}
           - name: RFSIMULATOR
-            value: "192.168.62.20"
+            {{- if .Values.distributedMode }}
+            value: "{{ .Values.enb.networks.ranIpAddr }}"
+            {{- else }}
+            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
+            {{- end }}
           - name: MCC
-            value: "208"
+            value: "{{ .Values.ue.env.mcc }}"
           - name: MNC
-            value: "96"
+            value: "{{ .Values.ue.env.mnc }}"
           - name: SHORT_IMSI
-            value: "0100000002"
+            value: "{{ .Values.ue.ue1.env.shortImsi }}"
           - name: LTE_KEY
-            value: "fec86ba6eb707ed08905757b1bb44b8f"
+            value: "{{ .Values.ue.env.lteKey }}"
           - name: OPC
-            value: "c42449363bbad02b66d16bc975d77cc1"
+            value: "{{ .Values.ue.env.opc }}"
           - name: MSISDN
-            value: "001011234561010"
+            value: "{{ .Values.ue.env.mision }}"
           - name: HPLMN
-            value: "20896"
+            value: "{{ .Values.ue.env.hplmn }}"
           - name: USE_ADDITIONAL_OPTIONS
-            value: --rfsim -C 2680000000 -r 25 --ue-rxgain 140 --ue-txgain 120 --nokrnmod 1 --log_config.global_log_options level,nocolor,time
+            value: "{{ .Values.ue.env.useAdditionalOpt }}"
           livenessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-uesoftmodem"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 5
+{{ toYaml .Values.ue.probes.params | indent 12 }}
           readinessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-uesoftmodem"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 5
+{{ toYaml .Values.ue.probes.params | indent 12 }}
           resources: 
-            requests:
-              memory: 1Gi
-              cpu: 1
-            limits:
-              memory: 1Gi
-              cpu: 1
+{{ toYaml .Values.ue.resources | indent 12 }}
+{{- end }}
+{{- if .Values.ue.ue2.enabled }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -208,92 +212,98 @@ metadata:
   labels:
     app: oai-ue2-deployment
     chart: oai-ue2
+{{ toYaml .Values.ue.ue2.labels | indent 4 }}
 spec:
   selector:
     matchLabels:
-      app: oai-ue2-deployment
+{{ toYaml .Values.ue.ue2.labels | indent 6 }}
   template:
     metadata:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
+          {{- if .Values.distributedMode }}
           {
-            "name": "oai-ran-net",
-            "interface": "eth1",
-            "ips": ["192.168.62.32"],
+            "name": "{{ .Values.networks.ranNetName }}",
+            "interface": "{{ .Values.ue.ue2.networks.ifName }}",
+            "ips": ["{{ .Values.ue.ue2.networks.ranIpAddr }}"],
             "default": true
           }
+          {{- else }}
+          {
+            "name": "{{ .Values.networks.pubCoreNetName }}",
+            "interface": "{{ .Values.ue.ue2.networks.ifName }}",
+            "ips": ["{{ .Values.ue.ue2.networks.pubCoreIpAddr }}"],
+            "default": true
+          }
+          {{- end }}
         ]'
       labels:
-        app: oai-ue2-deployment
+{{ toYaml .Values.ue.ue2.labels | indent 8 }}
     spec:
+      affinity:
+      {{- if .Values.distributedMode }}
+{{ toYaml .Values.affinity.ranAffinity | indent 8 }}
+      {{- else }}
+{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
+      {{- end }}
       initContainers:
         - name: init-enb
-          image: busybox:1.28
-          imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 220 && until nslookup enb-svc; do echo waiting for enb; sleep 2; done"]
+          image: "{{ .Values.ue.initContainer.image }}:{{ .Values.ue.initContainer.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+          command:  ['sh', '-c', "sleep {{ .Values.ue.ue2.delayInit }} && until nslookup {{ .Values.enb.service.name }}; do echo waiting for enb; sleep 2; done"]
           resources:
-            requests:
-              memory: 10Mi
-              cpu: 10m
+{{ toYaml .Values.ue.initContainer.resources | indent 12 }}
       containers:
         - name: ue2
           securityContext:
-            privileged: true
-          image: oaisoftwarealliance/oai-lte-ue:develop
-          imagePullPolicy: IfNotPresent
+{{ toYaml .Values.ue.securityContext | indent 12 }}
+          image: "{{ .Values.ue.image }}:{{ .Values.ue.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
           ports:
             - name: http1
-              containerPort: 10002
+              containerPort: {{ .Values.ue.ue2.service.http1 }}
               protocol: TCP
           env:
           - name: TZ
-            value: Europe/Paris
+            value: {{ .Values.ue.env.timeZone }}
           - name: HOSTNAME
-            value: oai_ue2
+            value: {{ .Values.ue.ue2.env.hostName }}
           - name: RFSIMULATOR
-            value: "192.168.62.20"
+            {{- if .Values.distributedMode }}
+            value: "{{ .Values.enb.networks.ranIpAddr }}"
+            {{- else }}
+            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
+            {{- end }}
           - name: MCC
-            value: "208"
+            value: "{{ .Values.ue.env.mcc }}"
           - name: MNC
-            value: "96"
+            value: "{{ .Values.ue.env.mnc }}"
           - name: SHORT_IMSI
-            value: "0100000003"
+            value: "{{ .Values.ue.ue2.env.shortImsi }}"
           - name: LTE_KEY
-            value: "fec86ba6eb707ed08905757b1bb44b8f"
+            value: "{{ .Values.ue.env.lteKey }}"
           - name: OPC
-            value: "c42449363bbad02b66d16bc975d77cc1"
+            value: "{{ .Values.ue.env.opc }}"
           - name: MSISDN
-            value: "001011234561010"
+            value: "{{ .Values.ue.env.mision }}"
           - name: HPLMN
-            value: "20896"
+            value: "{{ .Values.ue.env.hplmn }}"
           - name: USE_ADDITIONAL_OPTIONS
-            value: --rfsim -C 2680000000 -r 25 --ue-rxgain 140 --ue-txgain 120 --nokrnmod 1 --log_config.global_log_options level,nocolor,time
+            value: "{{ .Values.ue.env.useAdditionalOpt }}"
           livenessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-uesoftmodem"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 5
+{{ toYaml .Values.ue.probes.params | indent 12 }}
           readinessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-uesoftmodem"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 5
+{{ toYaml .Values.ue.probes.params | indent 12 }}
           resources: 
-            requests:
-              memory: 1Gi
-              cpu: 1
-            limits:
-              memory: 1Gi
-              cpu: 1  
+{{ toYaml .Values.ue.resources | indent 12 }} 
+{{- end }}
