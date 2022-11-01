@@ -1,5 +1,7 @@
 
+distributedMode: false 
 imagePullPolicy: IfNotPresent
+
 networks:
   pvCoreNetName: oai-private-core-net
   pvCoreNetSubnet: "192.168.68.0"
@@ -7,6 +9,9 @@ networks:
   pubCoreNetName: oai-public-core-net
   pubCoreNetSubnet: "192.168.61.0"
   pubCoreNetMask: "26"
+  ranNetName: oai-ran-net
+  ranNetSubnet: "192.168.62.0"
+  ranNetMask: "26"
 
 affinity:
   coreAffinity:
@@ -18,6 +23,15 @@ affinity:
             operator: In
             values:
             - oai-core
+  ranAffinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: worker
+            operator: In
+            values:
+            - oai-ran
 
 cassandra:
   image: "cassandra"
@@ -367,3 +381,58 @@ flexran:
       params:
         initialDelaySeconds: 10
         timeoutSeconds: 5
+
+enb:
+  image: "oaisoftwarealliance/oai-enb"
+  imageTag: "develop"
+  env:
+    timeZone: Europe/Paris
+    useFddMono: "yes"
+    rfsim: enb
+    enbName: eNB-rf-sim
+    mcc: "208"
+    mnc: "96"
+    mncLength: "2"
+    tac: "1"
+    ultraBandID: "7"
+    dlFreqInMhz: "2680"
+    ulFreqInMhz: "120"
+    nidCell: "10"
+    nbPrb: "25"
+    flexranEnabled: "yes"
+    flexranIfName: eth1
+    useAdditionalOpt: --rfsim --log_config.global_log_options level,nocolor,time
+  securityContext:
+    privileged: true
+  labels:
+    app: enb-deployment
+  initContainer:
+    image: "busybox"
+    imageTag: "1.28"
+    delayInit: 180
+  networks:
+    ifName: "eth1"
+    ranIpAddr: "192.168.62.20"
+    pubCoreIpAddr: "192.168.61.20"
+    brIpAddr: "192.168.241.10"
+  probes:
+    params:
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      periodSeconds: 20
+      successThreshold: 1
+      failureThreshold: 10
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 1
+    limits:
+      memory: 1Gi
+      cpu: 1
+  service:
+    name: enb-svc
+    labels:
+      app: enb-svc
+    udp1: 2152
+    udp2: 36412
+    udp3: 36422

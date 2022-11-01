@@ -3,133 +3,138 @@ kind: Deployment
 metadata:
   name: enb-deployment
   labels:
-    app: enb-deployment
     chart: enb
+{{ toYaml .Values.enb.labels | indent 4 }}
 spec:
   selector:
     matchLabels:
-      app: enb-deployment
+{{ toYaml .Values.enb.labels | indent 6 }}
   template:
     metadata:
+      labels:
+{{ toYaml .Values.enb.labels | indent 8 }}
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
+          {{- if .Values.distributedMode }}
           {
-            "name": "oai-ran-net",
-            "interface": "eth1",
-            "ips": ["192.168.62.20"],
+            "name": "{{ .Values.networks.ranNetName }}",
+            "interface": "{{ .Values.enb.networks.ifName }}",
+            "ips": ["{{ .Values.enb.networks.ranIpAddr }}"],
             "default": true
           }
+          {{- else }}
+          {
+            "name": "{{ .Values.networks.pubCoreNetName }}",
+            "interface": "{{ .Values.enb.networks.ifName }}",
+            "ips": ["{{ .Values.enb.networks.pubCoreIpAddr }}"],
+            "default": true
+          }
+          {{- end }}
         ]'
-      labels:
-        app: enb-deployment
     spec:
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: worker
-                operator: In
-                values:
-                - oai-ran
+      {{- if .Values.distributedMode }}
+{{ toYaml .Values.affinity.ranAffinity | indent 8 }}
+      {{- else }}
+{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
+      {{- end }}
       initContainers:
         - name: init-core
-          image: busybox:1.28
-          imagePullPolicy: IfNotPresent
-          command:  ['sh', '-c', "sleep 180 && until nslookup flexran-svc; do echo waiting for flexran; sleep 2; done"]
+          image: "{{ .Values.enb.initContainer.image }}:{{ .Values.enb.initContainer.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+          command:  ['sh', '-c', "sleep {{ .Values.enb.initContainer.delayInit }} && until nslookup {{ .Values.flexran.service.name }}; do echo waiting for flexran; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
               cpu: 10m
       containers:
         - name: enb
+          image: "{{ .Values.enb.image }}:{{ .Values.enb.imageTag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
           securityContext:
-            privileged: true
-          image: oaisoftwarealliance/oai-enb:develop
-          imagePullPolicy: IfNotPresent
+{{ toYaml .Values.spgwc.securityContext | indent 12 }}
           ports:
             - name: udp1
-              containerPort: 2152
+              containerPort: {{ .Values.enb.service.udp1 }}
               protocol: UDP
             - name: udp2
-              containerPort: 36412
+              containerPort: {{ .Values.enb.service.udp2 }}
               protocol: UDP
             - name: udp3
-              containerPort: 36422
+              containerPort: {{ .Values.enb.service.udp3 }}
               protocol: UDP
           env:
           - name: TZ
-            value: Europe/Paris
+            value: {{ .Values.enb.env.timeZone }}
           - name: USE_FDD_MONO
-            value: "yes"
+            value: "{{ .Values.enb.env.useFddMono }}"
           - name: RFSIMULATOR
-            value: enb
+            value: {{ .Values.enb.env.rfsim }}
           - name: ENB_NAME
-            value: eNB-rf-sim
+            value: {{ .Values.enb.env.enbName }}
           - name: MCC
-            value: "208"
+            value: "{{ .Values.enb.env.mcc }}"
           - name: MNC
-            value: "96"
+            value: "{{ .Values.enb.env.mnc }}"
           - name: MNC_LENGTH
-            value: "2"
+            value: "{{ .Values.enb.env.mncLength }}"
           - name: TAC
-            value: "1"
+            value: "{{ .Values.enb.env.tac }}"
           - name: UTRA_BAND_ID
-            value: "7"
+            value: "{{ .Values.enb.env.ultraBandID }}"
           - name: DL_FREQUENCY_IN_MHZ
-            value: "2680"
+            value: "{{ .Values.enb.env.dlFreqInMhz }}"
           - name: UL_FREQUENCY_OFFSET_IN_MHZ
-            value: "120"
+            value: "{{ .Values.enb.env.ulFreqInMhz }}"
           - name: NID_CELL
-            value: "10"
+            value: "{{ .Values.enb.env.nidCell }}"
           - name: NB_PRB
-            value: "25"
+            value: "{{ .Values.enb.env.nbPrb }}"
           - name: MME_S1C_IP_ADDRESS
-            value: "192.168.61.3"
+            value: "{{ .Values.mme.networks.ipAddr }}"
           - name: ENB_S1C_IF_NAME
-            value: eth1
+            value: {{ .Values.enb.networks.ifName }}
           - name: ENB_S1C_IP_ADDRESS
-            value: "192.168.241.10" # odl interface ip that connected to core
+            {{- if .Values.distributedMode }}
+            value: "{{ .Values.enb.networks.brIpAddr }}"
+            {{- else }}
+            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
+            {{- end }}
           - name: ENB_S1U_IF_NAME
-            value: eth1
+            value: {{ .Values.enb.networks.ifName }}
           - name: ENB_S1U_IP_ADDRESS
-            value: "192.168.241.10" # odl interface ip that connected to core
+            {{- if .Values.distributedMode }}
+            value: "{{ .Values.enb.networks.brIpAddr }}"
+            {{- else }}
+            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
+            {{- end }}
           - name: ENB_X2_IP_ADDRESS
-            value: "192.168.241.10" # odl interface ip that connected to core
+            {{- if .Values.distributedMode }}
+            value: "{{ .Values.enb.networks.brIpAddr }}"
+            {{- else }}
+            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
+            {{- end }}
           - name: FLEXRAN_ENABLED
-            value: "yes"
+            value: "{{ .Values.enb.env.flexranEnabled }}"
           - name: FLEXRAN_INTERFACE_NAME
-            value: eth1
+            value: {{ .Values.enb.networks.ifName }}
           - name: FLEXRAN_IPV4_ADDRESS
-            value: "192.168.61.61"
+            value: "{{ .Values.flexran.networks.ipAddr }}"
           - name: USE_ADDITIONAL_OPTIONS
-            value: --rfsim --log_config.global_log_options level,nocolor,time
+            value: {{ .Values.enb.env.useAdditionalOpt }}
           livenessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-softmodem"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 5
+{{ toYaml .Values.enb.probes.params | indent 12 }}
           readinessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-softmodem"
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 5
+{{ toYaml .Values.enb.probes.params | indent 12 }}
           resources:
-            requests:
-              memory: 1Gi
-              cpu: 1
-            limits:
-              memory: 1Gi
-              cpu: 1
+{{ toYaml .Values.enb.resources | indent 12 }}

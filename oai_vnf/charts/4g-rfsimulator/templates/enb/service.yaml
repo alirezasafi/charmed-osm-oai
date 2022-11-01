@@ -1,24 +1,24 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: enb-svc
+  name: {{ .Values.enb.service.name }}
   labels:
-    app: enb-svc
     chart: enb
+{{ toYaml .Values.enb.service.labels | indent 4 }}
 spec:
   type: ClusterIP
   ports:
     - name: udp1
       targetPort: udp1
-      port: 2152
+      port: {{ .Values.enb.service.udp1 }}
       protocol: UDP
     - name: udp2
       targetPort: udp2
-      port: 36412
+      port: {{ .Values.enb.service.udp2 }}
       protocol: UDP
     - name: udp3
       targetPort: udp3
-      port: 36422
+      port: {{ .Values.enb.service.udp3 }}
       protocol: UDP
   selector:
-    app: enb-deployment
+{{ toYaml .Values.enb.labels | indent 4 }}
