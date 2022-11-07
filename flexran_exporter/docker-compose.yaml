@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  custom-exporter:
+    build: .
+    ports:
+      - 8000:8000
+    environment:
+      - FLEXRAN_IP=192.168.61.61
+      - FLEXRAN_PORT=9999

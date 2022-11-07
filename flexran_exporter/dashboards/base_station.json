@@ -1,0 +1,3474 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "gnetId": null,
+    "graphTooltip": 0,
+    "id": 162,
+    "links": [],
+    "panels": [
+      {
+        "collapsed": false,
+        "datasource": null,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 46,
+        "panels": [],
+        "title": "SLAP",
+        "type": "row"
+      },
+      {
+        "datasource": "prom-operator-k8s-cluster",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 0,
+          "y": 1
+        },
+        "id": 47,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.1.1",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "BSconf_s1ap_connected",
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Connected",
+        "type": "stat"
+      },
+      {
+        "datasource": "prom-operator-k8s-cluster",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 2,
+          "x": 3,
+          "y": 1
+        },
+        "id": 54,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.1.1",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "BSconf_s1ap_pending",
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Pending",
+        "type": "stat"
+      },
+      {
+        "datasource": "prom-operator-k8s-cluster",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 5,
+          "y": 1
+        },
+        "id": 49,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.1.1",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "BSconf_s1ap_mme_requested_plmns_mcc",
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "MCC",
+        "type": "stat"
+      },
+      {
+        "datasource": "prom-operator-k8s-cluster",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 8,
+          "y": 1
+        },
+        "id": 50,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.1.1",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "BSconf_s1ap_mme_requested_plmns_mnc",
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "MNC",
+        "type": "stat"
+      },
+      {
+        "datasource": "prom-operator-k8s-cluster",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 11,
+          "y": 1
+        },
+        "id": 51,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.1.1",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "BSconf_s1ap_mme_requested_plmns_mnc_length",
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "MNC Length",
+        "type": "stat"
+      },
+      {
+        "datasource": "prom-operator-k8s-cluster",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 14,
+          "y": 1
+        },
+        "id": 52,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.1.1",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "BSconf_s1ap_mme_served_gummeis_mme_code",
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "MME Code",
+        "type": "stat"
+      },
+      {
+        "datasource": "prom-operator-k8s-cluster",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 17,
+          "y": 1
+        },
+        "id": 53,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.1.1",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "BSconf_s1ap_mme_served_gummeis_mme_group_id",
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "MME Group ID",
+        "type": "stat"
+      },
+      {
+        "datasource": "prom-operator-k8s-cluster",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 20,
+          "y": 1
+        },
+        "id": 48,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.1.1",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "BSconf_s1ap_mme_rel_capacity",
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "MME REL Capacity",
+        "type": "stat"
+      },
+      {
+        "collapsed": true,
+        "datasource": null,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 6
+        },
+        "id": 4,
+        "panels": [
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 0,
+              "y": 1
+            },
+            "id": 5,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_carrier_index",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Carrier Index",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 3,
+              "y": 1
+            },
+            "id": 6,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_deltaPUCCH_shift",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "PUCCH Shift",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 6,
+              "y": 1
+            },
+            "id": 2,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_antenna_ports_count",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Antenna Ports",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 9,
+              "y": 1
+            },
+            "id": 11,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_duplex_mode",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Duplex Mode",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 12,
+              "y": 1
+            },
+            "id": 12,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_enable_64QAM",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Enable 64QM",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 15,
+              "y": 1
+            },
+            "id": 13,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_eutra_band",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Eutra Band",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 18,
+              "y": 1
+            },
+            "id": 14,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_hopping_mode",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Hopping Mode",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 21,
+              "y": 1
+            },
+            "id": 19,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_nRB_cqi",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "NRB CQI",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 0,
+              "y": 6
+            },
+            "id": 15,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_init_nr_PDCCH_OFDM_sym",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "PDCCG OFDM SYM",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 4,
+              "y": 6
+            },
+            "id": 16,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_mac_contention_resolution_timer",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "MAC Connection Timer ",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 8,
+              "y": 6
+            },
+            "id": 17,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_max_HARQ_Msg3Tx",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Max HARQ TX",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 12,
+              "y": 6
+            },
+            "id": 18,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_n1PUCCH_AN",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "PUCCH AN",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 16,
+              "y": 6
+            },
+            "id": 20,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_n_sb",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "N SB",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 20,
+              "y": 6
+            },
+            "id": 21,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_phich_duration",
+                "interval": "",
+                "legendFormat": "duration",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_phich_resource",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "resource",
+                "refId": "B"
+              }
+            ],
+            "title": "Phich",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 0,
+              "y": 11
+            },
+            "id": 24,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_pusch_hopping_offset",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "PUSCH Hopping Offset",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 4,
+              "y": 11
+            },
+            "id": 25,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_ra_response_window_size",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Res Window Size",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 8,
+              "y": 11
+            },
+            "id": 27,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_si_config_si_window_length",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Window Length",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 12,
+              "y": 11
+            },
+            "id": 28,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_si_config_sib1_length",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "SIB1 Length",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 16,
+              "y": 11
+            },
+            "id": 22,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_phy_cell_id",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "PHY Cell ID",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 20,
+              "y": 11
+            },
+            "id": 23,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_prach_config_index",
+                "interval": "",
+                "legendFormat": "index",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_prach_freq_offset",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "freq",
+                "refId": "B"
+              }
+            ],
+            "title": "Prach",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 0,
+              "y": 16
+            },
+            "id": 29,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_srs_mac_up_pts",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "SRS MAC UP PTS",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 4,
+              "y": 16
+            },
+            "id": 32,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_srs_subframe_config",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "SRS Subframe",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 8,
+              "y": 16
+            },
+            "id": 33,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_subframe_assignment",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Subframe Assignment",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 12,
+              "y": 16
+            },
+            "id": 34,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_subframe_assignment",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Subframe Assignment",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 16,
+              "y": 16
+            },
+            "id": 31,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_si_config_sib1_length",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "SIB1 Length",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 20,
+              "y": 16
+            },
+            "id": 30,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_srs_bw_config",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "SRS BW",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 21
+            },
+            "id": 36,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom"
+              },
+              "tooltip": {
+                "mode": "single"
+              }
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_dl_bandwidth",
+                "interval": "",
+                "legendFormat": "bandwith",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_dl_cyclic_prefix_length",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "prefix",
+                "refId": "B"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_dl_freq",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "freq",
+                "refId": "C"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_dl_pdsch_power",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "pusch power",
+                "refId": "D"
+              }
+            ],
+            "title": "Download Config",
+            "type": "timeseries"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 21
+            },
+            "id": 35,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom"
+              },
+              "tooltip": {
+                "mode": "single"
+              }
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_ul_bandwidth",
+                "interval": "",
+                "legendFormat": "bandwith",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_ul_cyclic_prefix_length",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "prefix",
+                "refId": "B"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_ul_freq",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "freq",
+                "refId": "C"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_ul_pusch_power",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "pusch power",
+                "refId": "D"
+              }
+            ],
+            "title": "Upload Config",
+            "type": "timeseries"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 29
+            },
+            "id": 26,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom"
+              },
+              "tooltip": {
+                "mode": "single"
+              }
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_cell_config_si_config_sfn",
+                "interval": "",
+                "legendFormat": "sfn",
+                "refId": "A"
+              }
+            ],
+            "title": "Si SFN",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Cell Config",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "datasource": null,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 7
+        },
+        "id": 38,
+        "panels": [
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 0,
+              "y": 3
+            },
+            "id": 39,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_lc_ue_config_lc_config_direction",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Direction",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 3,
+              "y": 3
+            },
+            "id": 40,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_lc_ue_config_lc_config_lcg",
+                "interval": "",
+                "legendFormat": "LCG",
+                "refId": "A"
+              }
+            ],
+            "title": "LCQ",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 6,
+              "y": 3
+            },
+            "id": 41,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_lc_ue_config_lc_config_lcid",
+                "interval": "",
+                "legendFormat": "LCG",
+                "refId": "A"
+              }
+            ],
+            "title": "LCID",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 9,
+              "y": 3
+            },
+            "id": 42,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_lc_ue_config_lc_config_qci",
+                "interval": "",
+                "legendFormat": "LCG",
+                "refId": "A"
+              }
+            ],
+            "title": "QCI",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 12,
+              "y": 3
+            },
+            "id": 43,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_lc_ue_config_lc_config_qos_bearer_type",
+                "interval": "",
+                "legendFormat": "LCG",
+                "refId": "A"
+              }
+            ],
+            "title": "QOS Type",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 15,
+              "y": 3
+            },
+            "id": 44,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_lc_ue_config_rnti",
+                "interval": "",
+                "legendFormat": "LCG",
+                "refId": "A"
+              }
+            ],
+            "title": "QOS Type",
+            "type": "stat"
+          }
+        ],
+        "title": "LC UE Config",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "datasource": null,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 8
+        },
+        "id": 56,
+        "panels": [
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 3,
+              "x": 0,
+              "y": 4
+            },
+            "id": 57,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_aperiodic_cqi_rep_mode",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "CQI Rep Mode",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 9,
+              "x": 3,
+              "y": 4
+            },
+            "id": 59,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_beta_offset_ACK_index",
+                "interval": "",
+                "legendFormat": "ACK",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_beta_offset_CQI_index",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "CQI",
+                "refId": "B"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_beta_offset_RI_index",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "RI",
+                "refId": "C"
+              }
+            ],
+            "title": "Beta Offset Index",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 12,
+              "x": 12,
+              "y": 4
+            },
+            "id": 60,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_capabilities_half_duplex",
+                "interval": "",
+                "legendFormat": "half duplex",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_capabilities_intra_SF_hopping",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "SF",
+                "refId": "B"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_capabilities_res_alloc_type1",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Res Alloc",
+                "refId": "C"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_capabilities_type2_sb_1",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "sb - 1",
+                "refId": "D"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_capabilities_ue_category",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "ue category",
+                "refId": "E"
+              }
+            ],
+            "title": "Capabilities",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 5,
+              "x": 0,
+              "y": 9
+            },
+            "id": 61,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_imsi",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "IMSI",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 19,
+              "x": 5,
+              "y": 9
+            },
+            "id": 62,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_info_event_a3_a3_offset",
+                "interval": "",
+                "legendFormat": "offset",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_info_event_a3_hysteresis",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "hysteresis",
+                "refId": "B"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_info_event_a3_max_report_cells",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "max report cell",
+                "refId": "C"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_info_event_a3_report_on_leave",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "report on leave",
+                "refId": "D"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_info_event_a3_time_to_trigger",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "time to trigger",
+                "refId": "E"
+              }
+            ],
+            "title": "Event A3",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 5,
+              "x": 0,
+              "y": 14
+            },
+            "id": 63,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_info_filter_coefficient_rsrp",
+                "interval": "",
+                "legendFormat": "rsrp",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_info_filter_coefficient_rsrq",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "rsrq",
+                "refId": "B"
+              }
+            ],
+            "title": "Filter Coefficient",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 5,
+              "x": 5,
+              "y": 14
+            },
+            "id": 64,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_info_offset_freq_neighbouring",
+                "interval": "",
+                "legendFormat": "neighbouring",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_info_offset_freq_serving",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "serving",
+                "refId": "B"
+              }
+            ],
+            "title": "Offset Freq",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 5,
+              "x": 10,
+              "y": 14
+            },
+            "id": 65,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_max_HARQ_tx",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Max HARQ TX",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 9,
+              "x": 15,
+              "y": 14
+            },
+            "id": 66,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_meas_gap_config_pattern",
+                "interval": "",
+                "legendFormat": "config pattern",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_meas_gap_config_sf_offset",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "sf offset",
+                "refId": "B"
+              }
+            ],
+            "title": "MEAS GAP",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 0,
+              "y": 19
+            },
+            "id": 67,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_transmission_mode",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Transmission Mode",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 4,
+              "y": 19
+            },
+            "id": 68,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_tti_bundling",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "TTI Bundling",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 7,
+              "x": 8,
+              "y": 19
+            },
+            "id": 69,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 15
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_ue_aggregated_max_bitrate_DL",
+                "interval": "",
+                "legendFormat": "download",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_ue_aggregated_max_bitrate_UL",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "upload",
+                "refId": "B"
+              }
+            ],
+            "title": "Aggregated Bitrate",
+            "type": "stat"
+          },
+          {
+            "datasource": "prom-operator-k8s-cluster",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 15,
+              "y": 19
+            },
+            "id": 70,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.1.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "BSconf_ue_config_ue_transmission_antenna",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Transmission Antenna",
+            "type": "stat"
+          }
+        ],
+        "title": "UE Config",
+        "type": "row"
+      }
+    ],
+    "refresh": "5s",
+    "schemaVersion": 30,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Base Station",
+    "uid": "rPesM4N4z",
+    "version": 9
+  }
