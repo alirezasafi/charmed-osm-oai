@@ -35,6 +35,7 @@ spec:
             memory: 10Mi
             cpu: 10m
       containers:
+      {{- if .Values.flexran.metrics.enabled }}
       - name: metrics
         image: "{{ .Values.flexran.metrics.image }}:{{ .Values.flexran.metrics.imageTag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
@@ -58,6 +59,7 @@ spec:
             path: /
             port: metrics
 {{ toYaml .Values.flexran.metrics.probes.params | indent 10 }}
+      {{- end }}
       - name: flexran
         securityContext:
 {{ toYaml .Values.flexran.securityContext | indent 10 }}

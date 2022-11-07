@@ -1,3 +1,4 @@
+{{- if .Values.enb.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -96,7 +97,7 @@ spec:
             value: {{ .Values.enb.networks.ifName }}
           - name: ENB_S1C_IP_ADDRESS
             {{- if .Values.distributedMode }}
-            value: "{{ .Values.enb.networks.brIpAddr }}"
+            value: "{{ .Values.enb.networks.ranIpAddr }}"
             {{- else }}
             value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
             {{- end }}
@@ -104,13 +105,13 @@ spec:
             value: {{ .Values.enb.networks.ifName }}
           - name: ENB_S1U_IP_ADDRESS
             {{- if .Values.distributedMode }}
-            value: "{{ .Values.enb.networks.brIpAddr }}"
+            value: "{{ .Values.enb.networks.ranIpAddr }}"
             {{- else }}
             value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
             {{- end }}
           - name: ENB_X2_IP_ADDRESS
             {{- if .Values.distributedMode }}
-            value: "{{ .Values.enb.networks.brIpAddr }}"
+            value: "{{ .Values.enb.networks.ranIpAddr }}"
             {{- else }}
             value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
             {{- end }}
@@ -138,3 +139,4 @@ spec:
 {{ toYaml .Values.enb.probes.params | indent 12 }}
           resources:
 {{ toYaml .Values.enb.resources | indent 12 }}
+{{- end}}

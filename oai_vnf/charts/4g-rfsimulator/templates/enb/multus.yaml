@@ -8,7 +8,7 @@ spec:
       "cniVersion": "0.3.1",
       "name": "{{ .Values.networks.ranNetName }}",
       "type": "bridge",
-      "bridge": "oai-br",
+      "bridge": "oai-ran-br",
       "isDefaultGateway": true,
       "ipam": {
         "type": "host-local",

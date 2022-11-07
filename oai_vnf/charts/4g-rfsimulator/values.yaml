@@ -188,7 +188,7 @@ mme:
       memory: 512Mi
       cpu: 200m
   networks:
-    IfName: "eth1"
+    ifName: "eth1"
     ipAddr: "192.168.61.3"
   labels:
     app: magma-mme-deployment
@@ -367,6 +367,7 @@ flexran:
     http4: 6630
     metrics: 8000
   metrics:
+    enabled: false
     image: "flexran-exporter"
     imageTag: "latest"
     statsPort: 9999
@@ -383,6 +384,7 @@ flexran:
         timeoutSeconds: 5
 
 enb:
+  enabled: true
   image: "oaisoftwarealliance/oai-enb"
   imageTag: "develop"
   env:
@@ -414,7 +416,7 @@ enb:
     ifName: "eth1"
     ranIpAddr: "192.168.62.20"
     pubCoreIpAddr: "192.168.61.20"
-    brIpAddr: "192.168.40.2" # interface in node RAN that connected to ODL
+    # brIpAddr: "192.168.40.2" # interface in node RAN that connected to ODL
   probes:
     params:
       initialDelaySeconds: 10
@@ -473,6 +475,7 @@ ue:
       memory: 1Gi
       cpu: 1
   ue0:
+    enabled: true
     env:
       hostName: oai_ue0
       shortImsi: "0100000001"

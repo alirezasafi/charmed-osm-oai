@@ -1,3 +1,4 @@
+{{- if .Values.enb.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -22,3 +23,4 @@ spec:
       protocol: UDP
   selector:
 {{ toYaml .Values.enb.labels | indent 4 }}
+{{- end }}
