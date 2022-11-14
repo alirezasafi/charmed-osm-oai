@@ -1,1 +1,14 @@
 k8s-namespace: oai
+additionalParamsForVnf:
+- member-vnf-index: oai-vnf
+  additionalParamsForKdu:
+  - kdu_name: 4g-rfsimulator
+    additionalParams:
+      distributedMode: false
+      ue:
+        ue0:
+          enabled: true
+        ue1:
+          enabled: false
+        ue2:
+          enabled: false
