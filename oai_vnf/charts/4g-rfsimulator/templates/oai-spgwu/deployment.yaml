@@ -39,7 +39,7 @@ spec:
         image: "{{ .Values.spgwu.image }}:{{ .Values.spgwu.imageTag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         securityContext:
-{{ toYaml .Values.spgwc.securityContext | indent 10 }}
+{{ toYaml .Values.spgwu.securityContext | indent 10 }}
         ports:
         - name: udp1
           containerPort: {{ .Values.spgwu.service.udp1 }}
@@ -92,5 +92,10 @@ spec:
             - -c
             - "pgrep oai_spgwu"
 {{ toYaml .Values.spgwu.probes.params | indent 10 }}
+        {{- if .Values.spgwu.resources.enabled }}
         resources:
-{{ toYaml .Values.spgwc.resources | indent 10 }}
+          requests:
+{{ toYaml .Values.spgwu.resources.requests | indent 12 }}
+          limits:
+{{ toYaml .Values.spgwu.resources.limits | indent 12 }}
+        {{- end }}

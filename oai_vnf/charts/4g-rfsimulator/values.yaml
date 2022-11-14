@@ -1,5 +1,5 @@
 
-distributedMode: false 
+distributedMode: true
 imagePullPolicy: IfNotPresent
 
 networks:
@@ -37,12 +37,13 @@ cassandra:
   image: "cassandra"
   imageTag: "2.1"
   resources:
+    enabled: true
     requests:
-      memory: 1Gi
-      cpu: 1
+      memory: 2Gi
+      cpu: 2
     limits:
-      memory: 1Gi
-      cpu: 1
+      memory: 2Gi
+      cpu: 2
   probes:
     enabled: false
     params:
@@ -90,12 +91,13 @@ oaiHss:
     firstImsi: "208960100000001"
     nbUsers: "10"
   resources:
+    enabled: true
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: 1Gi
+      cpu: 1
     limits:
-      memory: 256Mi
-      cpu: 100m
+      memory: 1Gi
+      cpu: 1
   probes:
     params:
       initialDelaySeconds: 10
@@ -134,12 +136,13 @@ redis:
     ifName: "eth1"
     ipAddr: "192.168.61.6"
   resources:
+    enabled: true
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: 512Mi
+      cpu: 500m
     limits:
-      memory: 256Mi
-      cpu: 100m
+      memory: 512Mi
+      cpu: 500m
   probes:
     params:
       initialDelaySeconds: 10
@@ -174,9 +177,13 @@ mme:
   securityContext:
     privileged: true
   resources:
+    enabled: true
     requests:
-      memory: 512Mi
-      cpu: 200m
+      memory: 1Gi
+      cpu: 1
+    limits:
+      memory: 1Gi
+      cpu: 1
   probes:
     params:
       initialDelaySeconds: 10
@@ -244,12 +251,13 @@ spgwc:
       successThreshold: 1
       failureThreshold: 10
   resources:
+    enabled: true
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: 1Gi
+      cpu: 1
     limits:
-      memory: 256Mi
-      cpu: 100m
+      memory: 1Gi
+      cpu: 1
   service:
     name: oai-spgwc-svc
     labels:
@@ -294,12 +302,13 @@ spgwu:
       successThreshold: 1
       failureThreshold: 10
   resources:
+    enabled: true
     requests:
-      memory: 256Mi
-      cpu: 200m
+      memory: 1Gi
+      cpu: 1
     limits:
-      memory: 256Mi
-      cpu: 200m
+      memory: 1Gi
+      cpu: 1
   service:
     name: oai-spgwu-svc
     labels:
@@ -329,12 +338,13 @@ trfGen:
       successThreshold: 1
       failureThreshold: 10
   resources:
+    enabled: true
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: 512Mi
+      cpu: 500m
     limits:
-      memory: 256Mi
-      cpu: 100m
+      memory: 512Mi
+      cpu: 500m
 
 flexran:
   image: "ellior/flexran"
@@ -342,12 +352,13 @@ flexran:
   securityContext:
     privileged: true
   resources:
+    enabled: true
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: 1Gi
+      cpu: 1
     limits:
-      memory: 256Mi
-      cpu: 100m
+      memory: 1Gi
+      cpu: 1
   labels:
     app: flexran-deployment
   networks:
@@ -367,17 +378,18 @@ flexran:
     http4: 6630
     metrics: 8000
   metrics:
-    enabled: false
+    enabled: true
     image: "flexran-exporter"
     imageTag: "latest"
     statsPort: 9999
     resources:
+      enabled: true
       requests:
         memory: 256Mi
-        cpu: 100m
+        cpu: 200m
       limits:
         memory: 256Mi
-        cpu: 100m
+        cpu: 200m
     probes:
       params:
         initialDelaySeconds: 10
@@ -414,7 +426,7 @@ enb:
     delayInit: 180
   networks:
     ifName: "eth1"
-    ranIpAddr: "192.168.62.20"
+    ranIpAddr: "192.168.62.21"
     pubCoreIpAddr: "192.168.61.20"
     # brIpAddr: "192.168.40.2" # interface in node RAN that connected to ODL
   probes:
@@ -425,12 +437,13 @@ enb:
       successThreshold: 1
       failureThreshold: 10
   resources:
+    enabled: true
     requests:
-      memory: 1Gi
-      cpu: 1
+      memory: 3Gi
+      cpu: 3
     limits:
-      memory: 1Gi
-      cpu: 1
+      memory: 3Gi
+      cpu: 3
   service:
     name: enb-svc
     labels:
@@ -468,12 +481,13 @@ ue:
       successThreshold: 1
       failureThreshold: 5
   resources:
+    enabled: true
     requests:
-      memory: 1Gi
-      cpu: 1
+      memory: 2Gi
+      cpu: 2
     limits:
-      memory: 1Gi
-      cpu: 1
+      memory: 2Gi
+      cpu: 2
   ue0:
     enabled: true
     env:
@@ -484,7 +498,7 @@ ue:
     delayInit: 220
     networks:
       ifName: eth1
-      ranIpAddr: "192.168.62.30"
+      ranIpAddr: "192.168.62.31"
       pubCoreIpAddr: "192.168.61.30"
     service: 
       name: oai-ue0-svc
@@ -492,7 +506,7 @@ ue:
         app: oai-ue0-svc
       http1: 10000
   ue1:
-    enabled: true
+    enabled: false
     env:
       hostName: oai_ue1
       shortImsi: "0100000002"
@@ -501,7 +515,7 @@ ue:
     delayInit: 240
     networks:
       ifName: eth1
-      ranIpAddr: "192.168.62.31"
+      ranIpAddr: "192.168.62.32"
       pubCoreIpAddr: "192.168.61.31"
     service: 
       name: oai-ue1-svc
@@ -509,7 +523,7 @@ ue:
         app: oai-ue1-svc
       http1: 10001
   ue2:
-    enabled: true
+    enabled: false
     env:
       hostName: oai_ue2
       shortImsi: "0100000003"
@@ -518,7 +532,7 @@ ue:
     delayInit: 260
     networks:
       ifName: eth1
-      ranIpAddr: "192.168.62.32"
+      ranIpAddr: "192.168.62.33"
       pubCoreIpAddr: "192.168.61.32"
     service: 
       name: oai-ue2-svc

@@ -66,8 +66,13 @@ spec:
               - "nodetool status"
 {{ toYaml .Values.cassandra.probes.params | indent 12 }}
           {{- end }}
+          {{- if .Values.cassandra.resources.enabled }}
           resources:
-{{ toYaml .Values.cassandra.resources | indent 12 }}
+            requests:
+{{ toYaml .Values.cassandra.resources.requests | indent 14 }}
+            limits:
+{{ toYaml .Values.cassandra.resources.limits | indent 14 }}
+          {{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment

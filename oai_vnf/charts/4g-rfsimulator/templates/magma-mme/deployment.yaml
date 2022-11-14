@@ -103,8 +103,13 @@ spec:
             - -c
             - "pgrep oai_mme"
 {{ toYaml .Values.mme.probes.params | indent 10 }}
+        {{- if .Values.mme.resources.enabled }}
         resources:
-{{ toYaml .Values.mme.resources | indent 10 }}
+          requests:
+{{ toYaml .Values.mme.resources.requests | indent 12 }}
+          limits:
+{{ toYaml .Values.mme.resources.limits | indent 12 }}
+        {{- end }}
       volumes:
       - name: mme-config
         configMap:

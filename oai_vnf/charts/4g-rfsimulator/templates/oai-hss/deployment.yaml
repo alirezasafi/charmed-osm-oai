@@ -93,5 +93,10 @@ spec:
               - -c
               - "pgrep oai_hss"
 {{ toYaml .Values.oaiHss.probes.params | indent 12 }}
+          {{- if .Values.oaiHss.resources.enabled }}
           resources:
-{{ toYaml .Values.oaiHss.resources | indent 12 }}
+            requests:
+{{ toYaml .Values.oaiHss.resources.requests | indent 14 }}
+            limits:
+{{ toYaml .Values.oaiHss.resources.limits | indent 14 }}
+          {{- end }}

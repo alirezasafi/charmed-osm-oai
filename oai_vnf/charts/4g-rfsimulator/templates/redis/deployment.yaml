@@ -57,8 +57,13 @@ spec:
             - -c
             - "redis-cli -h {{ .Values.redis.networks.ipAddr }} -p {{ .Values.redis.service.http1 }} ping"
 {{ toYaml .Values.redis.probes.params | indent 10 }}
+        {{- if .Values.redis.resources.enabled }}
         resources:
-{{ toYaml .Values.redis.resources | indent 10 }}
+          requests:
+{{ toYaml .Values.redis.resources.requests | indent 12 }}
+          limits:
+{{ toYaml .Values.redis.resources.limits | indent 12 }}
+        {{- end }}      
       volumes:
       - name: redis-conf
         configMap:

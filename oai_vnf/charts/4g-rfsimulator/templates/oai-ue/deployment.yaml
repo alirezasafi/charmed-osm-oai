@@ -98,8 +98,13 @@ spec:
               - -c
               - "pgrep lte-uesoftmodem"
 {{ toYaml .Values.ue.probes.params | indent 12 }}
-          resources: 
-{{ toYaml .Values.ue.resources | indent 12 }}
+          {{- if .Values.ue.resources.enabled }}
+          resources:
+            requests:
+{{ toYaml .Values.ue.resources.requests | indent 14 }}
+            limits:
+{{ toYaml .Values.ue.resources.limits | indent 14 }}
+          {{- end }}
 {{- end }}
 {{- if .Values.ue.ue1.enabled }}
 ---
@@ -202,8 +207,13 @@ spec:
               - -c
               - "pgrep lte-uesoftmodem"
 {{ toYaml .Values.ue.probes.params | indent 12 }}
-          resources: 
-{{ toYaml .Values.ue.resources | indent 12 }}
+          {{- if .Values.ue.resources.enabled }}
+          resources:
+            requests:
+{{ toYaml .Values.ue.resources.requests | indent 14 }}
+            limits:
+{{ toYaml .Values.ue.resources.limits | indent 14 }}
+          {{- end }}
 {{- end }}
 {{- if .Values.ue.ue2.enabled }}
 ---
@@ -306,6 +316,11 @@ spec:
               - -c
               - "pgrep lte-uesoftmodem"
 {{ toYaml .Values.ue.probes.params | indent 12 }}
-          resources: 
-{{ toYaml .Values.ue.resources | indent 12 }} 
+          {{- if .Values.ue.resources.enabled }}
+          resources:
+            requests:
+{{ toYaml .Values.ue.resources.requests | indent 14 }}
+            limits:
+{{ toYaml .Values.ue.resources.limits | indent 14 }}
+          {{- end }}
 {{- end }}

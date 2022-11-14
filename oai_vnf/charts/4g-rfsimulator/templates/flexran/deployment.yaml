@@ -47,8 +47,13 @@ spec:
           value: "{{ .Values.flexran.networks.ipAddr }}"
         - name: FLEXRAN_PORT
           value: "{{ .Values.flexran.metrics.statsPort }}"
+        {{- if .Values.flexran.metrics.resources.enabled }}
         resources:
-{{ toYaml .Values.flexran.metrics.resources | indent 10 }}
+          requests:
+{{ toYaml .Values.flexran.metrics.resources.requests | indent 12 }}
+          limits:
+{{ toYaml .Values.flexran.metrics.resources.limits | indent 12 }}
+        {{- end }}
         livenessProbe:
           httpGet:
             path: /
@@ -82,8 +87,13 @@ spec:
           - mountPath: /sys/fs/cgroup
             name: cgroup
             readOnly: true
+        {{- if .Values.flexran.resources.enabled }}
         resources:
-{{ toYaml .Values.flexran.resources | indent 10 }}
+          requests:
+{{ toYaml .Values.flexran.resources.requests | indent 12 }}
+          limits:
+{{ toYaml .Values.flexran.resources.limits | indent 12 }}
+        {{- end }}
       volumes:
       - name: cgroup
         hostPath:

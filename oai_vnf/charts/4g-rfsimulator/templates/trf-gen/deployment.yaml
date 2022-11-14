@@ -58,5 +58,10 @@ spec:
             - -c
             - "ping -c 2 {{ .Values.spgwu.networks.ipAddr }}"
 {{ toYaml .Values.trfGen.probes.params | indent 10 }}
+          {{- if .Values.trfGen.resources.enabled }}
         resources:
-{{ toYaml .Values.trfGen.resources | indent 10 }}
+          requests:
+{{ toYaml .Values.trfGen.resources.requests | indent 12 }}
+          limits:
+{{ toYaml .Values.trfGen.resources.limits | indent 12 }}
+        {{- end }}

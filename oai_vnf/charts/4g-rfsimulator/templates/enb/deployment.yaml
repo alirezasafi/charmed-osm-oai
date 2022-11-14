@@ -43,7 +43,7 @@ spec:
         - name: init-core
           image: "{{ .Values.enb.initContainer.image }}:{{ .Values.enb.initContainer.imageTag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.enb.initContainer.delayInit }} && until nslookup {{ .Values.flexran.service.name }}; do echo waiting for flexran; sleep 2; done"]
+          command:  ['sh', '-c', "sleep {{ .Values.enb.initContainer.delayInit }}"]
           resources:
             requests:
               memory: 10Mi
@@ -137,6 +137,11 @@ spec:
               - -c
               - "pgrep lte-softmodem"
 {{ toYaml .Values.enb.probes.params | indent 12 }}
+          {{- if .Values.enb.resources.enabled }}
           resources:
-{{ toYaml .Values.enb.resources | indent 12 }}
+            requests:
+{{ toYaml .Values.enb.resources.requests | indent 14 }}
+            limits:
+{{ toYaml .Values.enb.resources.limits | indent 14 }}
+          {{- end }}
 {{- end}}

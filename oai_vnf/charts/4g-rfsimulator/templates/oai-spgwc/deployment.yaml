@@ -96,5 +96,10 @@ spec:
             - -c
             - "pgrep oai_spgwc"
 {{ toYaml .Values.spgwc.probes.params | indent 10 }}
+        {{- if .Values.spgwc.resources.enabled }}
         resources:
-{{ toYaml .Values.spgwc.resources | indent 10 }}
+          requests:
+{{ toYaml .Values.spgwc.resources.requests | indent 12 }}
+          limits:
+{{ toYaml .Values.spgwc.resources.limits | indent 12 }}
+        {{- end }}
