@@ -6,13 +6,19 @@ networks:
   pvCoreNetName: oai-private-core-net
   pvCoreNetSubnet: "192.168.68.0"
   pvCoreNetMask: "26"
+  pvCoreGateway: "192.168.68.1"
   pubCoreNetName: oai-public-core-net
   pubCoreNetSubnet: "192.168.61.0"
   pubCoreNetMask: "26"
+  pubCoreGateway: "192.168.61.1"
   ranNetName: oai-ran-net
   ranNetSubnet: "192.168.62.0"
   ranNetMask: "26"
-
+  ranGateway: "192.168.62.1"
+  ueNetName: oai-ue-net
+  ueNetSubnet: "192.168.63.0"
+  ueNetMask: "26"
+  ueGateway: "192.168.63.1"
 affinity:
   coreAffinity:
     nodeAffinity:
@@ -37,7 +43,7 @@ cassandra:
   image: "cassandra"
   imageTag: "2.1"
   resources:
-    enabled: true
+    enabled: false
     requests:
       memory: 2Gi
       cpu: 2
@@ -91,7 +97,7 @@ oaiHss:
     firstImsi: "208960100000001"
     nbUsers: "10"
   resources:
-    enabled: true
+    enabled: false
     requests:
       memory: 1Gi
       cpu: 1
@@ -136,7 +142,7 @@ redis:
     ifName: "eth1"
     ipAddr: "192.168.61.6"
   resources:
-    enabled: true
+    enabled: false
     requests:
       memory: 512Mi
       cpu: 500m
@@ -177,7 +183,7 @@ mme:
   securityContext:
     privileged: true
   resources:
-    enabled: true
+    enabled: false
     requests:
       memory: 1Gi
       cpu: 1
@@ -251,7 +257,7 @@ spgwc:
       successThreshold: 1
       failureThreshold: 10
   resources:
-    enabled: true
+    enabled: false
     requests:
       memory: 1Gi
       cpu: 1
@@ -302,7 +308,7 @@ spgwu:
       successThreshold: 1
       failureThreshold: 10
   resources:
-    enabled: true
+    enabled: false
     requests:
       memory: 1Gi
       cpu: 1
@@ -338,7 +344,7 @@ trfGen:
       successThreshold: 1
       failureThreshold: 10
   resources:
-    enabled: true
+    enabled: false
     requests:
       memory: 512Mi
       cpu: 500m
@@ -352,7 +358,7 @@ flexran:
   securityContext:
     privileged: true
   resources:
-    enabled: true
+    enabled: false
     requests:
       memory: 1Gi
       cpu: 1
@@ -383,7 +389,7 @@ flexran:
     imageTag: "latest"
     statsPort: 9999
     resources:
-      enabled: true
+      enabled: false
       requests:
         memory: 256Mi
         cpu: 200m
@@ -437,7 +443,7 @@ enb:
       successThreshold: 1
       failureThreshold: 10
   resources:
-    enabled: true
+    enabled: false
     requests:
       memory: 3Gi
       cpu: 3
@@ -481,7 +487,7 @@ ue:
       successThreshold: 1
       failureThreshold: 5
   resources:
-    enabled: true
+    enabled: false
     requests:
       memory: 2Gi
       cpu: 2
@@ -499,14 +505,15 @@ ue:
     networks:
       ifName: eth1
       ranIpAddr: "192.168.62.31"
-      pubCoreIpAddr: "192.168.61.30"
+      ueIpAddr: "192.168.63.31"
+      pubCoreIpAddr: "192.168.61.31"
     service: 
       name: oai-ue0-svc
       labels:
         app: oai-ue0-svc
       http1: 10000
   ue1:
-    enabled: false
+    enabled: true
     env:
       hostName: oai_ue1
       shortImsi: "0100000002"
@@ -516,14 +523,15 @@ ue:
     networks:
       ifName: eth1
       ranIpAddr: "192.168.62.32"
-      pubCoreIpAddr: "192.168.61.31"
+      ueIpAddr: "192.168.63.32"
+      pubCoreIpAddr: "192.168.61.32"
     service: 
       name: oai-ue1-svc
       labels:
         app: oai-ue1-svc
       http1: 10001
   ue2:
-    enabled: false
+    enabled: true
     env:
       hostName: oai_ue2
       shortImsi: "0100000003"
@@ -533,7 +541,8 @@ ue:
     networks:
       ifName: eth1
       ranIpAddr: "192.168.62.33"
-      pubCoreIpAddr: "192.168.61.32"
+      ueIpAddr: "192.168.63.33"
+      pubCoreIpAddr: "192.168.61.33"
     service: 
       name: oai-ue2-svc
       labels:

@@ -21,14 +21,14 @@ spec:
             "name": "{{ .Values.networks.ranNetName }}",
             "interface": "{{ .Values.enb.networks.ifName }}",
             "ips": ["{{ .Values.enb.networks.ranIpAddr }}"],
-            "default": true
+            "default-route": ["{{ .Values.networks.ranGateway }}"]
           }
           {{- else }}
           {
             "name": "{{ .Values.networks.pubCoreNetName }}",
             "interface": "{{ .Values.enb.networks.ifName }}",
             "ips": ["{{ .Values.enb.networks.pubCoreIpAddr }}"],
-            "default": true
+            "default-route": ["{{ .Values.networks.pubCoreGateway }}"]
           }
           {{- end }}
         ]'

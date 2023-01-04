@@ -21,14 +21,14 @@ spec:
             "name": "{{ .Values.networks.ranNetName }}",
             "interface": "{{ .Values.ue.ue0.networks.ifName }}",
             "ips": ["{{ .Values.ue.ue0.networks.ranIpAddr }}"],
-            "default": true
+            "default-route": ["{{ .Values.networks.ranGateway }}"]
           }
           {{- else }}
           {
             "name": "{{ .Values.networks.pubCoreNetName }}",
             "interface": "{{ .Values.ue.ue0.networks.ifName }}",
             "ips": ["{{ .Values.ue.ue0.networks.pubCoreIpAddr }}"],
-            "default": true
+            "default-route": ["{{ .Values.networks.pubCoreGateway }}"]
           }
           {{- end }}
         ]'
@@ -43,7 +43,7 @@ spec:
         - name: init-enb
           image: "{{ .Values.ue.initContainer.image }}:{{ .Values.ue.initContainer.imageTag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.ue.ue0.delayInit }} && until nslookup {{ .Values.enb.service.name }}; do echo waiting for enb; sleep 2; done"]
+          command:  ['sh', '-c', "sleep {{ .Values.ue.ue0.delayInit }}"]
           resources:
 {{ toYaml .Values.ue.initContainer.resources | indent 12 }}
       containers:
@@ -128,7 +128,7 @@ spec:
             "name": "{{ .Values.networks.ranNetName }}",
             "interface": "{{ .Values.ue.ue1.networks.ifName }}",
             "ips": ["{{ .Values.ue.ue1.networks.ranIpAddr }}"],
-            "default": true
+            "default-route": ["{{ .Values.networks.ranGateway }}"]
           }
           {{- else }}
           {
@@ -153,7 +153,7 @@ spec:
         - name: init-enb
           image: "{{ .Values.ue.initContainer.image }}:{{ .Values.ue.initContainer.imageTag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.ue.ue1.delayInit }} && until nslookup {{ .Values.enb.service.name }}; do echo waiting for enb; sleep 2; done"]
+          command:  ['sh', '-c', "sleep {{ .Values.ue.ue1.delayInit }}"]
           resources:
 {{ toYaml .Values.ue.initContainer.resources | indent 12 }}
       containers:
@@ -238,14 +238,14 @@ spec:
             "name": "{{ .Values.networks.ranNetName }}",
             "interface": "{{ .Values.ue.ue2.networks.ifName }}",
             "ips": ["{{ .Values.ue.ue2.networks.ranIpAddr }}"],
-            "default": true
+            "default-route": ["{{ .Values.networks.ranGateway }}"]
           }
           {{- else }}
           {
             "name": "{{ .Values.networks.pubCoreNetName }}",
             "interface": "{{ .Values.ue.ue2.networks.ifName }}",
             "ips": ["{{ .Values.ue.ue2.networks.pubCoreIpAddr }}"],
-            "default": true
+            "default-route": ["{{ .Values.networks.pubCoreGateway }}"]
           }
           {{- end }}
         ]'
@@ -262,7 +262,7 @@ spec:
         - name: init-enb
           image: "{{ .Values.ue.initContainer.image }}:{{ .Values.ue.initContainer.imageTag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.ue.ue2.delayInit }} && until nslookup {{ .Values.enb.service.name }}; do echo waiting for enb; sleep 2; done"]
+          command:  ['sh', '-c', "sleep {{ .Values.ue.ue2.delayInit }}"]
           resources:
 {{ toYaml .Values.ue.initContainer.resources | indent 12 }}
       containers:
