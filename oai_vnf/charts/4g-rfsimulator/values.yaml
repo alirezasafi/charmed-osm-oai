@@ -1,4 +1,3 @@
-
 distributedMode: true
 imagePullPolicy: IfNotPresent
 
@@ -82,7 +81,7 @@ cassandra:
     name: cassandra-db-init
 
 oaiHss:
-  image: "oaisoftwarealliance/oai-hss"
+  image: "oai-hss"
   imageTag: latest
   securityContext:
     privileged: true
@@ -165,7 +164,7 @@ redis:
     name: redis-conf
 
 mme:
-  image: "oaisoftwarealliance/magma-mme"
+  image: "magma-mme"
   imageTag: "latest"
   env:
     timeZone: Europe/Paris
@@ -218,14 +217,14 @@ mme:
     fdConfName: mme-fd-config
 
 spgwc:
-  image: "oaisoftwarealliance/oai-spgwc"
+  image: "oai-spgwc-mci-3"
   imageTag: "latest"
   env:
     timeZone: Europe/Paris
     sgwIfNameForS11: eth1
     pgwIfNameForSx: eth1
-    defaultDNS: "8.8.8.8"
-    defaultDNSSec: "8.8.4.4"
+    defaultDNS: "8.8.4.4"
+    defaultDNSSec: "8.8.8.8"
     pushProtocol: "true"
     apnNI1: oai.ipv4
     apnNI2: oai.ipv4_2
@@ -272,7 +271,7 @@ spgwc:
     udp2: 8805
 
 spgwu:
-  image: "oaisoftwarealliance/oai-spgwu-tiny"
+  image: "oai-spgwu-tiny"
   imageTag: "latest"
   env:
     timeZone: Europe/Paris
@@ -323,7 +322,7 @@ spgwu:
     udp2: 8805
 
 trfGen:
-  image: oaisoftwarealliance/trf-gen-cn5g
+  image: trf-gen
   imageTag: latest
   labels:
     app: trf-gen-deployment
@@ -353,6 +352,7 @@ trfGen:
       cpu: 500m
 
 flexran:
+  enabled: false
   image: "ellior/flexran"
   imageTag: "v1"
   securityContext:
@@ -403,7 +403,7 @@ flexran:
 
 enb:
   enabled: true
-  image: "oaisoftwarealliance/oai-enb"
+  image: "oai-enb"
   imageTag: "develop"
   env:
     timeZone: Europe/Paris
@@ -419,7 +419,7 @@ enb:
     ulFreqInMhz: "120"
     nidCell: "10"
     nbPrb: "25"
-    flexranEnabled: "yes"
+    flexranEnabled: "no"
     flexranIfName: eth1
     useAdditionalOpt: --rfsim --log_config.global_log_options level,nocolor,time
   securityContext:
@@ -459,7 +459,7 @@ enb:
     udp3: 36422
 
 ue:
-  image: "oaisoftwarealliance/oai-lte-ue"
+  image: "oai-lte-ue"
   imageTag: "develop"
   env:
     timeZone: Europe/Paris
