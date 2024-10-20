@@ -2,19 +2,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.ue.ue0.service.name }}
+  name: oai-ue0-svc
   labels:
     chart: oai-ue
-{{ toYaml .Values.ue.ue0.service.labels | indent 4 }}
+    app: oai-ue0-svc
 spec:
   type: ClusterIP
   ports:
     - name: http1
       targetPort: http1
-      port: {{ .Values.ue.ue0.service.http1 }}
+      port: 10000
       protocol: TCP
   selector:
-{{ toYaml .Values.ue.ue0.labels | indent 4 }}
+    app: oai-ue0
 {{- end }}
 {{- if .Values.ue.ue1.enabled }}
 ---

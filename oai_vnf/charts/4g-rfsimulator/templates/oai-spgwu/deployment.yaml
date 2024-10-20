@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: oai-spgwu-deployment
+  name: oai-spgwu
   labels:
     chart: oai-spgwu
-{{ toYaml .Values.spgwu.labels | indent 4 }}
+    app: oai-spgwu
 spec:
   selector:
     matchLabels:
-{{ toYaml .Values.spgwu.labels | indent 6 }}
+      app: oai-spgwu
   template:
     metadata:
       labels:
-{{ toYaml .Values.spgwu.labels | indent 8 }}
+        app: oai-spgwu
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "{{ .Values.networks.pubCoreNetName }}",
-            "interface": "{{ .Values.spgwu.networks.ifName }}",
+            "name": "rfsim4g-core-public",
+            "interface": "eth1",
             "ips": ["{{ .Values.spgwu.networks.ipAddr }}"],
             "default": true
           }
@@ -27,9 +27,9 @@ spec:
 {{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       initContainers:
         - name: init-spgwc
-          image: "{{ .Values.spgwu.initContainer.image }}:{{ .Values.spgwu.initContainer.imageTag }}"
+          image: "busybox:1.28"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.spgwu.initContainer.delayInit }} && until nslookup {{ .Values.spgwc.service.name }}; do echo waiting for spgwc; sleep 2; done"]
+          command:  ['sh', '-c', "sleep {{ .Values.spgwu.initContainer.delayInit }} && until nslookup oai-spgwc-svc; do echo waiting for spgwc; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
@@ -39,59 +39,67 @@ spec:
         image: "{{ .Values.spgwu.image }}:{{ .Values.spgwu.imageTag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         securityContext:
-{{ toYaml .Values.spgwu.securityContext | indent 10 }}
+          privileged: true
         ports:
         - name: udp1
-          containerPort: {{ .Values.spgwu.service.udp1 }}
+          containerPort: 2152
           protocol: UDP
         - name: udp2
-          containerPort: {{ .Values.spgwu.service.udp2 }}
+          containerPort: 8805
           protocol: UDP
         env:
         - name: TZ
-          value: {{ .Values.spgwu.env.timeZone }}
+          value: Europe/Paris
         - name: PID_DIRECTORY
-          value: {{ .Values.spgwu.env.pidDir }}
+          value: /var/run
         - name: INSTANCE
-          value: "{{ .Values.spgwu.env.instance }}"
+          value: "1"
         - name: SGW_INTERFACE_NAME_FOR_S1U_S12_S4_UP
-          value: {{ .Values.spgwu.env.sgwIfNameForS1uS12S4 }}
+          value: eth1
         - name: PGW_INTERFACE_NAME_FOR_SGI
-          value: {{ .Values.spgwu.env.pgwIfNameForSgi }}
+          value: eth1
         - name: SGW_INTERFACE_NAME_FOR_SX
-          value: {{ .Values.spgwu.env.sgwIfNameForSx }}
+          value: eth1
         - name: SPGWC0_IP_ADDRESS
           value: "{{ .Values.spgwc.networks.ipAddr }}"
         - name: NETWORK_UE_IP
-          value: "{{ .Values.spgwu.env.netUeIP }}"
+          value: "12.0.0.0/24"
         - name: NETWORK_UE_NAT_OPTION
-          value: "{{ .Values.spgwu.env.netUeNAT }}"
+          value: "yes"
         - name: MCC
-          value: "{{ .Values.spgwu.env.mcc }}"
+          value: "208"
         - name: MNC
-          value: "{{ .Values.spgwu.env.mnc }}"
+          value: "96"
         - name: MNC03
-          value: "{{ .Values.spgwu.env.mnc03 }}"
+          value: "096"
         - name: TAC
-          value: "{{ .Values.spgwu.env.tac }}"
+          value: "1"
         - name: GW_ID
-          value: "{{ .Values.spgwu.env.gwID }}"
+          value: "1"
         - name: REALM
-          value: {{ .Values.spgwu.env.realm }}
+          value: openairinterface.org
         livenessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "pgrep oai_spgwu"
-{{ toYaml .Values.spgwu.probes.params | indent 10 }}
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 10
         readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "pgrep oai_spgwu"
-{{ toYaml .Values.spgwu.probes.params | indent 10 }}
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 10
         {{- if .Values.spgwu.resources.enabled }}
         resources:
           requests:

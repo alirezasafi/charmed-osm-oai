@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.mme.config.entrypointName }}
+  name: mme-entrypoint
 data:
   {{ (.Files.Glob "configurations/entrypoint.sh").AsConfig | indent 2 | trim }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.mme.config.confName }}
+  name: mme-config
 data:
   {{ (.Files.Glob "configurations/mme.conf").AsConfig | indent 2 | trim }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.mme.config.fdConfName }}
+  name: mme-fd-config
 data:
   {{ (.Files.Glob "configurations/mme_fd.conf.tmplt").AsConfig | indent 2 | trim }}

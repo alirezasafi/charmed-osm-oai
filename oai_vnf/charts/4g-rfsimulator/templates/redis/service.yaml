@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.redis.service.name }}
+  name: redis-svc
   labels:
     chart: redis-6
-{{ toYaml .Values.redis.service.labels | indent 4}}
+    app: redis
 spec:
   type: ClusterIP
   ports:
   - name: http1
-    port: {{ .Values.redis.service.http1 }}
+    port: 6380
     targetPort: http1
     protocol: TCP
   selector:
-{{ toYaml .Values.redis.labels | indent 4 }}
+    app: redis

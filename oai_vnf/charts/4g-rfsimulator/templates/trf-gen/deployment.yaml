@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trf-gen-deployment
+  name: trf-gen
   labels:
     chart: trf-gen
-{{ toYaml .Values.trfGen.labels | indent 4 }}
+    app: trf-gen
 spec:
   selector:
     matchLabels:
-{{ toYaml .Values.trfGen.labels | indent 6 }}
+      app: trf-gen
   template:
     metadata:
       labels:
-{{ toYaml .Values.trfGen.labels | indent 8 }}
+        app: trf-gen
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "{{ .Values.networks.pubCoreNetName }}",
-            "interface": "{{ .Values.trfGen.networks.ifName }}",
+            "name": "rfsim4g-core-public",
+            "interface": "eth1",
             "ips": ["{{ .Values.trfGen.networks.ipAddr }}"],
             "default": true
           }
@@ -27,9 +27,9 @@ spec:
 {{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       initContainers:
         - name: init-spgwu
-          image: "{{ .Values.trfGen.initContainer.image }}:{{ .Values.trfGen.initContainer.imageTag }}"
+          image: "busybox:1.28"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.trfGen.initContainer.delayInit }} && until nslookup {{ .Values.spgwu.service.name }}; do echo waiting for spgwu; sleep 2; done"]
+          command:  ['sh', '-c', "sleep {{ .Values.trfGen.initContainer.delayInit }} && until nslookup oai-spgwu-svc; do echo waiting for spgwu; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
@@ -37,27 +37,35 @@ spec:
       containers:
       - name: trg-gen
         securityContext:
-{{ toYaml .Values.trfGen.securityContext | indent 10 }}
+          privileged: true
         image: "{{ .Values.trfGen.image }}:{{ .Values.trfGen.imageTag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         command:
         - /bin/bash
         - -c
-        - "ip route add {{ .Values.spgwu.env.netUeIP }} via {{ .Values.spgwu.networks.ipAddr }} dev eth1; sleep infinity"
+        - "ip route add 12.0.0.0/24 via {{ .Values.spgwu.networks.ipAddr }} dev eth1; sleep infinity"
         livenessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "ping -c 2 {{ .Values.spgwu.networks.ipAddr }}"
-{{ toYaml .Values.trfGen.probes.params | indent 10 }}
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 10
         readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "ping -c 2 {{ .Values.spgwu.networks.ipAddr }}"
-{{ toYaml .Values.trfGen.probes.params | indent 10 }}
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 10
           {{- if .Values.trfGen.resources.enabled }}
         resources:
           requests:

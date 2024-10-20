@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cassandra-deployment
+  name: cassandra
   labels:
+    app: cassandra
     chart: "cassandra-2.1"
-{{ toYaml .Values.cassandra.labels | indent 4 }}
 spec:
   selector:
     matchLabels:
-{{ toYaml .Values.cassandra.labels | indent 6 }}
+      app: cassandra
   template:
     metadata:
       labels:
-{{ toYaml .Values.cassandra.labels | indent 8 }}
+        app: cassandra
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name" : "{{ .Values.networks.pvCoreNetName }}",
-            "interface": "{{ .Values.cassandra.networks.mainIfName }}",
-            "ips": ["{{ .Values.cassandra.networks.mainIpAddr }}"],
+            "name" : "rfsim4g-core-private",
+            "interface": "eth1",
+            "ips": ["{{ .Values.cassandra.networks.ipAddr }}"],
             "default": true
           }
         ]'
@@ -31,41 +31,47 @@ spec:
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
           ports:
             - name: http1
-              containerPort: {{ .Values.cassandra.service.http1 }}
+              containerPort: 7000
               protocol: TCP
             - name: http2
-              containerPort: {{ .Values.cassandra.service.http2 }}
+              containerPort: 7001
               protocol: TCP
             - name: http3
-              containerPort: {{ .Values.cassandra.service.http3 }}
+              containerPort: 7199
               protocol: TCP
             - name: http4
-              containerPort: {{ .Values.cassandra.service.http4 }}
+              containerPort: 9160
               protocol: TCP
             - name: http5
-              containerPort: {{ .Values.cassandra.service.http5 }}
+              containerPort: 9042
               protocol: TCP
           env:
           - name: CASSANDRA_CLUSTER_NAME
             value: "OAI HSS Cluster"
           - name: CASSANDRA_ENDPOINT_SNITCH
             value: "GossipingPropertyFileSnitch"
-          {{- if .Values.cassandra.probes.enabled }}
           livenessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "nodetool status"
-{{ toYaml .Values.cassandra.probes.params | indent 12 }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            failureThreshold: 10
           readinessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "nodetool status"
-{{ toYaml .Values.cassandra.probes.params | indent 12 }}
-          {{- end }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            failureThreshold: 10
           {{- if .Values.cassandra.resources.enabled }}
           resources:
             requests:
@@ -77,23 +83,23 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db-init-deployment
+  name: db-init
   labels:
-    app: db-init-deployment
+    app: db-init
     chart: db-init
 spec:
   selector:
     matchLabels:
-      app: db-init-deployment
+      app: db-init
   template:
     metadata:
       labels:
-        app: db-init-deployment
+        app: db-init
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name" : "{{ .Values.networks.pvCoreNetName }}",
-            "interface": "{{ .Values.cassandra.networks.dbInitIfName }}",
+            "name" : "rfsim4g-core-private",
+            "interface": "eth1",
             "ips": ["{{ .Values.cassandra.networks.dbInitIpAddr }}"],
             "default": true
           }
@@ -103,9 +109,9 @@ spec:
 {{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       initContainers:
         - name: init-cassandra
-          image: "{{ .Values.cassandra.initContainer.image }}:{{ .Values.cassandra.initContainer.imageTag }}"
+          image: "busybox:1.28"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.cassandra.initContainer.delayInit }} && until nslookup {{ .Values.cassandra.service.name }}; do echo waiting for cassandra; sleep 2; done"]
+          command:  ['sh', '-c', "sleep {{ .Values.cassandra.initContainer.delayInit }} && until nslookup cassandra-svc; do echo waiting for cassandra; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
@@ -114,7 +120,7 @@ spec:
         - name: db-init
           image: "{{ .Values.cassandra.image }}:{{ .Values.cassandra.imageTag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command: ["/bin/bash", "-c", "cqlsh --file /home/oai_db.cql {{ .Values.cassandra.networks.mainIpAddr }} && echo 'OK' && sleep infinity"]
+          command: ["/bin/bash", "-c", "cqlsh --file /home/oai_db.cql {{ .Values.cassandra.networks.ipAddr }} && echo 'OK' && sleep infinity"]
           volumeMounts:
           - name: db-init
             mountPath: /home/oai_db.cql
@@ -126,4 +132,4 @@ spec:
       volumes:
       - name: db-init
         configMap:
-          name: {{ .Values.cassandra.config.name }}
+          name: cassandra-db-init

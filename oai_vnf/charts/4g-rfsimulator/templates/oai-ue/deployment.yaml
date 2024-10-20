@@ -2,33 +2,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: oai-ue0-deployment
+  name: oai-ue0
   labels:
     chart: oai-ue0
-{{ toYaml .Values.ue.ue0.labels | indent 4 }}
+    app: oai-ue0
 spec:
   selector:
     matchLabels:
-{{ toYaml .Values.ue.ue0.labels | indent 6 }}
+      app: oai-ue0
   template:
     metadata:
       labels:
-{{ toYaml .Values.ue.ue0.labels | indent 8 }}
+        app: oai-ue0
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {{- if .Values.distributedMode }}
           {
-            "name": "{{ .Values.networks.ranNetName }}",
-            "interface": "{{ .Values.ue.ue0.networks.ifName }}",
+            "name": "rfsim4g-ran-private",
+            "interface": "eth1",
             "ips": ["{{ .Values.ue.ue0.networks.ranIpAddr }}"],
-            "default-route": ["{{ .Values.networks.ranGateway }}"]
+            "default-route": ["{{ .Values.networks.rfsim4gPrivateRanGateway }}"]
           }
           {{- else }}
           {
-            "name": "{{ .Values.networks.pubCoreNetName }}",
-            "interface": "{{ .Values.ue.ue0.networks.ifName }}",
+            "name": "rfsim4g-core-public",
+            "interface": "eth1",
             "ips": ["{{ .Values.ue.ue0.networks.pubCoreIpAddr }}"],
-            "default-route": ["{{ .Values.networks.pubCoreGateway }}"]
+            "default-route": ["{{ .Values.networks.rfsim4gPublicCoreGateway }}"]
           }
           {{- end }}
         ]'
@@ -41,63 +41,54 @@ spec:
       {{- end }}
       initContainers:
         - name: init-enb
-          image: "{{ .Values.ue.initContainer.image }}:{{ .Values.ue.initContainer.imageTag }}"
+          image: "busybox:1.28"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
           command:  ['sh', '-c', "sleep {{ .Values.ue.ue0.delayInit }}"]
           resources:
-{{ toYaml .Values.ue.initContainer.resources | indent 12 }}
+            requests:
+              memory: 10Mi
+              cpu: 10m
       containers:
         - name: ue0
           securityContext:
-{{ toYaml .Values.ue.securityContext | indent 12 }}
+            privileged: true
           image: "{{ .Values.ue.image }}:{{ .Values.ue.imageTag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
           ports:
             - name: http1
-              containerPort: {{ .Values.ue.ue0.service.http1 }}
+              containerPort: 10000
               protocol: TCP
           env:
           - name: TZ
-            value: {{ .Values.ue.env.timeZone }}
-          - name: HOSTNAME
-            value: {{ .Values.ue.ue0.env.hostName }}
-          - name: RFSIMULATOR
-            {{- if .Values.distributedMode }}
-            value: "{{ .Values.enb.networks.ranIpAddr }}"
-            {{- else }}
-            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
-            {{- end }}
-          - name: MCC
-            value: "{{ .Values.ue.env.mcc }}"
-          - name: MNC
-            value: "{{ .Values.ue.env.mnc }}"
-          - name: SHORT_IMSI
-            value: "{{ .Values.ue.ue0.env.shortImsi }}"
-          - name: LTE_KEY
-            value: "{{ .Values.ue.env.lteKey }}"
-          - name: OPC
-            value: "{{ .Values.ue.env.opc }}"
-          - name: MSISDN
-            value: "{{ .Values.ue.env.mision }}"
-          - name: HPLMN
-            value: "{{ .Values.ue.env.hplmn }}"
+            value: Europe/Paris
           - name: USE_ADDITIONAL_OPTIONS
-            value: "{{ .Values.ue.env.useAdditionalOpt }}"
+            value: "--rfsim -C 2680000000 -r 25 --ue-rxgain 140 --ue-txgain 120 --rfsimulator.serveraddr {{ .Values.enb.networks.ranIpAddr }} --log_config.global_log_options level,nocolor,time"
+          volumeMounts:
+          - mountPath: /opt/oai-lte-ue/etc/ue_usim.conf
+            name: ue-config
+            subPath: ue_usim.conf
           livenessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-uesoftmodem"
-
-{{ toYaml .Values.ue.probes.params | indent 12 }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
           readinessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-uesoftmodem"
-{{ toYaml .Values.ue.probes.params | indent 12 }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
           {{- if .Values.ue.resources.enabled }}
           resources:
             requests:
@@ -105,6 +96,11 @@ spec:
             limits:
 {{ toYaml .Values.ue.resources.limits | indent 14 }}
           {{- end }}
+      volumes:
+      - configMap:
+          defaultMode: 0664
+          name: ue-config
+        name: ue-config
 {{- end }}
 {{- if .Values.ue.ue1.enabled }}
 ---
@@ -128,11 +124,11 @@ spec:
             "name": "{{ .Values.networks.ranNetName }}",
             "interface": "{{ .Values.ue.ue1.networks.ifName }}",
             "ips": ["{{ .Values.ue.ue1.networks.ranIpAddr }}"],
-            "default-route": ["{{ .Values.networks.ranGateway }}"]
+            "default-route": ["{{ .Values.networks.rfsim4gPrivateRanGateway }}"]
           }
           {{- else }}
           {
-            "name": "{{ .Values.networks.pubCoreNetName }}",
+            "name": "rfsim4g-core-public",
             "interface": "{{ .Values.ue.ue1.networks.ifName }}",
             "ips": ["{{ .Values.ue.ue1.networks.pubCoreIpAddr }}"],
             "default": true
@@ -238,14 +234,14 @@ spec:
             "name": "{{ .Values.networks.ranNetName }}",
             "interface": "{{ .Values.ue.ue2.networks.ifName }}",
             "ips": ["{{ .Values.ue.ue2.networks.ranIpAddr }}"],
-            "default-route": ["{{ .Values.networks.ranGateway }}"]
+            "default-route": ["{{ .Values.networks.rfsim4gPrivateRanGateway }}"]
           }
           {{- else }}
           {
-            "name": "{{ .Values.networks.pubCoreNetName }}",
+            "name": "rfsim4g-core-public",
             "interface": "{{ .Values.ue.ue2.networks.ifName }}",
             "ips": ["{{ .Values.ue.ue2.networks.pubCoreIpAddr }}"],
-            "default-route": ["{{ .Values.networks.pubCoreGateway }}"]
+            "default-route": ["{{ .Values.networks.rfsim4gPublicCoreGateway }}"]
           }
           {{- end }}
         ]'

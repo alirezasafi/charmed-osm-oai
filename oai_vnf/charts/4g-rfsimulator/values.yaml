@@ -2,18 +2,17 @@ distributedMode: true
 imagePullPolicy: IfNotPresent
 
 networks:
-  pvCoreNetName: oai-private-core-net
-  pvCoreNetSubnet: "192.168.68.0"
-  pvCoreNetMask: "26"
-  pvCoreGateway: "192.168.68.1"
-  pubCoreNetName: oai-public-core-net
-  pubCoreNetSubnet: "192.168.61.0"
-  pubCoreNetMask: "26"
-  pubCoreGateway: "192.168.61.1"
-  ranNetName: oai-ran-net
-  ranNetSubnet: "192.168.62.0"
-  ranNetMask: "26"
-  ranGateway: "192.168.62.1"
+  ## Core Private Network
+  rfsim4gPrivateCoreNet: "192.168.68.0"
+  rfsim4gPrivateCoreNetMask: "26"
+  ## Core Private Network
+  rfsim4gPublicCoreNet: "192.168.61.0"
+  rfsim4gPublicCoreNetMask: "26"
+  rfsim4gPublicCoreGateway: "192.168.61.1"
+  ## Ran Private Network
+  rfsim4gPrivateRanNet: "192.168.62.0"
+  rfsim4gPrivateRanNetMask: "26"
+  rfsim4gPrivateRanGateway: "192.168.62.1"
   ueNetName: oai-ue-net
   ueNetSubnet: "192.168.63.0"
   ueNetMask: "26"
@@ -49,52 +48,15 @@ cassandra:
     limits:
       memory: 2Gi
       cpu: 2
-  probes:
-    enabled: false
-    params:
-      initialDelaySeconds: 10
-      timeoutSeconds: 5
-      periodSeconds: 20
-      successThreshold: 1
-      failureThreshold: 10
-  labels:
-    app: cassandra-deployment
   networks:
-    mainIfName: "eth1"
-    mainIpAddr: "192.168.68.2"
-    dbInitIfName: "eth1"
+    ipAddr: "192.168.68.2"
     dbInitIpAddr: "192.168.68.4"
   initContainer:
-    image: "busybox"
-    imageTag: "1.28"
-    delayInit: 25
-  service:
-    name: cassandra-svc
-    http1: 7000
-    http2: 7001
-    http3: 7199
-    http4: 9160
-    http5: 9042
-    labels:
-      app: cassandra-svc
-  config:
-    name: cassandra-db-init
+    delayInit: 10
 
 oaiHss:
-  image: "oai-hss"
+  image: "oaisoftwarealliance/oai-hss"
   imageTag: latest
-  securityContext:
-    privileged: true
-  env:
-    realm: "openairinterface.org"
-    fqdn: "hss.openairinterface.org"
-    prefix: "/openair-hss/etc"
-    opKey: "1006020f0a478bf6b699f15c062e42b3"
-    lteKey: "fec86ba6eb707ed08905757b1bb44b8f"
-    apn1: "oai.ipv4"
-    apn2: "internet"
-    firstImsi: "208960100000001"
-    nbUsers: "10"
   resources:
     enabled: false
     requests:
@@ -103,42 +65,18 @@ oaiHss:
     limits:
       memory: 1Gi
       cpu: 1
-  probes:
-    params:
-      initialDelaySeconds: 10
-      timeoutSeconds: 5
-      periodSeconds: 20
-      successThreshold: 1
-      failureThreshold: 10
   labels:
     app: oai-hss-deployment
   networks:
-    pvIfName: "eth1"
-    pvIpAddr: "192.168.68.3"
-    pubIfName: "eth2"
-    pubIpAddr: "192.168.61.2"
+    privateIpAddr: "192.168.68.3"
+    publicIpAddr: "192.168.61.2"
   initContainer:
-    image: "busybox"
-    imageTag: "1.28"
-    delayInit: 70
-  service:
-    name: oai-hss-svc
-    labels:
-      app: oai-hss-svc
-    http1: 9042
-    http2: 5868
-    http3: 9080
-    http4: 9081
+    delayInit: 30
 
 redis:
   image: "redis"
   imageTag: "6.0.5"
-  securityContext:
-    privileged: true
-  labels:
-    app: redis-deployment
   networks:
-    ifName: "eth1"
     ipAddr: "192.168.61.6"
   resources:
     enabled: false
@@ -148,39 +86,12 @@ redis:
     limits:
       memory: 512Mi
       cpu: 500m
-  probes:
-    params:
-      initialDelaySeconds: 10
-      timeoutSeconds: 5
-      periodSeconds: 20
-      successThreshold: 1
-      failureThreshold: 10
-  service:
-    name: redis-svc
-    labels:
-      app: redis-svc
-    http1: 6380
-  config:
-    name: redis-conf
 
 mme:
-  image: "magma-mme"
+  image: "oaisoftwarealliance/magma-mme"
   imageTag: "latest"
-  env:
-    timeZone: Europe/Paris
-    realm: openairinterface.org
-    prefix: /openair-mme/etc
-    hssHostName: hss
-    hssFqdn: "hss.openairinterface.org"
-    hssRealm: openairinterface.org
-    mmeFqdn: mme.openairinterface.org
-    features: mme_oai
   initContainer:
-    image: "busybox"
-    imageTag: "1.28"
-    delayInit: 80
-  securityContext:
-    privileged: true
+    delayInit: 30
   resources:
     enabled: false
     requests:
@@ -189,72 +100,16 @@ mme:
     limits:
       memory: 1Gi
       cpu: 1
-  probes:
-    params:
-      initialDelaySeconds: 10
-      timeoutSeconds: 5
-      periodSeconds: 20
-      successThreshold: 1
-      failureThreshold: 10
-    limits:
-      memory: 512Mi
-      cpu: 200m
   networks:
-    ifName: "eth1"
     ipAddr: "192.168.61.3"
-  labels:
-    app: magma-mme-deployment
-  service:
-    name: magma-mme-svc
-    labels:
-      app: magma-mme-svc
-    udp1: 2123
-    http1: 3870
-    http2: 5870
-  config:
-    entrypointName: mme-entrypoint
-    confName: mme-config
-    fdConfName: mme-fd-config
 
 spgwc:
-  image: "oai-spgwc-mci-3"
+  image: "oaisoftwarealliance/oai-spgwc"
   imageTag: "latest"
-  env:
-    timeZone: Europe/Paris
-    sgwIfNameForS11: eth1
-    pgwIfNameForSx: eth1
-    defaultDNS: "8.8.4.4"
-    defaultDNSSec: "8.8.8.8"
-    pushProtocol: "true"
-    apnNI1: oai.ipv4
-    apnNI2: oai.ipv4_2
-    defaultApnNI1: oai.ipv4
-    ueIpAddrPool1: "12.0.0.2 - 12.0.0.254"
-    ueIpAddrPool2: "12.1.1.2 - 12.1.1.254"
-    mcc: "208"
-    mnc: "96"
-    mnc03: "096"
-    tac: "1"
-    gwID: "1"
-    realm: openairinterface.org
-  labels:
-    app: oai-spgwc-deployment
   networks:
-    ifName: "eth1"
     ipAddr: "192.168.61.4"
   initContainer:
-    image: "busybox"
-    imageTag: "1.28"
-    delayInit: 100
-  securityContext:
-    privileged: true
-  probes:
-    params:
-      initialDelaySeconds: 10
-      timeoutSeconds: 5
-      periodSeconds: 20
-      successThreshold: 1
-      failureThreshold: 10
+    delayInit: 30
   resources:
     enabled: false
     requests:
@@ -263,49 +118,14 @@ spgwc:
     limits:
       memory: 1Gi
       cpu: 1
-  service:
-    name: oai-spgwc-svc
-    labels:
-      app: oai-spgwc-svc
-    udp1: 2123
-    udp2: 8805
 
 spgwu:
-  image: "oai-spgwu-tiny"
+  image: "oaisoftwarealliance/oai-spgwu-tiny"
   imageTag: "latest"
-  env:
-    timeZone: Europe/Paris
-    pidDir: /var/run
-    instance: "1"
-    sgwIfNameForS1uS12S4: eth1
-    pgwIfNameForSgi: eth1
-    sgwIfNameForSx: eth1
-    netUeIP: "12.0.0.0/24"
-    netUeNAT: "yes"
-    mcc: "208"
-    mnc: "96"
-    mnc03: "096"
-    tac: "1"
-    gwID: "1"
-    realm: openairinterface.org
-  labels:
-    app: oai-spgwu-deployment
   networks:
-    ifName: "eth1"
     ipAddr: "192.168.61.5"
   initContainer:
-    image: "busybox"
-    imageTag: "1.28"
-    delayInit: 120
-  securityContext:
-    privileged: true
-  probes:
-    params:
-      initialDelaySeconds: 10
-      timeoutSeconds: 5
-      periodSeconds: 20
-      successThreshold: 1
-      failureThreshold: 10
+    delayInit: 30
   resources:
     enabled: false
     requests:
@@ -314,34 +134,14 @@ spgwu:
     limits:
       memory: 1Gi
       cpu: 1
-  service:
-    name: oai-spgwu-svc
-    labels:
-      app: oai-spgwc-svc
-    udp1: 2152
-    udp2: 8805
 
 trfGen:
-  image: trf-gen
-  imageTag: latest
-  labels:
-    app: trf-gen-deployment
+  image: oaisoftwarealliance/trf-gen-cn5g
+  imageTag: focal
   networks:
-    ifName: "eth1"
     ipAddr: "192.168.61.11"
   initContainer:
-    image: "busybox"
-    imageTag: "1.28"
-    delayInit: 120
-  securityContext:
-    privileged: true
-  probes:
-    params:
-      initialDelaySeconds: 10
-      timeoutSeconds: 5
-      periodSeconds: 20
-      successThreshold: 1
-      failureThreshold: 10
+    delayInit: 30
   resources:
     enabled: false
     requests:
@@ -403,45 +203,14 @@ flexran:
 
 enb:
   enabled: true
-  image: "oai-enb"
+  image: "oaisoftwarealliance/oai-enb"
   imageTag: "develop"
-  env:
-    timeZone: Europe/Paris
-    useFddMono: "yes"
-    rfsim: enb
-    enbName: eNB-rf-sim
-    mcc: "208"
-    mnc: "96"
-    mncLength: "2"
-    tac: "1"
-    ultraBandID: "7"
-    dlFreqInMhz: "2680"
-    ulFreqInMhz: "120"
-    nidCell: "10"
-    nbPrb: "25"
-    flexranEnabled: "no"
-    flexranIfName: eth1
-    useAdditionalOpt: --rfsim --log_config.global_log_options level,nocolor,time
-  securityContext:
-    privileged: true
-  labels:
-    app: enb-deployment
   initContainer:
-    image: "busybox"
-    imageTag: "1.28"
-    delayInit: 180
+    delayInit: 90
   networks:
-    ifName: "eth1"
-    ranIpAddr: "192.168.62.21"
+    ranIpAddr: "192.168.62.20"
     pubCoreIpAddr: "192.168.61.20"
     # brIpAddr: "192.168.40.2" # interface in node RAN that connected to ODL
-  probes:
-    params:
-      initialDelaySeconds: 10
-      timeoutSeconds: 5
-      periodSeconds: 20
-      successThreshold: 1
-      failureThreshold: 10
   resources:
     enabled: false
     requests:
@@ -450,42 +219,10 @@ enb:
     limits:
       memory: 3Gi
       cpu: 3
-  service:
-    name: enb-svc
-    labels:
-      app: enb-svc
-    udp1: 2152
-    udp2: 36412
-    udp3: 36422
 
 ue:
-  image: "oai-lte-ue"
+  image: "oaisoftwarealliance/oai-lte-ue"
   imageTag: "develop"
-  env:
-    timeZone: Europe/Paris
-    mcc: "208"
-    mnc: "96"
-    lteKey: "fec86ba6eb707ed08905757b1bb44b8f"
-    opc: "c42449363bbad02b66d16bc975d77cc1"
-    mision: "001011234561010"
-    hplmn: "20896"
-    useAdditionalOpt: --rfsim -C 2680000000 -r 25 --ue-rxgain 140 --ue-txgain 120 --nokrnmod 1 --log_config.global_log_options level,nocolor,time
-  securityContext:
-    privileged: true
-  initContainer:
-    image: "busybox"
-    imageTag: "1.28"
-    resources:
-      requests:
-        memory: 10Mi
-        cpu: 10m
-  probes:
-    params:
-      initialDelaySeconds: 10
-      timeoutSeconds: 5
-      periodSeconds: 10
-      successThreshold: 1
-      failureThreshold: 5
   resources:
     enabled: false
     requests:
@@ -496,24 +233,13 @@ ue:
       cpu: 2
   ue0:
     enabled: true
-    env:
-      hostName: oai_ue0
-      shortImsi: "0100000001"
-    labels:
-      app: oai-ue0-deployment
-    delayInit: 220
+    delayInit: 90
     networks:
-      ifName: eth1
-      ranIpAddr: "192.168.62.31"
+      ranIpAddr: "192.168.62.30"
       ueIpAddr: "192.168.63.31"
       pubCoreIpAddr: "192.168.61.31"
-    service: 
-      name: oai-ue0-svc
-      labels:
-        app: oai-ue0-svc
-      http1: 10000
   ue1:
-    enabled: true
+    enabled: false
     env:
       hostName: oai_ue1
       shortImsi: "0100000002"
@@ -531,7 +257,7 @@ ue:
         app: oai-ue1-svc
       http1: 10001
   ue2:
-    enabled: true
+    enabled: false
     env:
       hostName: oai_ue2
       shortImsi: "0100000003"

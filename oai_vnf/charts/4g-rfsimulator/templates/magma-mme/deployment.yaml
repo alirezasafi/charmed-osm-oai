@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: magma-mme-deployment
+  name: magma-mme
   labels:
     chart: magma-mme
-{{ toYaml .Values.mme.labels | indent 4 }}
+    app: magma-mme
 spec:
   selector:
     matchLabels:
-{{ toYaml .Values.mme.labels | indent 6 }}
+      app: magma-mme
   template:
     metadata:
       labels:
-{{ toYaml .Values.mme.labels | indent 8 }}
+        app: magma-mme
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "{{ .Values.networks.pubCoreNetName }}",
-            "interface": "{{ .Values.mme.networks.ifName }}",
+            "name": "rfsim4g-core-public",
+            "interface": "eth1",
             "ips": ["{{ .Values.mme.networks.ipAddr }}"],
             "default": true
           }
@@ -27,17 +27,17 @@ spec:
 {{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       initContainers:
         - name: init-hss
-          image: "{{ .Values.mme.initContainer.image }}:{{ .Values.mme.initContainer.imageTag }}"
+          image: "busybox:1.28"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.mme.initContainer.delayInit }} && until nslookup {{ .Values.oaiHss.service.name }}; do echo waiting for oai-hss; sleep 2; done"]
+          command:  ['sh', '-c', "sleep {{ .Values.mme.initContainer.delayInit }} && until nslookup oai-hss-svc; do echo waiting for oai-hss; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
               cpu: 10m
         - name: init-redis
-          image: "{{ .Values.mme.initContainer.image }}:{{ .Values.mme.initContainer.imageTag }}"
+          image: "busybox:1.28"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "until nslookup {{ .Values.redis.service.name }}; do echo waiting for redis; sleep 2; done"]
+          command:  ['sh', '-c', "until nslookup redis-svc; do echo waiting for redis; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
@@ -47,16 +47,16 @@ spec:
         image: "{{ .Values.mme.image }}:{{ .Values.mme.imageTag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         securityContext:
-{{ toYaml .Values.mme.securityContext | indent 10 }}
+          privileged: true
         ports:
         - name: udp1
-          containerPort: {{ .Values.mme.service.udp1 }}
+          containerPort: 2123
           protocol: UDP
         - name: http1
-          containerPort: {{ .Values.mme.service.http1 }}
+          containerPort: 3870
           protocol: TCP
         - name: http2
-          containerPort: {{ .Values.mme.service.http2 }}
+          containerPort: 5870
           protocol: TCP
         command:
         - /bin/bash
@@ -64,21 +64,21 @@ spec:
         - "/magma-mme/bin/entrypoint.sh"
         env:
         - name: TZ
-          value: {{ .Values.mme.env.timeZone }}
+          value: Europe/Paris
         - name: REALM
-          value: {{ .Values.mme.env.realm }}
+          value: openairinterface.org
         - name: PREFIX
-          value: {{ .Values.mme.env.prefix }}
+          value: "/openair-mme/etc"
         - name: HSS_HOSTNAME
-          value: {{ .Values.mme.env.hssHostName }}
+          value: hss
         - name: HSS_FQDN
-          value: "{{ .Values.mme.env.hssFqdn }}"
+          value: "hss.openairinterface.org"
         - name: HSS_REALM
-          value: {{ .Values.mme.env.hssRealm }}
+          value: openairinterface.org
         - name: MME_FQDN
-          value: {{ .Values.mme.env.mmeFqdn }}
+          value: mme.openairinterface.org
         - name: FEATURES
-          value: {{ .Values.mme.env.features }}
+          value: mme_oai
         volumeMounts:
         - name: mme-entrypoint
           mountPath: /magma-mme/bin/entrypoint.sh
@@ -95,14 +95,22 @@ spec:
             - /bin/bash
             - -c
             - "pgrep oai_mme"
-{{ toYaml .Values.mme.probes.params | indent 10 }}
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 10
         readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "pgrep oai_mme"
-{{ toYaml .Values.mme.probes.params | indent 10 }}
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 10
         {{- if .Values.mme.resources.enabled }}
         resources:
           requests:
@@ -113,11 +121,11 @@ spec:
       volumes:
       - name: mme-config
         configMap:
-          name: {{ .Values.mme.config.confName }}
+          name: mme-config
       - name: mme-fd-config
         configMap:
-          name: {{ .Values.mme.config.fdConfName }}
+          name: mme-fd-config
       - name: mme-entrypoint
         configMap:
-          name: {{ .Values.mme.config.entrypointName }}
+          name: mme-entrypoint
           defaultMode: 0774

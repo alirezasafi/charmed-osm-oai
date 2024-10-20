@@ -2,33 +2,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: enb-deployment
+  name: enb
   labels:
     chart: enb
-{{ toYaml .Values.enb.labels | indent 4 }}
+    app: enb
 spec:
   selector:
     matchLabels:
-{{ toYaml .Values.enb.labels | indent 6 }}
+      app: enb
   template:
     metadata:
       labels:
-{{ toYaml .Values.enb.labels | indent 8 }}
+        app: enb
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {{- if .Values.distributedMode }}
           {
-            "name": "{{ .Values.networks.ranNetName }}",
-            "interface": "{{ .Values.enb.networks.ifName }}",
+            "name": "rfsim4g-ran-private",
+            "interface": "eth1",
             "ips": ["{{ .Values.enb.networks.ranIpAddr }}"],
-            "default-route": ["{{ .Values.networks.ranGateway }}"]
+            "default-route": ["{{ .Values.networks.rfsim4gPrivateRanGateway }}"]
           }
           {{- else }}
           {
-            "name": "{{ .Values.networks.pubCoreNetName }}",
-            "interface": "{{ .Values.enb.networks.ifName }}",
+            "name": "rfsim4g-core-public",
+            "interface": "eth1",
             "ips": ["{{ .Values.enb.networks.pubCoreIpAddr }}"],
-            "default-route": ["{{ .Values.networks.pubCoreGateway }}"]
+            "default-route": ["{{ .Values.networks.rfsim4gPublicCoreGateway }}"]
           }
           {{- end }}
         ]'
@@ -41,7 +41,7 @@ spec:
       {{- end }}
       initContainers:
         - name: init-core
-          image: "{{ .Values.enb.initContainer.image }}:{{ .Values.enb.initContainer.imageTag }}"
+          image: "busybox:1.28"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
           command:  ['sh', '-c', "sleep {{ .Values.enb.initContainer.delayInit }}"]
           resources:
@@ -53,90 +53,48 @@ spec:
           image: "{{ .Values.enb.image }}:{{ .Values.enb.imageTag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
           securityContext:
-{{ toYaml .Values.spgwc.securityContext | indent 12 }}
+            privileged: true
           ports:
             - name: udp1
-              containerPort: {{ .Values.enb.service.udp1 }}
+              containerPort: 2152
               protocol: UDP
             - name: udp2
-              containerPort: {{ .Values.enb.service.udp2 }}
+              containerPort: 36412
               protocol: UDP
             - name: udp3
-              containerPort: {{ .Values.enb.service.udp3 }}
+              containerPort: 36422
               protocol: UDP
           env:
           - name: TZ
-            value: {{ .Values.enb.env.timeZone }}
-          - name: USE_FDD_MONO
-            value: "{{ .Values.enb.env.useFddMono }}"
-          - name: RFSIMULATOR
-            value: {{ .Values.enb.env.rfsim }}
-          - name: ENB_NAME
-            value: {{ .Values.enb.env.enbName }}
-          - name: MCC
-            value: "{{ .Values.enb.env.mcc }}"
-          - name: MNC
-            value: "{{ .Values.enb.env.mnc }}"
-          - name: MNC_LENGTH
-            value: "{{ .Values.enb.env.mncLength }}"
-          - name: TAC
-            value: "{{ .Values.enb.env.tac }}"
-          - name: UTRA_BAND_ID
-            value: "{{ .Values.enb.env.ultraBandID }}"
-          - name: DL_FREQUENCY_IN_MHZ
-            value: "{{ .Values.enb.env.dlFreqInMhz }}"
-          - name: UL_FREQUENCY_OFFSET_IN_MHZ
-            value: "{{ .Values.enb.env.ulFreqInMhz }}"
-          - name: NID_CELL
-            value: "{{ .Values.enb.env.nidCell }}"
-          - name: NB_PRB
-            value: "{{ .Values.enb.env.nbPrb }}"
-          - name: MME_S1C_IP_ADDRESS
-            value: "{{ .Values.mme.networks.ipAddr }}"
-          - name: ENB_S1C_IF_NAME
-            value: {{ .Values.enb.networks.ifName }}
-          - name: ENB_S1C_IP_ADDRESS
-            {{- if .Values.distributedMode }}
-            value: "{{ .Values.enb.networks.ranIpAddr }}"
-            {{- else }}
-            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
-            {{- end }}
-          - name: ENB_S1U_IF_NAME
-            value: {{ .Values.enb.networks.ifName }}
-          - name: ENB_S1U_IP_ADDRESS
-            {{- if .Values.distributedMode }}
-            value: "{{ .Values.enb.networks.ranIpAddr }}"
-            {{- else }}
-            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
-            {{- end }}
-          - name: ENB_X2_IP_ADDRESS
-            {{- if .Values.distributedMode }}
-            value: "{{ .Values.enb.networks.ranIpAddr }}"
-            {{- else }}
-            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
-            {{- end }}
-          - name: FLEXRAN_ENABLED
-            value: "{{ .Values.enb.env.flexranEnabled }}"
-          - name: FLEXRAN_INTERFACE_NAME
-            value: {{ .Values.enb.networks.ifName }}
-          - name: FLEXRAN_IPV4_ADDRESS
-            value: "{{ .Values.flexran.networks.ipAddr }}"
+            value: Europe/Paris
           - name: USE_ADDITIONAL_OPTIONS
-            value: {{ .Values.enb.env.useAdditionalOpt }}
+            value: --rfsim --log_config.global_log_options level,nocolor,time
+          volumeMounts:
+          - mountPath: /opt/oai-enb/etc/enb.conf
+            name: enb-config
+            subPath: enb.conf
           livenessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-softmodem"
-{{ toYaml .Values.enb.probes.params | indent 12 }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            failureThreshold: 10
           readinessProbe:
             exec:
               command:
               - /bin/bash
               - -c
               - "pgrep lte-softmodem"
-{{ toYaml .Values.enb.probes.params | indent 12 }}
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            failureThreshold: 10
           {{- if .Values.enb.resources.enabled }}
           resources:
             requests:
@@ -144,4 +102,9 @@ spec:
             limits:
 {{ toYaml .Values.enb.resources.limits | indent 14 }}
           {{- end }}
-{{- end}}
+      volumes:
+      - configMap:
+          defaultMode: 0664
+          name: enb-config
+        name: enb-config
+{{- end }}

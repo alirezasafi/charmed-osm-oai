@@ -1,24 +1,24 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.mme.service.name }}
+  name: magma-mme-svc
   labels:
     chart: magma-mme
-{{ toYaml .Values.mme.service.labels | indent 4 }}
+    app: magma-mme
 spec:
   type: ClusterIP
   ports:
   - name: udp1
-    port: {{ .Values.mme.service.udp1 }}
+    port: 2123
     targetPort: udp1
     protocol: UDP
   - name: http1
-    port: {{ .Values.mme.service.http1 }}
+    port: 3870
     targetPort: http1
     protocol: TCP
   - name: http2
-    port: {{ .Values.mme.service.http2 }}
+    port: 5870
     targetPort: http2
     protocol: TCP
   selector:
-{{ toYaml .Values.mme.labels | indent 4 }}
+    app: magma-mme

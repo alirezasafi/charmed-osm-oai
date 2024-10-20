@@ -4,20 +4,20 @@ metadata:
   name: oai-spgwc-deployment
   labels:
     chart: oai-spgwc
-{{ toYaml .Values.spgwc.labels | indent 4 }}
+    app: oai-spgwc
 spec:
   selector:
     matchLabels:
-{{ toYaml .Values.spgwc.labels | indent 6 }}
+      app: oai-spgwc
   template:
     metadata:
       labels:
-{{ toYaml .Values.spgwc.labels | indent 8 }}
+        app: oai-spgwc
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
           {
-            "name": "{{ .Values.networks.pubCoreNetName }}",
-            "interface": "{{ .Values.spgwc.networks.ifName }}",
+            "name": "rfsim4g-core-public",
+            "interface": "eth1",
             "ips": ["{{ .Values.spgwc.networks.ipAddr }}"],
             "default": true
           }
@@ -27,9 +27,9 @@ spec:
 {{ toYaml .Values.affinity.coreAffinity | indent 8 }}
       initContainers:
         - name: init-magma
-          image: "{{ .Values.spgwc.initContainer.image }}:{{ .Values.spgwc.initContainer.imageTag }}"
+          image: "busybox:1.28"
           imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.spgwc.initContainer.delayInit }} && until nslookup {{ .Values.mme.service.name }}; do echo waiting for magma; sleep 2; done"]
+          command:  ['sh', '-c', "sleep {{ .Values.spgwc.initContainer.delayInit }} && until nslookup magma-mme-svc; do echo waiting for magma; sleep 2; done"]
           resources:
             requests:
               memory: 10Mi
@@ -39,63 +39,71 @@ spec:
         image: "{{ .Values.spgwc.image }}:{{ .Values.spgwc.imageTag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         securityContext:
-{{ toYaml .Values.spgwc.securityContext | indent 10 }}
+          privileged: true
         ports:
         - name: udp1
-          containerPort: {{ .Values.spgwc.service.udp1 }}
+          containerPort: 2123
           protocol: UDP
         - name: udp2
-          containerPort: {{ .Values.spgwc.service.udp2 }}
+          containerPort: 8805
           protocol: UDP
         env:
         - name: TZ
-          value: {{ .Values.spgwc.env.timeZone }}
+          value: Europe/Paris
         - name: SGW_INTERFACE_NAME_FOR_S11
-          value: {{ .Values.spgwc.env.sgwIfNameForS11 }}
+          value: eth1
         - name: PGW_INTERFACE_NAME_FOR_SX
-          value: {{ .Values.spgwc.env.pgwIfNameForSx }}
+          value: eth1
         - name: DEFAULT_DNS_IPV4_ADDRESS
-          value: "{{ .Values.spgwc.env.defaultDNS }}"
+          value: "172.21.3.100"
         - name: DEFAULT_DNS_SEC_IPV4_ADDRESS
-          value: "{{ .Values.spgwc.env.defaultDNSSec }}"
+          value: "8.8.8.8"
         - name: PUSH_PROTOCOL_OPTION
-          value: "{{ .Values.spgwc.env.pushProtocol }}"
+          value: "true"
         - name: APN_NI_1
-          value: {{ .Values.spgwc.env.apnNI1 }}
+          value: oai.ipv4
         - name: APN_NI_2
-          value: {{ .Values.spgwc.env.apnNI2 }}
+          value: oai.ipv4_2
         - name: DEFAULT_APN_NI_1
-          value: {{ .Values.spgwc.env.defaultApnNI1 }}
+          value: oai.ipv4
         - name: UE_IP_ADDRESS_POOL_1
-          value: "{{ .Values.spgwc.env.ueIpAddrPool1 }}"
+          value: "12.0.0.2 - 12.0.0.254"
         - name: UE_IP_ADDRESS_POOL_2
-          value: "{{ .Values.spgwc.env.ueIpAddrPool2 }}"
+          value: "12.1.1.2 - 12.1.1.254"
         - name: MCC
-          value: "{{ .Values.spgwc.env.mcc }}"
+          value: "208"
         - name: MNC
-          value: "{{ .Values.spgwc.env.mnc }}"
+          value: "96"
         - name: MNC03
-          value: "{{ .Values.spgwc.env.mnc03 }}"
+          value: "096"
         - name: TAC
-          value: "{{ .Values.spgwc.env.tac }}"
+          value: "1"
         - name: GW_ID
-          value: "{{ .Values.spgwc.env.gwID }}"
+          value: "1"
         - name: REALM
-          value: {{ .Values.spgwc.env.realm }}
+          value: openairinterface.org
         livenessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "pgrep oai_spgwc"
-{{ toYaml .Values.spgwc.probes.params | indent 10 }}
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 10
         readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - "pgrep oai_spgwc"
-{{ toYaml .Values.spgwc.probes.params | indent 10 }}
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 10
         {{- if .Values.spgwc.resources.enabled }}
         resources:
           requests:
