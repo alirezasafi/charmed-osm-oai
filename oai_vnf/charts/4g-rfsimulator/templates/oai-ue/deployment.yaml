@@ -1,59 +1,60 @@
-{{- if .Values.ue.ue0.enabled }}
+{{- range .Values.ue }}
+{{- if .enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: oai-ue0
+  name: oai-{{ .name }}
   labels:
-    chart: oai-ue0
-    app: oai-ue0
+    chart: oai-{{ .name }}
+    app: oai-{{ .name }}
 spec:
   selector:
     matchLabels:
-      app: oai-ue0
+      app: oai-{{ .name }}
   template:
     metadata:
       labels:
-        app: oai-ue0
+        app: oai-{{ .name }}
       annotations:
         k8s.v1.cni.cncf.io/networks: '[
-          {{- if .Values.distributedMode }}
+          {{- if $.Values.distributedMode }}
           {
             "name": "rfsim4g-ran-private",
             "interface": "eth1",
-            "ips": ["{{ .Values.ue.ue0.networks.ranIpAddr }}"],
-            "default-route": ["{{ .Values.networks.rfsim4gPrivateRanGateway }}"]
+            "ips": ["{{ .networks.ranIpAddr }}"],
+            "default-route": ["{{ $.Values.networks.rfsim4gPrivateRanGateway }}"]
           }
           {{- else }}
           {
             "name": "rfsim4g-core-public",
             "interface": "eth1",
-            "ips": ["{{ .Values.ue.ue0.networks.pubCoreIpAddr }}"],
-            "default-route": ["{{ .Values.networks.rfsim4gPublicCoreGateway }}"]
+            "ips": ["{{ .networks.pubCoreIpAddr }}"],
+            "default-route": ["{{ $.Values.networks.rfsim4gPublicCoreGateway }}"]
           }
           {{- end }}
         ]'
     spec:
       affinity:
-      {{- if .Values.distributedMode }}
-{{ toYaml .Values.affinity.ranAffinity | indent 8 }}
+      {{- if $.Values.distributedMode }}
+{{ toYaml $.Values.affinity.ranAffinity | indent 8 }}
       {{- else }}
-{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
+{{ toYaml $.Values.affinity.coreAffinity | indent 8 }}
       {{- end }}
       initContainers:
         - name: init-enb
           image: "busybox:1.28"
-          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.ue.ue0.delayInit }}"]
+          imagePullPolicy: {{ $.Values.imagePullPolicy | quote }}
+          command:  ['sh', '-c', "sleep {{ .delayInit }}"]
           resources:
             requests:
               memory: 10Mi
               cpu: 10m
       containers:
-        - name: ue0
+        - name: {{ .name }}
           securityContext:
             privileged: true
-          image: "{{ .Values.ue.image }}:{{ .Values.ue.imageTag }}"
-          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+          image: "{{ $.Values.ueCommons.image }}:{{ $.Values.ueCommons.imageTag }}"
+          imagePullPolicy: {{ $.Values.imagePullPolicy | quote }}
           ports:
             - name: http1
               containerPort: 10000
@@ -61,12 +62,30 @@ spec:
           env:
           - name: TZ
             value: Europe/Paris
+          - name: HOSTNAME
+            value: oai_{{ .name }}
+          - name: RFSIMULATOR
+            {{- if $.Values.distributedMode }}
+            value: "{{ $.Values.enb.networks.ranIpAddr }}"
+            {{- else }}
+            value: "{{ $.Values.enb.networks.pubCoreIpAddr }}"
+            {{- end }}
+          - name: MCC
+            value: "208"
+          - name: MNC
+            value: "96"
+          - name: SHORT_IMSI
+            value: "{{ .env.shortImsi }}"
+          - name: LTE_KEY
+            value: "fec86ba6eb707ed08905757b1bb44b8f"
+          - name: OPC
+            value: "c42449363bbad02b66d16bc975d77cc1"
+          - name: MSISDN
+            value: "001011234561010"
+          - name: HPLMN
+            value: "20896"
           - name: USE_ADDITIONAL_OPTIONS
-            value: "--rfsim -C 2680000000 -r 25 --ue-rxgain 140 --ue-txgain 120 --rfsimulator.serveraddr {{ .Values.enb.networks.ranIpAddr }} --log_config.global_log_options level,nocolor,time"
-          volumeMounts:
-          - mountPath: /opt/oai-lte-ue/etc/ue_usim.conf
-            name: ue-config
-            subPath: ue_usim.conf
+            value: "--rfsim -C 2680000000 -r 25 --ue-rxgain 140 --ue-txgain 120 --nokrnmod 1 --log_config.global_log_options level,nocolor,time"
           livenessProbe:
             exec:
               command:
@@ -89,234 +108,18 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             failureThreshold: 5
-          {{- if .Values.ue.resources.enabled }}
+          {{- if $.Values.ueCommons.resources.enabled }}
           resources:
             requests:
-{{ toYaml .Values.ue.resources.requests | indent 14 }}
+{{ toYaml $.Values.ueCommons.resources.requests | indent 14 }}
             limits:
-{{ toYaml .Values.ue.resources.limits | indent 14 }}
+{{ toYaml $.Values.ueCommons.resources.limits | indent 14 }}
           {{- end }}
       volumes:
       - configMap:
           defaultMode: 0664
           name: ue-config
         name: ue-config
-{{- end }}
-{{- if .Values.ue.ue1.enabled }}
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: oai-ue1-deployment
-  labels:
-    chart: oai-ue1
-{{ toYaml .Values.ue.ue1.labels | indent 4 }}
-spec:
-  selector:
-    matchLabels:
-      app: oai-ue1-deployment
-  template:
-    metadata:
-      annotations:
-        k8s.v1.cni.cncf.io/networks: '[
-          {{- if .Values.distributedMode }}
-          {
-            "name": "{{ .Values.networks.ranNetName }}",
-            "interface": "{{ .Values.ue.ue1.networks.ifName }}",
-            "ips": ["{{ .Values.ue.ue1.networks.ranIpAddr }}"],
-            "default-route": ["{{ .Values.networks.rfsim4gPrivateRanGateway }}"]
-          }
-          {{- else }}
-          {
-            "name": "rfsim4g-core-public",
-            "interface": "{{ .Values.ue.ue1.networks.ifName }}",
-            "ips": ["{{ .Values.ue.ue1.networks.pubCoreIpAddr }}"],
-            "default": true
-          }
-          {{- end }}
-        ]'
-      labels:
-        app: oai-ue1-deployment
-
-    spec:
-      affinity:
-      {{- if .Values.distributedMode }}
-{{ toYaml .Values.affinity.ranAffinity | indent 8 }}
-      {{- else }}
-{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
-      {{- end }}
-      initContainers:
-        - name: init-enb
-          image: "{{ .Values.ue.initContainer.image }}:{{ .Values.ue.initContainer.imageTag }}"
-          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.ue.ue1.delayInit }}"]
-          resources:
-{{ toYaml .Values.ue.initContainer.resources | indent 12 }}
-      containers:
-        - name: ue1
-          securityContext:
-{{ toYaml .Values.ue.securityContext | indent 12 }}
-          image: "{{ .Values.ue.image }}:{{ .Values.ue.imageTag }}"
-          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          ports:
-            - name: http1
-              containerPort: {{ .Values.ue.ue1.service.http1 }}
-              protocol: TCP
-          env:
-          - name: TZ
-            value: {{ .Values.ue.env.timeZone }}
-          - name: HOSTNAME
-            value: {{ .Values.ue.ue1.env.hostName }}
-          - name: RFSIMULATOR
-            {{- if .Values.distributedMode }}
-            value: "{{ .Values.enb.networks.ranIpAddr }}"
-            {{- else }}
-            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
-            {{- end }}
-          - name: MCC
-            value: "{{ .Values.ue.env.mcc }}"
-          - name: MNC
-            value: "{{ .Values.ue.env.mnc }}"
-          - name: SHORT_IMSI
-            value: "{{ .Values.ue.ue1.env.shortImsi }}"
-          - name: LTE_KEY
-            value: "{{ .Values.ue.env.lteKey }}"
-          - name: OPC
-            value: "{{ .Values.ue.env.opc }}"
-          - name: MSISDN
-            value: "{{ .Values.ue.env.mision }}"
-          - name: HPLMN
-            value: "{{ .Values.ue.env.hplmn }}"
-          - name: USE_ADDITIONAL_OPTIONS
-            value: "{{ .Values.ue.env.useAdditionalOpt }}"
-          livenessProbe:
-            exec:
-              command:
-              - /bin/bash
-              - -c
-              - "pgrep lte-uesoftmodem"
-{{ toYaml .Values.ue.probes.params | indent 12 }}
-          readinessProbe:
-            exec:
-              command:
-              - /bin/bash
-              - -c
-              - "pgrep lte-uesoftmodem"
-{{ toYaml .Values.ue.probes.params | indent 12 }}
-          {{- if .Values.ue.resources.enabled }}
-          resources:
-            requests:
-{{ toYaml .Values.ue.resources.requests | indent 14 }}
-            limits:
-{{ toYaml .Values.ue.resources.limits | indent 14 }}
-          {{- end }}
 {{- end }}
-{{- if .Values.ue.ue2.enabled }}
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: oai-ue2-deployment
-  labels:
-    app: oai-ue2-deployment
-    chart: oai-ue2
-{{ toYaml .Values.ue.ue2.labels | indent 4 }}
-spec:
-  selector:
-    matchLabels:
-{{ toYaml .Values.ue.ue2.labels | indent 6 }}
-  template:
-    metadata:
-      annotations:
-        k8s.v1.cni.cncf.io/networks: '[
-          {{- if .Values.distributedMode }}
-          {
-            "name": "{{ .Values.networks.ranNetName }}",
-            "interface": "{{ .Values.ue.ue2.networks.ifName }}",
-            "ips": ["{{ .Values.ue.ue2.networks.ranIpAddr }}"],
-            "default-route": ["{{ .Values.networks.rfsim4gPrivateRanGateway }}"]
-          }
-          {{- else }}
-          {
-            "name": "rfsim4g-core-public",
-            "interface": "{{ .Values.ue.ue2.networks.ifName }}",
-            "ips": ["{{ .Values.ue.ue2.networks.pubCoreIpAddr }}"],
-            "default-route": ["{{ .Values.networks.rfsim4gPublicCoreGateway }}"]
-          }
-          {{- end }}
-        ]'
-      labels:
-{{ toYaml .Values.ue.ue2.labels | indent 8 }}
-    spec:
-      affinity:
-      {{- if .Values.distributedMode }}
-{{ toYaml .Values.affinity.ranAffinity | indent 8 }}
-      {{- else }}
-{{ toYaml .Values.affinity.coreAffinity | indent 8 }}
-      {{- end }}
-      initContainers:
-        - name: init-enb
-          image: "{{ .Values.ue.initContainer.image }}:{{ .Values.ue.initContainer.imageTag }}"
-          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          command:  ['sh', '-c', "sleep {{ .Values.ue.ue2.delayInit }}"]
-          resources:
-{{ toYaml .Values.ue.initContainer.resources | indent 12 }}
-      containers:
-        - name: ue2
-          securityContext:
-{{ toYaml .Values.ue.securityContext | indent 12 }}
-          image: "{{ .Values.ue.image }}:{{ .Values.ue.imageTag }}"
-          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-          ports:
-            - name: http1
-              containerPort: {{ .Values.ue.ue2.service.http1 }}
-              protocol: TCP
-          env:
-          - name: TZ
-            value: {{ .Values.ue.env.timeZone }}
-          - name: HOSTNAME
-            value: {{ .Values.ue.ue2.env.hostName }}
-          - name: RFSIMULATOR
-            {{- if .Values.distributedMode }}
-            value: "{{ .Values.enb.networks.ranIpAddr }}"
-            {{- else }}
-            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
-            {{- end }}
-          - name: MCC
-            value: "{{ .Values.ue.env.mcc }}"
-          - name: MNC
-            value: "{{ .Values.ue.env.mnc }}"
-          - name: SHORT_IMSI
-            value: "{{ .Values.ue.ue2.env.shortImsi }}"
-          - name: LTE_KEY
-            value: "{{ .Values.ue.env.lteKey }}"
-          - name: OPC
-            value: "{{ .Values.ue.env.opc }}"
-          - name: MSISDN
-            value: "{{ .Values.ue.env.mision }}"
-          - name: HPLMN
-            value: "{{ .Values.ue.env.hplmn }}"
-          - name: USE_ADDITIONAL_OPTIONS
-            value: "{{ .Values.ue.env.useAdditionalOpt }}"
-          livenessProbe:
-            exec:
-              command:
-              - /bin/bash
-              - -c
-              - "pgrep lte-uesoftmodem"
-{{ toYaml .Values.ue.probes.params | indent 12 }}
-          readinessProbe:
-            exec:
-              command:
-              - /bin/bash
-              - -c
-              - "pgrep lte-uesoftmodem"
-{{ toYaml .Values.ue.probes.params | indent 12 }}
-          {{- if .Values.ue.resources.enabled }}
-          resources:
-            requests:
-{{ toYaml .Values.ue.resources.requests | indent 14 }}
-            limits:
-{{ toYaml .Values.ue.resources.limits | indent 14 }}
-          {{- end }}
 {{- end }}

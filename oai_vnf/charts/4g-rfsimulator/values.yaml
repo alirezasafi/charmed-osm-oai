@@ -153,7 +153,7 @@ trfGen:
 
 flexran:
   enabled: false
-  image: "ellior/flexran"
+  image: "ellior/flexranEnabledflexran"
   imageTag: "v1"
   securityContext:
     privileged: true
@@ -203,7 +203,7 @@ flexran:
 
 enb:
   enabled: true
-  image: "oaisoftwarealliance/oai-enb"
+  image: "oai-enb"
   imageTag: "develop"
   initContainer:
     delayInit: 90
@@ -220,8 +220,8 @@ enb:
       memory: 3Gi
       cpu: 3
 
-ue:
-  image: "oaisoftwarealliance/oai-lte-ue"
+ueCommons:
+  image: "oai-lte-ue"
   imageTag: "develop"
   resources:
     enabled: false
@@ -231,46 +231,35 @@ ue:
     limits:
       memory: 2Gi
       cpu: 2
-  ue0:
+ue:
+  - name: ue0
     enabled: true
+    port: 10001
     delayInit: 90
+    env:
+      shortImsi: "0100000001"
     networks:
       ranIpAddr: "192.168.62.30"
-      ueIpAddr: "192.168.63.31"
-      pubCoreIpAddr: "192.168.61.31"
-  ue1:
-    enabled: false
-    env:
-      hostName: oai_ue1
+      ueIpAddr: "192.168.63.30"
+      pubCoreIpAddr: "192.168.61.30"
+  - name: ue1
+    enabled: true
+    port: 10001
+    delayInit: 90
+    env: 
       shortImsi: "0100000002"
-    labels:
-      app: oai-ue1-deployment
-    delayInit: 240
+    networks:
+      ranIpAddr: "192.168.62.31"
+      ueIpAddr: "192.168.63.32"
+      pubCoreIpAddr: "192.168.61.32"
+  - name: ue2
+    enabled: true
+    port: 10002
+    delayInit: 90
+    env: 
+      shortImsi: "0100000003"
     networks:
       ifName: eth1
       ranIpAddr: "192.168.62.32"
       ueIpAddr: "192.168.63.32"
       pubCoreIpAddr: "192.168.61.32"
-    service: 
-      name: oai-ue1-svc
-      labels:
-        app: oai-ue1-svc
-      http1: 10001
-  ue2:
-    enabled: false
-    env:
-      hostName: oai_ue2
-      shortImsi: "0100000003"
-    labels:
-      app: oai-ue2-deployment
-    delayInit: 260
-    networks:
-      ifName: eth1
-      ranIpAddr: "192.168.62.33"
-      ueIpAddr: "192.168.63.33"
-      pubCoreIpAddr: "192.168.61.33"
-    service: 
-      name: oai-ue2-svc
-      labels:
-        app: oai-ue2-svc
-      http1: 10002

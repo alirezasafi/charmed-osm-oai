@@ -67,12 +67,62 @@ spec:
           env:
           - name: TZ
             value: Europe/Paris
+          - name: USE_FDD_MONO
+            value: "yes"
+          - name: RFSIMULATOR
+            value: enb
+          - name: ENB_NAME
+            value: eNB01
+          - name: MCC
+            value: "208"
+          - name: MNC
+            value: "96"
+          - name: MNC_LENGTH
+            value: "2"
+          - name: TAC
+            value: "1"
+          - name: UTRA_BAND_ID
+            value: "7"
+          - name: DL_FREQUENCY_IN_MHZ
+            value: "2680"
+          - name: UL_FREQUENCY_OFFSET_IN_MHZ
+            value: "120"
+          - name: NID_CELL
+            value: "10"
+          - name: NB_PRB
+            value: "25"
+          - name: MME_S1C_IP_ADDRESS
+            value: "192.168.61.3"
+          - name: ENB_S1C_IF_NAME
+            value: eth1
+          - name: ENB_S1C_IP_ADDRESS
+            {{- if .Values.distributedMode }}
+            value: "{{ .Values.enb.networks.ranIpAddr }}"
+            {{- else }}
+            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
+            {{- end }}
+          - name: ENB_S1U_IF_NAME
+            value: eth1
+          - name: ENB_S1U_IP_ADDRESS
+            {{- if .Values.distributedMode }}
+            value: "{{ .Values.enb.networks.ranIpAddr }}"
+            {{- else }}
+            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
+            {{- end }}
+          - name: ENB_X2_IP_ADDRESS
+            {{- if .Values.distributedMode }}
+            value: "{{ .Values.enb.networks.ranIpAddr }}"
+            {{- else }}
+            value: "{{ .Values.enb.networks.pubCoreIpAddr }}"
+            {{- end }}
+          - name: FLEXRAN_ENABLED
+            value: "no"
+          - name: FLEXRAN_INTERFACE_NAME
+            value: eth1
+          - name: FLEXRAN_IPV4_ADDRESS
+            value: "{{ .Values.flexran.networks.ipAddr }}"
           - name: USE_ADDITIONAL_OPTIONS
             value: --rfsim --log_config.global_log_options level,nocolor,time
-          volumeMounts:
-          - mountPath: /opt/oai-enb/etc/enb.conf
-            name: enb-config
-            subPath: enb.conf
           livenessProbe:
             exec:
               command:
